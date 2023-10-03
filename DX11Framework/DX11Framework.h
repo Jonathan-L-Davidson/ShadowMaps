@@ -11,18 +11,6 @@
 using namespace DirectX;
 //using Microsoft::WRL::ComPtr;
 
-struct SimpleVertex
-{
-	XMFLOAT3 Position;
-	XMFLOAT4 Color;
-};
-
-struct ConstantBuffer
-{
-	XMMATRIX Projection;
-	XMMATRIX View;
-	XMMATRIX World;
-};
 
 class DX11Framework
 {
@@ -64,5 +52,4 @@ public:
 	~DX11Framework();
 	void Update();
 	void Draw();
-	void Test(std::list<SimpleVertex> A);
 };

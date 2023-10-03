@@ -9,6 +9,7 @@ VertexBuffer::VertexBuffer(ID3D11Device* device) {
 	_device = device;
 	_vertices = new std::list<SimpleVertex>();
 }
+
 VertexBuffer::~VertexBuffer() {
 	_buffer->Release();
 	_buffer = 0;
@@ -22,8 +23,6 @@ void VertexBuffer::SetBuffer(std::list<SimpleVertex> verts) {
 }
 
 void VertexBuffer::RefreshBuffer() {
-	_buffer->Release();
-
 	HRESULT hr = S_OK;
 
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
@@ -58,8 +57,6 @@ void IndexBuffer::SetBuffer(std::list<WORD> ind) {
 }
 
 void IndexBuffer::RefreshBuffer() {
-	_buffer->Release();
-
 	HRESULT hr = S_OK;
 
 	D3D11_BUFFER_DESC indexBufferDesc = {};

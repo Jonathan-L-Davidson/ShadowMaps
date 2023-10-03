@@ -1,6 +1,9 @@
 #pragma once
 
-#include "DX11Framework.h"
+#if !defined(MODELHELPERS_H)
+#define MODELHELPERS_H
+#include "Structures.h"
+#include <list>
 
 //class Buffer {
 //public:
@@ -26,7 +29,7 @@ public:
 	VertexBuffer(ID3D11Device* device);
 	~VertexBuffer();
 	
-	void SetBuffer(std::list<SimpleVertex>& verts);
+	void SetBuffer(std::list<SimpleVertex> verts);
 
 	ID3D11Buffer* GetBuffer()					{ return _buffer; };
 	int GetCount()								{ return _vertices->size(); };
@@ -73,3 +76,5 @@ private:
 	VertexBuffer* _vBuffer; // Vertex Buffer
 	IndexBuffer* _iBuffer; // Index Buffer
 };
+
+#endif

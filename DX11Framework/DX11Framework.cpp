@@ -234,6 +234,8 @@ HRESULT DX11Framework::InitVertexIndexBuffers()
     };
 
     _cube = new Model(_device, VertexData, IndexData);
+    _cube->SetVertexShader(_vertexShader);
+    _cube->SetPixelShader(_pixelShader);
 
     return S_OK;
 }
@@ -349,8 +351,4 @@ void DX11Framework::Draw()
 
     //Present Backbuffer to screen
     _swapChain->Present(0, 0);
-}
-
-void DX11Framework::Test(std::list<SimpleVertex> A) {
-    int num = A.size();
 }
