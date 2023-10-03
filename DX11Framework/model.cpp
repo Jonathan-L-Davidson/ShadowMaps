@@ -12,6 +12,7 @@ void Model::Render(ID3D11DeviceContext* context) {
     //Set object variables and draw
     UINT stride = { sizeof(SimpleVertex) };
     UINT offset = 0;
+    // TODO: Assign buffers correctly to the buffer wrappers.
     context->IASetVertexBuffers(0, 1, _modelBuffer->GetVertBuffer()->GetBuffer(), &stride, &offset);
     context->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
