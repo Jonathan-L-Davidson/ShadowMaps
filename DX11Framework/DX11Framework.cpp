@@ -370,7 +370,7 @@ void DX11Framework::Draw()
 
     //Set object variables and draw
     UINT stride = {sizeof(SimpleVertex)};
-    UINT offset =  0 ;
+    UINT offset = 0;
     _immediateContext->IASetVertexBuffers(0, 1, &_vertexBuffer, &stride, &offset);
     _immediateContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
 

@@ -12,22 +12,27 @@ class ModelHelpers {
 
 class Buffer {
 public:
-	Buffer();
+	Buffer(ID3D11Device* device);
 	~Buffer();
 	
 	void SetBuffer(Buffer buff);
 
-	std::list<XMFLOAT3>* GetBuffer() { return _buffer; };
+	std::list<XMFLOAT3>* GetBufferFloat3() { return _buffer; };
+	ID3D11Buffer* GetBuffer() { return _xBuffer; };
 	int GetCount() { return _buffer->size(); };
 
+	void RefreshBuffer();
 private:
-	std::list<XMFLOAT3>* _buffer;
+	ID3D11Device* _device;
+	ID3D11Buffer* _xBuffer; // DirectX buffer
+
+	std::list<XMFLOAT3>* _buffer; // Our own independant buffer system so we can read/write easily
 };
 
 class ModelBuffer {
 public:
-	ModelBuffer();
-	ModelBuffer(Buffer vBuffer, Buffer iBuffer);
+	ModelBuffer(ID3D11Device* device);
+	ModelBuffer(ID3D11Device* device, Buffer vBuffer, Buffer iBuffer);
 	~ModelBuffer();
 
 	Buffer* GetVertBuffer()		{ return _vBuffer; };

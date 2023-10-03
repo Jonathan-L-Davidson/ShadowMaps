@@ -1,6 +1,7 @@
 #include "ModelHelpers.h"
 
-Buffer::Buffer() {
+Buffer::Buffer(ID3D11Device* device) {
+	_device = device;
 	_buffer = new std::list<XMFLOAT3>();
 }
 Buffer::~Buffer() {
@@ -9,16 +10,20 @@ Buffer::~Buffer() {
 }
 
 void Buffer::SetBuffer(Buffer buff) {
-	_buffer->assign(buff.GetBuffer()->begin(), buff.GetBuffer()->end());
+	_buffer->assign(buff.GetBufferFloat3()->begin(), buff.GetBufferFloat3()->end());
+	
+	RefreshBuffer();
 }
 
-ModelBuffer::ModelBuffer() {
-	_vBuffer = new Buffer();
-	_iBuffer = new Buffer();
+ModelBuffer::ModelBuffer(ID3D11Device* device) {
+	_vBuffer = new Buffer(device);
+	_iBuffer = new Buffer(device);
 }
 
-ModelBuffer::ModelBuffer(Buffer vBuffer, Buffer iBuffer) {
-	ModelBuffer();
+ModelBuffer::ModelBuffer(ID3D11Device* device, Buffer vBuffer, Buffer iBuffer) {
+	_vBuffer = new Buffer(device);
+	_iBuffer = new Buffer(device);
+
 	_vBuffer->SetBuffer(vBuffer);
 	_iBuffer->SetBuffer(iBuffer);
 }
