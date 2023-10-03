@@ -59,12 +59,16 @@ void IndexBuffer::SetBuffer(std::list<WORD> ind) {
 void IndexBuffer::RefreshBuffer() {
 	HRESULT hr = S_OK;
 
+	const int indiceSize = _indices->size();
+	WORD indiceArray[indiceSize];
+	std::copy(_indices->begin(), _indices->end(), arr);
+
 	D3D11_BUFFER_DESC indexBufferDesc = {};
-	indexBufferDesc.ByteWidth = sizeof(_indices);
+	indexBufferDesc.ByteWidth = sizeof(indiceArray);
 	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA indexData = { _indices };
+	D3D11_SUBRESOURCE_DATA indexData = { indiceArray };
 
 	hr = _device->CreateBuffer(&indexBufferDesc, &indexData, &_buffer);
 	if (FAILED(hr)) throw std::invalid_argument("Index Buffer failed to refresh/initialise");
