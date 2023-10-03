@@ -23,8 +23,6 @@ private:
 
 	ID3D11VertexShader* _vertexShader;
 	ID3D11PixelShader* _pixelShader;
-
-	
 	
 };
 
