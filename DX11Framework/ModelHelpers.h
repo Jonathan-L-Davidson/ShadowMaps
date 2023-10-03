@@ -4,43 +4,77 @@
 #define MODELHELPER_CLASS
 
 #include "DX11Framework.h"
-#include <list>
 
-class ModelHelpers {
+//class Buffer {
+//public:
+//	Buffer(ID3D11Device* device);
+//	~Buffer();
+//	
+//	void SetBuffer(Buffer buff);
+//
+//	std::list<XMFLOAT3>* GetBufferFloat3() { return _buffer; };
+//	ID3D11Buffer* GetBuffer() { return _xBuffer; };
+//	int GetCount() { return _buffer->size(); };
+//
+//	void RefreshBuffer();
+//private:
+//	ID3D11Device* _device;
+//	ID3D11Buffer* _xBuffer; // DirectX buffer
+//
+//	std::list<XMFLOAT3>* _buffer; // Our own independant buffer system so we can read/write easily
+//};
 
-};
-
-class Buffer {
+class VertexBuffer {
 public:
-	Buffer(ID3D11Device* device);
-	~Buffer();
+	VertexBuffer(ID3D11Device* device);
+	~VertexBuffer();
 	
-	void SetBuffer(Buffer buff);
+	void SetBuffer(std::list<SimpleVertex> verts);
 
-	std::list<XMFLOAT3>* GetBufferFloat3() { return _buffer; };
-	ID3D11Buffer* GetBuffer() { return _xBuffer; };
-	int GetCount() { return _buffer->size(); };
+	ID3D11Buffer* GetBuffer()					{ return _buffer; };
+	int GetCount()								{ return _vertices->size(); };
+	std::list<SimpleVertex>* GetVertices()		{ return _vertices; };
 
 	void RefreshBuffer();
 private:
 	ID3D11Device* _device;
-	ID3D11Buffer* _xBuffer; // DirectX buffer
+	ID3D11Buffer* _buffer; // DirectX buffer
 
-	std::list<XMFLOAT3>* _buffer; // Our own independant buffer system so we can read/write easily
+	std::list<SimpleVertex>* _vertices;
+
+};
+
+class IndexBuffer {
+public:
+	IndexBuffer(ID3D11Device* device);
+	~IndexBuffer();
+
+	void SetBuffer(std::list<WORD> indices);
+
+	ID3D11Buffer* GetBuffer() { return _buffer; };
+	int GetCount() { return _indices->size(); };
+	std::list<WORD>* GetIndices() { return _indices; };
+
+	void RefreshBuffer();
+private:
+	ID3D11Device* _device;
+	ID3D11Buffer* _buffer; // DirectX buffer
+
+	std::list<WORD>* _indices;
 };
 
 class ModelBuffer {
 public:
 	ModelBuffer(ID3D11Device* device);
-	ModelBuffer(ID3D11Device* device, Buffer vBuffer, Buffer iBuffer);
+	ModelBuffer(ID3D11Device* device, std::list<SimpleVertex> verts, std::list<WORD> indices);
 	~ModelBuffer();
 
-	Buffer* GetVertBuffer()		{ return _vBuffer; };
-	Buffer* GetIndBuffer() { return _iBuffer; };
+	VertexBuffer* GetVertBuffer()	{ return _vBuffer; };
+	IndexBuffer* GetIndBuffer() { return _iBuffer; };
 
 private:
-	Buffer* _vBuffer; // Vertex Buffer
-	Buffer* _iBuffer; // Index Buffer
+	VertexBuffer* _vBuffer; // Vertex Buffer
+	IndexBuffer* _iBuffer; // Index Buffer
 };
 
 #endif

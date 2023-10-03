@@ -1,31 +1,93 @@
 #include "ModelHelpers.h"
+#include <stdexcept>
 
-Buffer::Buffer(ID3D11Device* device) {
+/// <summary>
+/// Contains buffer for vertices with appropriate helpers.
+/// </summary>
+/// <param name="device"></param>
+VertexBuffer::VertexBuffer(ID3D11Device* device) {
 	_device = device;
-	_buffer = new std::list<XMFLOAT3>();
+	_vertices = new std::list<SimpleVertex>();
 }
-Buffer::~Buffer() {
-	delete _buffer;
+VertexBuffer::~VertexBuffer() {
+	_buffer->Release();
 	_buffer = 0;
+	_vertices->clear();
+	delete _vertices;
 }
 
-void Buffer::SetBuffer(Buffer buff) {
-	_buffer->assign(buff.GetBufferFloat3()->begin(), buff.GetBufferFloat3()->end());
-	
+void VertexBuffer::SetBuffer(std::list<SimpleVertex> verts) {
+	_vertices->assign(verts.begin(),verts.end());
 	RefreshBuffer();
 }
 
-ModelBuffer::ModelBuffer(ID3D11Device* device) {
-	_vBuffer = new Buffer(device);
-	_iBuffer = new Buffer(device);
+void VertexBuffer::RefreshBuffer() {
+	_buffer->Release();
+
+	HRESULT hr = S_OK;
+
+	D3D11_BUFFER_DESC vertexBufferDesc = {};
+	vertexBufferDesc.ByteWidth = sizeof(_vertices);
+	vertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA vertexData = { _vertices };
+
+	hr = _device->CreateBuffer(&vertexBufferDesc, &vertexData, &_buffer);
+	if (FAILED(hr)) throw std::invalid_argument("Vertex Buffer failed to refresh/initialise");
 }
 
-ModelBuffer::ModelBuffer(ID3D11Device* device, Buffer vBuffer, Buffer iBuffer) {
-	_vBuffer = new Buffer(device);
-	_iBuffer = new Buffer(device);
+/// <summary>
+/// Contains buffers for indices with appropriate helpers.
+/// </summary>
+/// <param name="device"></param>
+IndexBuffer::IndexBuffer(ID3D11Device* device) {
+	_device = device;
+	_indices = new std::list<WORD>();
+}
+IndexBuffer::~IndexBuffer() {
+	_buffer->Release();
+	_buffer = 0;
+	_indices->clear();
+	delete _indices;
+}
 
-	_vBuffer->SetBuffer(vBuffer);
-	_iBuffer->SetBuffer(iBuffer);
+void IndexBuffer::SetBuffer(std::list<WORD> ind) {
+	_indices->assign(ind.begin(), ind.end());
+	RefreshBuffer();
+}
+
+void IndexBuffer::RefreshBuffer() {
+	_buffer->Release();
+
+	HRESULT hr = S_OK;
+
+	D3D11_BUFFER_DESC indexBufferDesc = {};
+	indexBufferDesc.ByteWidth = sizeof(_indices);
+	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
+	D3D11_SUBRESOURCE_DATA indexData = { _indices };
+
+	hr = _device->CreateBuffer(&indexBufferDesc, &indexData, &_buffer);
+	if (FAILED(hr)) throw std::invalid_argument("Index Buffer failed to refresh/initialise");
+}
+
+/// <summary>
+/// Model Buffer, the wrapper to contain both Index and Vertex buffers to be managed.
+/// </summary>
+/// <param name="device"></param>
+ModelBuffer::ModelBuffer(ID3D11Device* device) {
+	_vBuffer = new VertexBuffer(device);
+	_iBuffer = new IndexBuffer(device);
+}
+
+ModelBuffer::ModelBuffer(ID3D11Device* device, std::list<SimpleVertex> verts, std::list<WORD> indices) {
+	_vBuffer = new VertexBuffer(device);
+	_iBuffer = new IndexBuffer(device);
+
+	_vBuffer->SetBuffer(verts);
+	_iBuffer->SetBuffer(indices);
 }
 ModelBuffer::~ModelBuffer() {
 	delete _vBuffer;

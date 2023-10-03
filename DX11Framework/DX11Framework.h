@@ -4,6 +4,8 @@
 #include <d3d11_4.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
+#include <list>
+#include "Model.h"
 //#include <wrl.h>
 
 using namespace DirectX;
@@ -40,8 +42,7 @@ class DX11Framework
 	ID3D11InputLayout* _inputLayout;
 	ID3D11PixelShader* _pixelShader;
 	ID3D11Buffer* _constantBuffer;
-	ID3D11Buffer* _vertexBuffer;
-	ID3D11Buffer* _indexBuffer;
+	//Model* _cube;
 
 	HWND _windowHandle;
 
@@ -63,4 +64,5 @@ public:
 	~DX11Framework();
 	void Update();
 	void Draw();
+	void Test(std::list<SimpleVertex> A);
 };

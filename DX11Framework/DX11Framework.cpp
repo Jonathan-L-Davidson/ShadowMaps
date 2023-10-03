@@ -1,5 +1,6 @@
 #include "DX11Framework.h"
 #include <string>
+#include <list>
 
 //#define RETURNFAIL(x) if(FAILED(x)) return x;
 
@@ -217,9 +218,7 @@ HRESULT DX11Framework::InitShadersAndInputLayout()
 
 HRESULT DX11Framework::InitVertexIndexBuffers()
 {
-    HRESULT hr = S_OK;
-
-    SimpleVertex VertexData[] = 
+    std::list<SimpleVertex> VertexData = 
     {
         //Position                     //Color             
         { XMFLOAT3(-1.00f,  1.00f, 0), XMFLOAT4(1.0f,  0.0f, 0.0f,  0.0f)},
@@ -228,34 +227,14 @@ HRESULT DX11Framework::InitVertexIndexBuffers()
         { XMFLOAT3(1.00f, -1.00f, 0),  XMFLOAT4(1.0f,  1.0f, 1.0f,  0.0f)},
     };
 
-    D3D11_BUFFER_DESC vertexBufferDesc = {};
-    vertexBufferDesc.ByteWidth = sizeof(VertexData);
-    vertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-    vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-    D3D11_SUBRESOURCE_DATA vertexData = { VertexData };
-
-    hr = _device->CreateBuffer(&vertexBufferDesc, &vertexData, &_vertexBuffer);
-    if (FAILED(hr)) return hr;
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    WORD IndexData[] =
+    std::list<WORD> IndexData =
     {
         //Indices
         0, 1, 2,
         2, 1, 3,
     };
 
-    D3D11_BUFFER_DESC indexBufferDesc = {};
-    indexBufferDesc.ByteWidth = sizeof(IndexData);
-    indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-    indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-
-    D3D11_SUBRESOURCE_DATA indexData = { IndexData };
-
-    hr = _device->CreateBuffer(&indexBufferDesc, &indexData, &_indexBuffer);
-    if (FAILED(hr)) return hr;
+    //_cube = new Model(_device, VertexData, IndexData);
 
     return S_OK;
 }
@@ -330,8 +309,7 @@ DX11Framework::~DX11Framework()
     if(_inputLayout)_inputLayout->Release();
     if(_pixelShader)_pixelShader->Release();
     if(_constantBuffer)_constantBuffer->Release();
-    if(_vertexBuffer)_vertexBuffer->Release();
-    if(_indexBuffer)_indexBuffer->Release();
+    //delete _cube;
 }
 
 
@@ -368,17 +346,12 @@ void DX11Framework::Draw()
     memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));
     _immediateContext->Unmap(_constantBuffer, 0);
 
-    //Set object variables and draw
-    UINT stride = {sizeof(SimpleVertex)};
-    UINT offset = 0;
-    _immediateContext->IASetVertexBuffers(0, 1, &_vertexBuffer, &stride, &offset);
-    _immediateContext->IASetIndexBuffer(_indexBuffer, DXGI_FORMAT_R16_UINT, 0);
-
-    _immediateContext->VSSetShader(_vertexShader, nullptr, 0);
-    _immediateContext->PSSetShader(_pixelShader, nullptr, 0);
-
-    _immediateContext->DrawIndexed(6, 0, 0);
+    //_cube->Render();
 
     //Present Backbuffer to screen
     _swapChain->Present(0, 0);
+}
+
+void DX11Framework::Test(std::list<SimpleVertex> A) {
+    int num = A.size();
 }

@@ -1,11 +1,21 @@
 #include "model.h"
 
-Model::Model() {
+Model::Model(ID3D11Device* device) {
+    _modelBuffer = new ModelBuffer(device);
+    _vertexShader = NULL;
+    _pixelShader = NULL;
+}
 
+Model::Model(ID3D11Device* device, std::list<SimpleVertex> verts, std::list<WORD> indices) {
+    _modelBuffer = new ModelBuffer(device, verts, indices);
+    _vertexShader = NULL;
+    _pixelShader = NULL;
 }
 
 Model::~Model() {
-
+    delete _modelBuffer;
+    _vertexShader = NULL;
+    _pixelShader = NULL;
 }
 
 void Model::Render(ID3D11DeviceContext* context) {
