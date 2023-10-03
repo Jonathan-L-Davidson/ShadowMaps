@@ -1,6 +1,5 @@
 #include "DX11Framework.h"
 #include <string>
-#include <list>
 
 //#define RETURNFAIL(x) if(FAILED(x)) return x;
 
@@ -234,7 +233,7 @@ HRESULT DX11Framework::InitVertexIndexBuffers()
         2, 1, 3,
     };
 
-    //_cube = new Model(_device, VertexData, IndexData);
+    _cube = new Model(_device, VertexData, IndexData);
 
     return S_OK;
 }
@@ -309,7 +308,7 @@ DX11Framework::~DX11Framework()
     if(_inputLayout)_inputLayout->Release();
     if(_pixelShader)_pixelShader->Release();
     if(_constantBuffer)_constantBuffer->Release();
-    //delete _cube;
+    delete _cube;
 }
 
 
@@ -346,7 +345,7 @@ void DX11Framework::Draw()
     memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));
     _immediateContext->Unmap(_constantBuffer, 0);
 
-    //_cube->Render();
+    _cube->Render(_immediateContext);
 
     //Present Backbuffer to screen
     _swapChain->Present(0, 0);

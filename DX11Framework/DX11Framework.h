@@ -42,7 +42,7 @@ class DX11Framework
 	ID3D11InputLayout* _inputLayout;
 	ID3D11PixelShader* _pixelShader;
 	ID3D11Buffer* _constantBuffer;
-	//Model* _cube;
+	Model* _cube;
 
 	HWND _windowHandle;
 

@@ -1,8 +1,5 @@
 #pragma once
 
-#if !defined(MODEL_CLASS)
-#define MODEL_CLASS
-
 #include <DirectXMath.h>
 #include "ModelHelpers.h"
 
@@ -26,5 +23,3 @@ private:
 	ID3D11PixelShader* _pixelShader;
 	
 };
-
-#endif
