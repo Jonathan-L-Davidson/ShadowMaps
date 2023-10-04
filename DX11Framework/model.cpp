@@ -6,7 +6,7 @@ Model::Model(ID3D11Device* device) {
     _pixelShader = NULL;
 }
 
-Model::Model(ID3D11Device* device, std::list<SimpleVertex> verts, std::list<WORD> indices) {
+Model::Model(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<WORD> indices) {
     _modelBuffer = new ModelBuffer(device, verts, indices);
     _vertexShader = NULL;
     _pixelShader = NULL;

@@ -7,7 +7,7 @@
 /// <param name="device"></param>
 VertexBuffer::VertexBuffer(ID3D11Device* device) {
 	_device = device;
-	_vertices = new std::list<SimpleVertex>();
+	_vertices = new std::vector<SimpleVertex>();
 }
 
 VertexBuffer::~VertexBuffer() {
@@ -17,23 +17,31 @@ VertexBuffer::~VertexBuffer() {
 	delete _vertices;
 }
 
-void VertexBuffer::SetBuffer(std::list<SimpleVertex> verts) {
+void VertexBuffer::SetBuffer(std::vector<SimpleVertex> verts) {
 	_vertices->assign(verts.begin(),verts.end());
+	_vertices->reserve(_vertices->size());
 	RefreshBuffer();
 }
 
 void VertexBuffer::RefreshBuffer() {
 	HRESULT hr = S_OK;
 
+	const int vertexSize = _vertices->size();
+	SimpleVertex* vertexArray = new SimpleVertex[vertexSize];
+	std::copy(_vertices->begin(), _vertices->end(), vertexArray);
+
+
 	D3D11_BUFFER_DESC vertexBufferDesc = {};
-	vertexBufferDesc.ByteWidth = sizeof(_vertices);
+	vertexBufferDesc.ByteWidth = sizeof(&vertexArray);
 	vertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA vertexData = { _vertices };
+	D3D11_SUBRESOURCE_DATA vertexData = { vertexArray };
+
 
 	hr = _device->CreateBuffer(&vertexBufferDesc, &vertexData, &_buffer);
 	if (FAILED(hr)) throw std::invalid_argument("Vertex Buffer failed to refresh/initialise");
+
 }
 
 /// <summary>
@@ -42,7 +50,7 @@ void VertexBuffer::RefreshBuffer() {
 /// <param name="device"></param>
 IndexBuffer::IndexBuffer(ID3D11Device* device) {
 	_device = device;
-	_indices = new std::list<WORD>();
+	_indices = new std::vector<WORD>();
 }
 IndexBuffer::~IndexBuffer() {
 	_buffer->Release();
@@ -51,8 +59,11 @@ IndexBuffer::~IndexBuffer() {
 	delete _indices;
 }
 
-void IndexBuffer::SetBuffer(std::list<WORD> ind) {
+void IndexBuffer::SetBuffer(std::vector<WORD> ind) {
 	_indices->assign(ind.begin(), ind.end());
+	_indices->reserve(_indices->size());
+
+
 	RefreshBuffer();
 }
 
@@ -60,15 +71,15 @@ void IndexBuffer::RefreshBuffer() {
 	HRESULT hr = S_OK;
 
 	const int indiceSize = _indices->size();
-	WORD indiceArray[indiceSize];
-	std::copy(_indices->begin(), _indices->end(), arr);
+	WORD* indiceArray = new WORD[indiceSize];
+	std::copy(_indices->begin(), _indices->end(), indiceArray);
 
 	D3D11_BUFFER_DESC indexBufferDesc = {};
-	indexBufferDesc.ByteWidth = sizeof(indiceArray);
+	indexBufferDesc.ByteWidth = sizeof(&indiceArray);
 	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA indexData = { indiceArray };
+	D3D11_SUBRESOURCE_DATA indexData = { &indiceArray };
 
 	hr = _device->CreateBuffer(&indexBufferDesc, &indexData, &_buffer);
 	if (FAILED(hr)) throw std::invalid_argument("Index Buffer failed to refresh/initialise");
@@ -83,7 +94,7 @@ ModelBuffer::ModelBuffer(ID3D11Device* device) {
 	_iBuffer = new IndexBuffer(device);
 }
 
-ModelBuffer::ModelBuffer(ID3D11Device* device, std::list<SimpleVertex> verts, std::list<WORD> indices) {
+ModelBuffer::ModelBuffer(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<WORD> indices) {
 	_vBuffer = new VertexBuffer(device);
 	_iBuffer = new IndexBuffer(device);
 

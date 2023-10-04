@@ -217,7 +217,7 @@ HRESULT DX11Framework::InitShadersAndInputLayout()
 
 HRESULT DX11Framework::InitVertexIndexBuffers()
 {
-    std::list<SimpleVertex> VertexData = 
+    std::vector<SimpleVertex> VertexData =
     {
         //Position                     //Color             
         { XMFLOAT3(-1.00f,  1.00f, 0), XMFLOAT4(1.0f,  0.0f, 0.0f,  0.0f)},
@@ -226,7 +226,7 @@ HRESULT DX11Framework::InitVertexIndexBuffers()
         { XMFLOAT3(1.00f, -1.00f, 0),  XMFLOAT4(1.0f,  1.0f, 1.0f,  0.0f)},
     };
 
-    std::list<WORD> IndexData =
+    std::vector<WORD> IndexData =
     {
         //Indices
         0, 1, 2,
