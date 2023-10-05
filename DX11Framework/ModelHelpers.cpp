@@ -52,6 +52,8 @@ void VertexBuffer::RefreshBuffer() {
 
 	hr = _device->CreateBuffer(&vertexBufferDesc, &vertexData, &_buffer);
 	if (FAILED(hr)) throw std::invalid_argument("Vertex Buffer failed to refresh/initialise");
+	
+	delete[] vertexArray;
 
 }
 
@@ -100,9 +102,10 @@ void IndexBuffer::RefreshBuffer() {
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
-
 	hr = _device->CreateBuffer(&indexBufferDesc, &indexData, &_buffer);
 	if (FAILED(hr)) throw std::invalid_argument("Index Buffer failed to refresh/initialise");
+
+	delete[] indiceArray;
 }
 
 /// <summary>
