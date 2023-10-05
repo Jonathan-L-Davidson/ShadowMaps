@@ -6,6 +6,8 @@
 #include <DirectXMath.h>
 #include <list>
 #include "Model.h"
+#include "Renderer.h"
+#include "WindowManager.h"
 //#include <wrl.h>
 
 using namespace DirectX;
@@ -14,42 +16,16 @@ using namespace DirectX;
 
 class DX11Framework
 {
-	int _WindowWidth = 1280;
-	int _WindowHeight = 768;
+	int _windW = 1280;
+	int _windH = 768;
 
-	ID3D11DeviceContext* _immediateContext = nullptr;
-	ID3D11Device* _device;
-	IDXGIDevice* _dxgiDevice = nullptr;
-	IDXGIFactory2* _dxgiFactory = nullptr;
-	ID3D11RenderTargetView* _frameBufferView = nullptr;
-	IDXGISwapChain1* _swapChain;
 	D3D11_VIEWPORT _viewport;
 
-	ID3D11RasterizerState* _rasterizerState;
-	ID3D11VertexShader* _vertexShader;
-	ID3D11InputLayout* _inputLayout;
-	ID3D11PixelShader* _pixelShader;
-	ID3D11Buffer* _constantBuffer;
-	Model* _cube;
-
-	HWND _windowHandle;
-
-	XMFLOAT4X4 _World;
-	XMFLOAT4X4 _View;
-	XMFLOAT4X4 _Projection;
-
-	ConstantBuffer _cbData;
-
+	Renderer* _renderManager;
+	WindowManager* _windowManager;
 public:
 	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
-	HRESULT CreateWindowHandle(HINSTANCE hInstance, int nCmdShow);
-	HRESULT CreateD3DDevice();
-	HRESULT CreateSwapChainAndFrameBuffer();
-	HRESULT InitShadersAndInputLayout();
-	HRESULT InitVertexIndexBuffers();
-	HRESULT InitPipelineVariables();
-	HRESULT InitRunTimeData();
+	HRESULT InitCube();
 	~DX11Framework();
 	void Update();
-	void Draw();
 };

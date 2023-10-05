@@ -135,7 +135,9 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="ModelHelpers.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Structures.cpp" />
+    <ClCompile Include="WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SimpleShaders.hlsl">
@@ -154,7 +156,9 @@
     <ClInclude Include="DX11Framework.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelHelpers.h" />
+    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Structures.h" />
+    <ClInclude Include="WindowManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
