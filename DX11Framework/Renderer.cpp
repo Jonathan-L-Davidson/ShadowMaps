@@ -13,7 +13,6 @@ Renderer::~Renderer() {
     DELETED3D(_vertexShader);
     DELETED3D(_pixelShader);
     DELETED3D(_constantBuffer);
-    delete _cube;
 }
 
 HRESULT Renderer::Initialise() {
@@ -227,47 +226,10 @@ HRESULT Renderer::InitRunTimeData()
     XMMATRIX perspective = XMMatrixPerspectiveFovLH(XMConvertToRadians(90), aspect, 0.01f, 100.0f);
     XMStoreFloat4x4(&_Projection, perspective);
 
-
-    std::vector<SimpleVertex> VertexData =
-    {
-        //Position                     //Color             
-        { XMFLOAT3(-1.00f,  1.00f, 0), XMFLOAT4(1.0f,  0.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(1.00f,  1.00f, 0),  XMFLOAT4(0.0f,  1.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, 0), XMFLOAT4(0.0f,  0.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, 0),  XMFLOAT4(1.0f,  1.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(-1.00f,  1.00f, 2.00f), XMFLOAT4(1.0f,  1.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(1.00f,  1.00f, 2.00f),  XMFLOAT4(0.0f,  1.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, 2.00f), XMFLOAT4(1.0f,  0.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, 2.00f),  XMFLOAT4(0.5f,  0.5f, 1.0f,  0.0f)},
-    };
-
-    std::vector<WORD> IndexData =
-    {
-        //Indices
-        0,1,2,
-        2,1,3,
-        5,7,3,
-        5,3,1,
-        7,5,4,
-        6,7,4,
-        6,4,0,
-        0,2,6,
-        5,1,4,
-        4,1,0,
-        3,7,6,
-        3,6,2,
-    };
-
-    _cube = new Model(GetDevice(), VertexData, IndexData);
-    Shader shaders = GetShaders();
-    _cube->SetVertexShader(shaders.vertexShader);
-    _cube->SetPixelShader(shaders.pixelShader);
-
-
     return S_OK;
 }
 
-void Renderer::Render(float simpleCount) {
+void Renderer::Render(float simpleCount, Model* model) {
     //Store this frames data in constant buffer struct
     _cbData.World = XMMatrixTranspose(XMLoadFloat4x4(&_World));
     _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&_View));
@@ -288,7 +250,7 @@ void Renderer::Render(float simpleCount) {
     _immediateContext->Unmap(_constantBuffer, 0);
 
     // TODO: Refactor a way to loop through all objects to render.
-    _cube->Render(_immediateContext);
+    model->Render(_immediateContext);
 
     //Present Backbuffer to screen
     _swapChain->Present(0, 0);

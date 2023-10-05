@@ -26,7 +26,7 @@ public:
 	ID3D11DeviceContext* GetDeviceContext() { return _immediateContext; };
 	ID3D11Device* GetDevice() { return _device; };
 
-	void Render(float simpleCount);
+	void Render(float simpleCount, Model* model);
 private:
 	Rect* _windowRect;
 
@@ -60,9 +60,6 @@ private:
 	XMFLOAT4X4 _World;
 	XMFLOAT4X4 _View;
 	XMFLOAT4X4 _Projection;
-
-	Model* _cube;
-
 };
 
 #endif

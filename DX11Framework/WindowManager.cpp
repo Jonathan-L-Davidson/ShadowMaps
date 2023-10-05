@@ -23,6 +23,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+WindowManager::~WindowManager() {
+    delete _windowRect;
+}
+
 HRESULT WindowManager::Initialise(HINSTANCE hInstance, int nCmdShow, int windX, int windY) {
     const wchar_t* windowName = L"DX11Framework";
 

@@ -9,6 +9,7 @@ class WindowManager
 {
 public:
 	WindowManager() {};
+	~WindowManager();
 	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow, int windX, int windY);
 	Rect* GetWindRect() { return _windowRect; };
 	HWND& GetHandle() { return _windowHandle; };
