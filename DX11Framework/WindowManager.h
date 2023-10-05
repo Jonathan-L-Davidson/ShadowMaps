@@ -12,10 +12,10 @@ public:
 	~WindowManager();
 	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow, int windX, int windY);
 	Rect* GetWindRect() { return _windowRect; };
-	HWND& GetHandle() { return _windowHandle; };
+	static HWND& GetHandle() { return _windowHandle; };
 private:
 	Rect* _windowRect;
-	HWND _windowHandle;
+	static HWND _windowHandle;
 };
 
 #endif
