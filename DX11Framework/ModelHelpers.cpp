@@ -1,6 +1,10 @@
 #include "ModelHelpers.h"
 #include <stdexcept>
 
+// For context to this messed up solution, using std::lists or std::vectors, they often pass pointers to the buffer instead of the data.
+// So I've made it so it creates a new pointer array and copies the list, this can be costly, but aslong as we're not loading models during gameplay,
+// this wouldn't be an issue.
+
 /// <summary>
 /// Contains buffer for vertices with appropriate helpers.
 /// </summary>
@@ -31,13 +35,20 @@ void VertexBuffer::RefreshBuffer() {
 	std::copy(_vertices->begin(), _vertices->end(), vertexArray);
 
 
-	D3D11_BUFFER_DESC vertexBufferDesc = {};
-	vertexBufferDesc.ByteWidth = sizeof(&vertexArray);
+	D3D11_BUFFER_DESC vertexBufferDesc;
+	ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
+
+	vertexBufferDesc.ByteWidth = sizeof(SimpleVertex) * vertexSize;
 	vertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA vertexData = { vertexArray };
+	// Future me, do not initialise subresource data and pass it the array immediately, use pSysMem and pass the first in list as junk data will be sent instead.
+	D3D11_SUBRESOURCE_DATA vertexData;
+	ZeroMemory(&vertexData, sizeof(vertexData));
 
+	vertexData.pSysMem = &vertexArray[0];
+	vertexData.SysMemPitch = 0;
+	vertexData.SysMemSlicePitch = 0;
 
 	hr = _device->CreateBuffer(&vertexBufferDesc, &vertexData, &_buffer);
 	if (FAILED(hr)) throw std::invalid_argument("Vertex Buffer failed to refresh/initialise");
@@ -74,12 +85,21 @@ void IndexBuffer::RefreshBuffer() {
 	WORD* indiceArray = new WORD[indiceSize];
 	std::copy(_indices->begin(), _indices->end(), indiceArray);
 
-	D3D11_BUFFER_DESC indexBufferDesc = {};
-	indexBufferDesc.ByteWidth = sizeof(&indiceArray);
+	D3D11_BUFFER_DESC indexBufferDesc;
+	ZeroMemory(&indexBufferDesc, sizeof(indexBufferDesc));
+
+	indexBufferDesc.ByteWidth = sizeof(WORD) * indiceSize;
 	indexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA indexData = { &indiceArray };
+	// Future me, do not initialise subresource data and pass it the array immediately, use pSysMem and pass the first in list as junk data will be sent instead.
+	D3D11_SUBRESOURCE_DATA indexData;
+	ZeroMemory(&indexData, sizeof(indexData));
+
+	indexData.pSysMem = &indiceArray[0];
+	indexData.SysMemPitch = 0;
+	indexData.SysMemSlicePitch = 0;
+
 
 	hr = _device->CreateBuffer(&indexBufferDesc, &indexData, &_buffer);
 	if (FAILED(hr)) throw std::invalid_argument("Index Buffer failed to refresh/initialise");
