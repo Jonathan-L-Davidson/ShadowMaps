@@ -48,5 +48,5 @@ void Cube::Initialise() {
 }
 
 void Cube::Update(float deltaTime) {
-    XMStoreFloat4x4(&_worldPos, XMLoadFloat4x4(&_worldPos) * XMMatrixRotationZ(deltaTime) * XMMatrixRotationY(deltaTime));
+    XMStoreFloat4x4(&_worldPos, XMMatrixIdentity() * XMMatrixRotationZ(2.0f * deltaTime) * XMMatrixRotationY(2.0f * deltaTime));
 }
