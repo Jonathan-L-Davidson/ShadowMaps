@@ -1,12 +1,14 @@
 #pragma once
 
-#if !defined(RENDERER_H)
+#ifndef RENDERER_H
 #define RENDERER_H
 #include <d3d11_4.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include "Structures.h"
 #include "model.h"
+
+class ObjectManager;
 
 class Renderer
 {
@@ -16,7 +18,7 @@ public:
 	HRESULT Initialise();
 
 	void SetWindowRect(Rect* rect) { _windowRect = rect; };
-	void SetWindowInstance(HWND& hwnd) { _windowHandle = hwnd; };
+	void SetWindowInstance(HWND hwnd) { _windowHandle = hwnd; };
 
 	Shader GetShaders() { Shader shaderPack;
 						shaderPack.vertexShader = _vertexShader;
@@ -26,7 +28,7 @@ public:
 	ID3D11DeviceContext* GetDeviceContext() { return _immediateContext; };
 	ID3D11Device* GetDevice() { return _device; };
 
-	void Render(float simpleCount, Model* model);
+	void Render(float simpleCount, ObjectManager* objManager);
 private:
 	Rect* _windowRect;
 

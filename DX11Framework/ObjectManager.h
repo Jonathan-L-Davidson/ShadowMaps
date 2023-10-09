@@ -1,23 +1,30 @@
 #pragma once
 
-#if !defined(OBJECTMANAGER_H)
+#ifndef OBJECTMANAGER_H
 #define OBJECTMANAGER_H
 
 #include "Object.h"
 #include <string>
-#include <map>
+#include <vector>
+
+class Renderer;
 
 class ObjectManager
 {
 public:
-	ObjectManager() {};
-	~ObjectManager() {};
+	ObjectManager();
+	~ObjectManager();
 
-	std::vector<Object> GetObjects() { return _objects; };
+	void SetRenderManager(Renderer* manager) { _renderManager = manager; };
 
-	static void AddObject(Object* obj);
+	std::vector<Object*> GetObjects() { return _objects; };
+
+
+	void AddObject(Object* obj);
 private:
-	std::map<std::string, Object*> _objects;
+	std::vector<Object*> _objects;
+
+	Renderer* _renderManager;
 };
 
 #endif

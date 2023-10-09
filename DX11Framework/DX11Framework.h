@@ -8,6 +8,9 @@
 #include "Model.h"
 #include "Renderer.h"
 #include "WindowManager.h"
+#include "ObjectManager.h"
+#include "Cube.h"
+
 //#include <wrl.h>
 
 using namespace DirectX;
@@ -23,6 +26,7 @@ class DX11Framework
 
 	Renderer* _renderManager;
 	WindowManager* _windowManager;
+	ObjectManager* _objectManager;
 	
 	Model* _cube;
 public:

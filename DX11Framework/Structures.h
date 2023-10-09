@@ -1,6 +1,6 @@
 #pragma once
 
-#if !defined(STRUCTURES_H)
+#ifndef STRUCTURES_H
 #define STRUCTURES_H
 #include <d3d11_4.h>
 #include <d3dcompiler.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-#if !defined(MODELHELPERS_H)
+#ifndef MODELHELPERS_H
 #define MODELHELPERS_H
 #include "Structures.h"
 #include <vector>

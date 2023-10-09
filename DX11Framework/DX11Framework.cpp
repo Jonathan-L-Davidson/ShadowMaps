@@ -18,6 +18,8 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
     hr = _renderManager->Initialise();
     if (FAILED(hr)) return E_FAIL;
 
+    _objectManager = new ObjectManager();
+
     hr = InitCube(); // Renderer Class
     if (FAILED(hr)) return E_FAIL;
     
@@ -26,39 +28,9 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
 
 HRESULT DX11Framework::InitCube()
 {
-    std::vector<SimpleVertex> VertexData = {
-        //Position                     //Color             
-        { XMFLOAT3(-1.00f,  1.00f, -1.00f), XMFLOAT4(1.0f,  0.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(1.00f,  1.00f, -1.00f),  XMFLOAT4(0.0f,  1.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, -1.00f), XMFLOAT4(0.0f,  0.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, -1.00f),  XMFLOAT4(1.0f,  1.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(-1.00f,  1.00f, 1.00f), XMFLOAT4(1.0f,  1.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(1.00f,  1.00f, 1.00f),  XMFLOAT4(0.0f,  1.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, 1.00f), XMFLOAT4(1.0f,  0.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, 1.00f),  XMFLOAT4(0.5f,  0.5f, 1.0f,  0.0f)},
-    };
-
-    std::vector<WORD> IndexData = {
-        //Indices
-        0,1,2,
-        2,1,3,    
-        5,7,3,
-        5,3,1,
-        7,5,4,
-        6,7,4,
-        6,4,0,
-        0,2,6,
-        5,1,4,
-        4,1,0,
-        3,7,6,
-        3,6,2,
-    };
-
-    _cube = new Model(_renderManager->GetDevice(), VertexData, IndexData);
-    Shader shaders = _renderManager->GetShaders();
-    _cube->SetVertexShader(shaders.vertexShader);
-    _cube->SetPixelShader(shaders.pixelShader);
-
+    Object* cube = new Cube();
+    cube->SetName("Test Cube");
+    _objectManager->AddObject(cube);
     return S_OK;
 }
 
@@ -68,6 +40,7 @@ DX11Framework::~DX11Framework()
 {
     delete _renderManager;
     delete _windowManager;
+    delete _objectManager;
     delete _cube;
 
 }
@@ -85,6 +58,6 @@ void DX11Framework::Update()
     static float simpleCount = 0.0f;
     simpleCount += deltaTime;
 
-    _renderManager->Render(simpleCount, _cube);
+    _renderManager->Render(simpleCount, _objectManager);
 
 }

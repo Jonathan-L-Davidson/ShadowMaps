@@ -1,5 +1,5 @@
 #include "Renderer.h"
-
+#include "ObjectManager.h"
 
 Renderer::Renderer() {
 
@@ -229,7 +229,7 @@ HRESULT Renderer::InitRunTimeData()
     return S_OK;
 }
 
-void Renderer::Render(float simpleCount, Model* model) {
+void Renderer::Render(float simpleCount, ObjectManager* objManager) {
     //Store this frames data in constant buffer struct
     _cbData.World = XMMatrixTranspose(XMLoadFloat4x4(&_World));
     _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&_View));
@@ -249,8 +249,11 @@ void Renderer::Render(float simpleCount, Model* model) {
     memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));
     _immediateContext->Unmap(_constantBuffer, 0);
 
-    // TODO: Refactor a way to loop through all objects to render.
-    model->Render(_immediateContext);
+    for (Object* obj : objManager->GetObjects()) {
+        Model* model = obj->GetModel();
+        if (model)
+            model->Render(_immediateContext);
+    }
 
     //Present Backbuffer to screen
     _swapChain->Present(0, 0);

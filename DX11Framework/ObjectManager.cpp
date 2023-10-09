@@ -1,26 +1,26 @@
 #include "ObjectManager.h"
-#include "WindowManager.h"
+#include <stdexcept>
 
 ObjectManager::ObjectManager() {
-
+	return;
 }
 
 ObjectManager::~ObjectManager() {
-
+	for (auto obj : _objects) {
+		delete obj;
+	}
+	_objects.clear();
 }
 
 void ObjectManager::AddObject(Object* obj) {
 	if(obj->GetName().size() <= 0) {// If the string is empty, do not add.
-		MessageBoxA(WindowManager::GetHandle(), "ERROR: Object has no name!", nullptr, ERROR);
+		throw std::invalid_argument("Object name is empty!");
 		return;
 	}
 	
-	// If insert returns a value in .second, 
-	if (!_objects.insert(std::make_pair(obj->GetName(), obj)).second) {
-		std::string obj1 = _objects.at(obj->GetName())->GetName();
-		std::string obj2 = obj->GetName();
-		MessageBoxA(WindowManager::GetHandle(), std::string("ERROR: Object has two names! " + obj1).c_str(), nullptr, ERROR);
+	if (obj) {
+		_objects.push_back(obj);
+		obj->SetManager(this);
+		obj->SetRenderManager(_renderManager);
 	}
-
-	
 }
