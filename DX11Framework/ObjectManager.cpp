@@ -13,7 +13,7 @@ ObjectManager::~ObjectManager() {
 }
 
 void ObjectManager::AddObject(Object* obj) {
-	if(obj->GetName().size() <= 0) {// If the string is empty, do not add.
+	if(obj->GetName().size() <= 0) { // If the name string is empty, do not add.
 		throw std::invalid_argument("Object name is empty!");
 		return;
 	}
@@ -22,5 +22,6 @@ void ObjectManager::AddObject(Object* obj) {
 		_objects.push_back(obj);
 		obj->SetManager(this);
 		obj->SetRenderManager(_renderManager);
+		obj->Initialise(); // Todo: Figure out proper OOP practices again.
 	}
 }

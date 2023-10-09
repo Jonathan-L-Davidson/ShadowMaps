@@ -19,7 +19,7 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
     if (FAILED(hr)) return E_FAIL;
 
     _objectManager = new ObjectManager();
-
+    _objectManager->SetRenderManager(_renderManager);
     hr = InitCube(); // Renderer Class
     if (FAILED(hr)) return E_FAIL;
     

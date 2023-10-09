@@ -2,7 +2,7 @@
 #include "Renderer.h"
 
 Cube::Cube() {
-    Object();
+    return;
 }
 
 Cube::~Cube() {
