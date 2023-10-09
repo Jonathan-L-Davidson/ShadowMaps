@@ -31,6 +31,6 @@ void ObjectManager::AddObject(Object* obj) {
 		obj->SetManager(this);
 		obj->SetRenderManager(_renderManager);
 		obj->Initialise(); // Todo: Figure out proper OOP practices again.
-		obj->SetPosition(XMFLOAT3(2.0f, 3.0f, 15.0f)); // Fix position stuff lol
+		obj->SetPosition(XMFLOAT3(2.0f, 3.0f, 10.0f)); // Fix position stuff lol
 	}
 }
