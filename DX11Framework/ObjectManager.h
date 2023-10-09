@@ -19,6 +19,7 @@ public:
 
 	std::vector<Object*> GetObjects() { return _objects; };
 
+	void Update(float deltaTime);
 
 	void AddObject(Object* obj);
 private:

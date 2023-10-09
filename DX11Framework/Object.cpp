@@ -13,6 +13,12 @@ void Object::Initialise() {
 	return;
 }
 
-void Object::Update() {
+void Object::Update(float deltaTime) {
 	return;
+}
+
+
+// SETTERS & GETTERS
+void Object::SetPosition(XMFLOAT3 pos) {
+	XMStoreFloat4x4(&_worldPos, XMMatrixIdentity() * XMMatrixTranslation(pos.x, pos.y, pos.z));
 }

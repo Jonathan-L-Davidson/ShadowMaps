@@ -11,6 +11,7 @@ public:
 	~Cube();
 
 	void Initialise();
+	void Update(float deltaTime);
 private:
 };
 

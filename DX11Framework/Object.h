@@ -25,19 +25,21 @@ public:
 
 	void SetManager(ObjectManager* manager) { _objManager = manager; }
 	void SetRenderManager(Renderer* manager) { _renderManager = manager; }
-	void SetPosition(XMFLOAT4X4 pos);
-	XMFLOAT4X4 GetPosition() { return _pos; };
+	void SetPosition(XMFLOAT3 pos);
+	XMFLOAT4X4 GetPosition() { return _worldPos; };
+	XMMATRIX GetWorldMatrix() { return XMLoadFloat4x4(&_worldPos); };
 
 	Model* GetModel() { return _model; };
 	void SetModel(Model* model) { _model = model; };
 
 	void SetName(std::string name) { _name = name; };
+
+	virtual void Update(float deltaTime);
 protected:
 	std::string _name;
 
-	XMFLOAT4X4 _pos;
+	XMFLOAT4X4 _worldPos;
 
-	virtual void Update();
 	Model* _model;
 
 

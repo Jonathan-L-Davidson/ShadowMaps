@@ -28,7 +28,6 @@ class DX11Framework
 	WindowManager* _windowManager;
 	ObjectManager* _objectManager;
 	
-	Model* _cube;
 public:
 	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
 	HRESULT InitCube();

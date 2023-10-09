@@ -231,12 +231,8 @@ HRESULT Renderer::InitRunTimeData()
 
 void Renderer::Render(float simpleCount, ObjectManager* objManager) {
     //Store this frames data in constant buffer struct
-    _cbData.World = XMMatrixTranspose(XMLoadFloat4x4(&_World));
     _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&_View));
     _cbData.Projection = XMMatrixTranspose(XMLoadFloat4x4(&_Projection));
-
-    // TODO: MOVE THIS ELSEWHERE
-    XMStoreFloat4x4(&_World, XMMatrixIdentity() * XMMatrixRotationZ(simpleCount) * XMMatrixRotationY(simpleCount));
 
     //Present unbinds render target, so rebind and clear at start of each frame
     float backgroundColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };
@@ -252,6 +248,7 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
     for (Object* obj : objManager->GetObjects()) {
         Model* model = obj->GetModel();
         if (model)
+            _cbData.World = XMMatrixTranspose(obj->GetWorldMatrix());
             model->Render(_immediateContext);
     }
 

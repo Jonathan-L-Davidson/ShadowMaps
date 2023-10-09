@@ -44,4 +44,9 @@ void Cube::Initialise() {
     model->SetVertexShader(shaders.vertexShader);
     model->SetPixelShader(shaders.pixelShader);
     SetModel(model);
+
+}
+
+void Cube::Update(float deltaTime) {
+    XMStoreFloat4x4(&_worldPos, XMLoadFloat4x4(&_worldPos) * XMMatrixRotationZ(deltaTime) * XMMatrixRotationY(deltaTime));
 }

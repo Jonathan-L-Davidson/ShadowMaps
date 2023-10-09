@@ -41,8 +41,6 @@ DX11Framework::~DX11Framework()
     delete _renderManager;
     delete _windowManager;
     delete _objectManager;
-    delete _cube;
-
 }
 
 
@@ -58,6 +56,7 @@ void DX11Framework::Update()
     static float simpleCount = 0.0f;
     simpleCount += deltaTime;
 
+    _objectManager->Update(simpleCount);
     _renderManager->Render(simpleCount, _objectManager);
 
 }
