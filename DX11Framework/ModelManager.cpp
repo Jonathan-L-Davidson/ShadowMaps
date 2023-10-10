@@ -116,13 +116,23 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     std::string line;
 
     bool mode = false;
+    int vertPos;
 
     // The spaghetti!! Plan on redoing this later, I can't remember how to read files.
     while (getline(modelFile, line, ' ')) {
         if (line[0] == 'v') {
             mode = true;
         }
-        if (mode) {
+        if (mode) { // It's a vertex!
+            if (vertPos == 3) {
+                vertPos = 0;
+            }
+            
+            float value = std::strtof(line.c_str(), NULL);
+            
+            vertPos++;
+        }
+        else { // It's a indice!
 
         }
             char split = ' '; // split by spacebar.
