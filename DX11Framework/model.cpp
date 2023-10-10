@@ -2,20 +2,18 @@
 
 Model::Model(ID3D11Device* device) {
     _modelBuffer = new ModelBuffer(device);
-    _vertexShader = NULL;
-    _pixelShader = NULL;
+    _vertexShader = nullptr;
+    _pixelShader = nullptr;
 }
 
 Model::Model(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<WORD> indices) {
     _modelBuffer = new ModelBuffer(device, verts, indices);
-    _vertexShader = NULL;
-    _pixelShader = NULL;
+    _vertexShader = nullptr;
+    _pixelShader = nullptr;
 }
 
 Model::~Model() {
-    delete _modelBuffer;
-    _vertexShader = NULL;
-    _pixelShader = NULL;
+    delete _modelBuffer; // TODO Make model buffer manager delete models instead.
 }
 
 void Model::Render(ID3D11DeviceContext* context) {

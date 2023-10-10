@@ -7,8 +7,8 @@
 #include <DirectXMath.h>
 #include "Structures.h"
 #include "model.h"
-#include "Camera.h"
 
+class Camera;
 class ObjectManager;
 
 class Renderer
@@ -20,6 +20,7 @@ public:
 
 	void SetWindowRect(Rect* rect) { _windowRect = rect; };
 	void SetWindowInstance(HWND hwnd) { _windowHandle = hwnd; };
+	void SetCamera(Camera* cam) { _cam = cam; };
 
 	Shader GetShaders() { Shader shaderPack;
 						shaderPack.vertexShader = _vertexShader;

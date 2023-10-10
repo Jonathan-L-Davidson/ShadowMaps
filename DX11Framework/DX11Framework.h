@@ -11,6 +11,7 @@
 #include "ObjectManager.h"
 #include "Cube.h"
 #include "Pyramid.h"
+#include "Camera.h"
 
 //#include <wrl.h>
 
@@ -28,6 +29,9 @@ class DX11Framework
 	Renderer* _renderManager;
 	WindowManager* _windowManager;
 	ObjectManager* _objectManager;
+
+	Camera* _cam;
+	Object* _pyramid;
 	
 public:
 	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);

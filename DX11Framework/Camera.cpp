@@ -8,6 +8,10 @@ Camera::Camera(XMFLOAT3X3 EyeAtUp) {
 	XMStoreFloat4x4(&_view, XMMatrixLookAtLH(XMLoadFloat3(&Eye), XMLoadFloat3(&At), XMLoadFloat3(&Up)));
 }
 
+Camera::~Camera() {
+
+}
+
 void Camera::UpdateViewMatrix() {
 	XMStoreFloat4x4(&_view, XMMatrixLookAtLH(XMLoadFloat3(&Eye), XMLoadFloat3(&At), XMLoadFloat3(&Up)));
 
@@ -18,3 +22,22 @@ void Camera::SetPosition(XMFLOAT3 pos) {
 	UpdateViewMatrix();
 }
 
+void Camera::SetAt(XMFLOAT3 at) {
+	XMStoreFloat3(&At, XMLoadFloat3(&at));
+	UpdateViewMatrix();
+}
+
+void Camera::SetUp(XMFLOAT3 up) {
+	XMStoreFloat3(&Up, XMLoadFloat3(&up));
+	UpdateViewMatrix();
+}
+
+void Camera::LookAt(XMFLOAT3 pos) {
+	XMFLOAT3 localDifference;
+	XMStoreFloat3(&localDifference, XMLoadFloat3(&pos) - XMLoadFloat3(&Eye));
+	
+
+
+	XMStoreFloat3(&At, XMLoadFloat3(&localDifference));
+	UpdateViewMatrix();
+}

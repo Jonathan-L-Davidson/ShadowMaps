@@ -8,21 +8,32 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
 {
     HRESULT hr = S_OK;
 
+    // WindowManager Init
     _windowManager = new WindowManager();
     hr = _windowManager->Initialise(hInstance, nShowCmd, _windW, _windH); // Application class
     if (FAILED(hr)) return E_FAIL;
 
+    // RenderManager Init
     _renderManager = new Renderer();
     _renderManager->SetWindowRect(_windowManager->GetWindRect());
     _renderManager->SetWindowInstance(_windowManager->GetHandle());
     hr = _renderManager->Initialise();
     if (FAILED(hr)) return E_FAIL;
 
+    // ObjManager Init
     _objectManager = new ObjectManager();
     _objectManager->SetRenderManager(_renderManager);
     hr = InitCube(); // Renderer Class
     if (FAILED(hr)) return E_FAIL;
     
+    // Camera Init
+    XMFLOAT3X3 CamPos = XMFLOAT3X3(0, 0, -10.0f, // eye
+        0, 0, 0, // at
+        0, 1, 0); // up
+
+    _cam = new Camera(CamPos);
+    _renderManager->SetCamera(_cam);
+
     return hr;
 }
 
@@ -32,9 +43,9 @@ HRESULT DX11Framework::InitCube()
     cube->SetName("Test Cube");
     _objectManager->AddObject(cube, XMFLOAT3(0.0f, 3.0f, 5.0f));
 
-    Object* pyramid = new Pyramid();
-    pyramid->SetName("Test Pyramid");
-    _objectManager->AddObject(pyramid, XMFLOAT3(-3.0f, 0.0f, 5.0f));
+    _pyramid = new Pyramid();
+    _pyramid->SetName("Test Pyramid");
+    _objectManager->AddObject(_pyramid, XMFLOAT3(-3.0f, 0.0f, 5.0f));
 
     return S_OK;
 }
@@ -46,6 +57,9 @@ DX11Framework::~DX11Framework()
     delete _renderManager;
     delete _windowManager;
     delete _objectManager;
+
+    delete _pyramid;
+    delete _cam;
 }
 
 
@@ -61,6 +75,19 @@ void DX11Framework::Update()
     static float simpleCount = 0.0f;
     simpleCount += deltaTime;
 
+    /* // Just some code experimenting with camera coordinates.
+    // Camera update thing.
+    XMFLOAT3 eye = _cam->GetPosition();
+    eye.x += 4 * deltaTime;
+    XMFLOAT3 at = _cam->GetAt();
+    at.x = eye.x + 1;
+    _cam->SetAt(at);
+    _cam->SetPosition(eye);
+    */
+
+    _cam->LookAt(_pyramid->GetPosition());
+
+    // Normal standard loop.
     _objectManager->Update(deltaTime);
     _renderManager->Render(simpleCount, _objectManager);
 

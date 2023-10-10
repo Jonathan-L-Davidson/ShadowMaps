@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "ObjectManager.h"
+#include "Camera.h"
 
 Renderer::Renderer() {
 
@@ -216,12 +217,6 @@ HRESULT Renderer::InitRunTimeData()
     //Camera
     float aspect = _viewport.Width / _viewport.Height;
     
-    XMFLOAT3X3 CamPos = XMFLOAT3X3(0, 0, -3.0f, // eye
-                0, 0, 0, // at
-                0, 1, 0); // up
-
-    _cam = new Camera(CamPos);
-
     //Projection
     XMMATRIX perspective = XMMatrixPerspectiveFovLH(XMConvertToRadians(90), aspect, 0.01f, 100.0f);
     XMStoreFloat4x4(&_Projection, perspective);

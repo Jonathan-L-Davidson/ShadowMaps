@@ -16,9 +16,13 @@ public:
     void UpdateViewMatrix();
 
     void SetPosition(XMFLOAT3 pos);
-    XMFLOAT3 GetPosition();
-    void SetRotation(XMFLOAT3 euler);
+    XMFLOAT3 GetPosition() { return Eye; };
+    void SetAt(XMFLOAT3 at);
+    XMFLOAT3 GetAt() { return At; };
+    void SetUp(XMFLOAT3 up);
+    XMFLOAT3 GetUp() { return Up; };
 
+    void LookAt(XMFLOAT3 pos);
     XMFLOAT4X4 GetView() { return _view; };
 private:
     XMFLOAT3 Eye;
