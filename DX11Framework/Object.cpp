@@ -5,7 +5,6 @@ Object::Object() {
 }
 
 Object::~Object() {
-	delete _model; // TODO: Model manager checking object references.
 	_objManager = nullptr;
 }
 

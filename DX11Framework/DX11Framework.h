@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "WindowManager.h"
 #include "ObjectManager.h"
+#include "ModelManager.h"
 #include "Cube.h"
 #include "Pyramid.h"
 #include "Camera.h"
@@ -29,6 +30,7 @@ class DX11Framework
 	Renderer* _renderManager;
 	WindowManager* _windowManager;
 	ObjectManager* _objectManager;
+	ModelManager* _modelManager;
 
 	Camera* _cam;
 	Object* _pyramid;

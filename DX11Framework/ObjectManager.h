@@ -8,6 +8,7 @@
 #include <vector>
 
 class Renderer;
+class ModelManager;
 
 class ObjectManager
 {
@@ -16,6 +17,7 @@ public:
 	~ObjectManager();
 
 	void SetRenderManager(Renderer* manager) { _renderManager = manager; };
+	void SetModelManager(ModelManager* manager) { _modelManager = manager; };
 
 	std::vector<Object*> GetObjects() { return _objects; };
 
@@ -26,6 +28,7 @@ private:
 	std::vector<Object*> _objects;
 
 	Renderer* _renderManager;
+	ModelManager* _modelManager;
 };
 
 #endif

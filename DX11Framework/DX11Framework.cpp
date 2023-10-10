@@ -20,9 +20,15 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
     hr = _renderManager->Initialise();
     if (FAILED(hr)) return E_FAIL;
 
+    // ModelManager Init
+    _modelManager = new ModelManager();
+    _modelManager->SetRenderManager(_renderManager);
+    _modelManager->Initialise();
+
     // ObjManager Init
     _objectManager = new ObjectManager();
     _objectManager->SetRenderManager(_renderManager);
+    _objectManager->SetModelManager(_modelManager);
     hr = InitCube(); // Renderer Class
     if (FAILED(hr)) return E_FAIL;
     
@@ -56,6 +62,7 @@ DX11Framework::~DX11Framework()
 {
     delete _renderManager;
     delete _windowManager;
+    delete _modelManager;
     delete _objectManager;
 
     delete _pyramid;
@@ -85,7 +92,7 @@ void DX11Framework::Update()
     _cam->SetPosition(eye);
     */
 
-    _cam->LookAt(_pyramid->GetPosition());
+    //_cam->LookAt(_pyramid->GetPosition());
 
     // Normal standard loop.
     _objectManager->Update(deltaTime);

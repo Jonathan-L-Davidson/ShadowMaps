@@ -1,4 +1,5 @@
 #include "ObjectManager.h"
+#include "ModelManager.h"
 #include <stdexcept>
 
 ObjectManager::ObjectManager() {
@@ -31,6 +32,8 @@ void ObjectManager::AddObject(Object* obj, XMFLOAT3 pos) {
 		obj->SetManager(this);
 		obj->SetRenderManager(_renderManager);
 		obj->Initialise(); // Todo: Figure out proper OOP practices again.
+		Model* model = _modelManager->GetModel(obj->GetName());
+		obj->SetModel(model);
 		obj->SetPosition(pos); // Fix position stuff lol
 	}
 }

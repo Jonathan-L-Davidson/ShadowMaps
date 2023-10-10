@@ -137,6 +137,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="ModelHelpers.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Pyramid.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="DX11Framework.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelHelpers.h" />
+    <ClInclude Include="ModelManager.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Pyramid.h" />
