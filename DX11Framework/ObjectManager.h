@@ -21,7 +21,7 @@ public:
 
 	void Update(float deltaTime);
 
-	void AddObject(Object* obj);
+	void AddObject(Object* obj, XMFLOAT3 pos);
 private:
 	std::vector<Object*> _objects;
 

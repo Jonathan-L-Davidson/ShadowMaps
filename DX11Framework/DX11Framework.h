@@ -10,6 +10,7 @@
 #include "WindowManager.h"
 #include "ObjectManager.h"
 #include "Cube.h"
+#include "Pyramid.h"
 
 //#include <wrl.h>
 

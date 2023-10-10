@@ -26,8 +26,9 @@ public:
 	void SetManager(ObjectManager* manager) { _objManager = manager; }
 	void SetRenderManager(Renderer* manager) { _renderManager = manager; }
 	void SetPosition(XMFLOAT3 pos);
-	XMFLOAT4X4 GetPosition() { return _worldPos; };
-	XMMATRIX GetWorldMatrix() { return XMLoadFloat4x4(&_worldPos); };
+	XMFLOAT3 GetPosition();
+	XMFLOAT4X4 GetTransform() { return _worldTransform; };
+	XMMATRIX GetWorldMatrix() { return XMLoadFloat4x4(&_worldTransform); };
 
 	Model* GetModel() { return _model; };
 	void SetModel(Model* model) { _model = model; };
@@ -38,11 +39,11 @@ public:
 protected:
 	std::string _name;
 
-	XMFLOAT4X4 _worldPos;
+	XMFLOAT4X4 _worldTransform;
 
 	Model* _model;
 
-
+	virtual void UpdatePosition();
 	ObjectManager* _objManager;
 	Renderer* _renderManager;
 };

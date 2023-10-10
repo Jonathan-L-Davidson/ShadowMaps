@@ -26,6 +26,7 @@ struct ConstantBuffer
 	XMMATRIX Projection;
 	XMMATRIX View;
 	XMMATRIX World;
+	float Time;
 };
 
 struct Rect{

@@ -233,6 +233,7 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
     //Store this frames data in constant buffer struct
     _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&_View));
     _cbData.Projection = XMMatrixTranspose(XMLoadFloat4x4(&_Projection));
+    _cbData.Time = simpleCount;
 
     //Present unbinds render target, so rebind and clear at start of each frame
     float backgroundColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };
@@ -241,15 +242,17 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
 
     //Write constant buffer data onto GPU
     D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-    _immediateContext->Map(_constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
-    memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));
-    _immediateContext->Unmap(_constantBuffer, 0);
+
 
     for (Object* obj : objManager->GetObjects()) {
         Model* model = obj->GetModel();
-        if (model)
+        if (model) {
             _cbData.World = XMMatrixTranspose(obj->GetWorldMatrix());
+            _immediateContext->Map(_constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+            memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));
+            _immediateContext->Unmap(_constantBuffer, 0);
             model->Render(_immediateContext);
+        }
     }
 
     //Present Backbuffer to screen

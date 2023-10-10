@@ -30,7 +30,12 @@ HRESULT DX11Framework::InitCube()
 {
     Object* cube = new Cube();
     cube->SetName("Test Cube");
-    _objectManager->AddObject(cube);
+    _objectManager->AddObject(cube, XMFLOAT3(0.0f, 3.0f, 5.0f));
+
+    Object* pyramid = new Pyramid();
+    pyramid->SetName("Test Pyramid");
+    _objectManager->AddObject(pyramid, XMFLOAT3(-3.0f, 0.0f, 5.0f));
+
     return S_OK;
 }
 

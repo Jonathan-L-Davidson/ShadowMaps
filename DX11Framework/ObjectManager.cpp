@@ -20,7 +20,7 @@ void ObjectManager::Update(float deltaTime) {
 	}
 }
 
-void ObjectManager::AddObject(Object* obj) {
+void ObjectManager::AddObject(Object* obj, XMFLOAT3 pos) {
 	if(obj->GetName().size() <= 0) { // If the name string is empty, do not add.
 		throw std::invalid_argument("Object name is empty!");
 		return;
@@ -31,6 +31,6 @@ void ObjectManager::AddObject(Object* obj) {
 		obj->SetManager(this);
 		obj->SetRenderManager(_renderManager);
 		obj->Initialise(); // Todo: Figure out proper OOP practices again.
-		obj->SetPosition(XMFLOAT3(2.0f, 3.0f, 10.0f)); // Fix position stuff lol
+		obj->SetPosition(pos); // Fix position stuff lol
 	}
 }
