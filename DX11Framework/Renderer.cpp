@@ -215,12 +215,12 @@ HRESULT Renderer::InitRunTimeData()
 {
     //Camera
     float aspect = _viewport.Width / _viewport.Height;
+    
+    XMFLOAT3X3 CamPos = XMFLOAT3X3(0, 0, -3.0f, // eye
+                0, 0, 0, // at
+                0, 1, 0); // up
 
-    XMFLOAT3 Eye = XMFLOAT3(0, 0, -3.0f);
-    XMFLOAT3 At = XMFLOAT3(0, 0, 0);
-    XMFLOAT3 Up = XMFLOAT3(0, 1, 0);
-
-    XMStoreFloat4x4(&_View, XMMatrixLookAtLH(XMLoadFloat3(&Eye), XMLoadFloat3(&At), XMLoadFloat3(&Up)));
+    _cam = new Camera(CamPos);
 
     //Projection
     XMMATRIX perspective = XMMatrixPerspectiveFovLH(XMConvertToRadians(90), aspect, 0.01f, 100.0f);
@@ -231,7 +231,8 @@ HRESULT Renderer::InitRunTimeData()
 
 void Renderer::Render(float simpleCount, ObjectManager* objManager) {
     //Store this frames data in constant buffer struct
-    _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&_View));
+    XMFLOAT4X4 camView = _cam->GetView();
+    _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&camView));
     _cbData.Projection = XMMatrixTranspose(XMLoadFloat4x4(&_Projection));
     _cbData.Time = simpleCount;
 
