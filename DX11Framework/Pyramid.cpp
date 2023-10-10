@@ -39,5 +39,5 @@ void Pyramid::Initialise() {
 }
 
 void Pyramid::Update(float deltaTime) {
-    XMStoreFloat4x4(&_worldTransform, XMMatrixIdentity() * XMMatrixRotationZ(0.00005) * XMMatrixRotationY(0.00005) * XMLoadFloat4x4(&_worldTransform));
+    XMStoreFloat4x4(&_worldTransform, XMMatrixIdentity() * XMMatrixRotationY(2 * deltaTime) * XMLoadFloat4x4(&_worldTransform) * XMMatrixRotationY(0.5 * deltaTime));
 }

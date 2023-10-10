@@ -61,7 +61,7 @@ void DX11Framework::Update()
     static float simpleCount = 0.0f;
     simpleCount += deltaTime;
 
-    _objectManager->Update(simpleCount);
+    _objectManager->Update(deltaTime);
     _renderManager->Render(simpleCount, _objectManager);
 
 }

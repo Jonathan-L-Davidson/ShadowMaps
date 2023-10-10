@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DX11Framework.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -157,6 +158,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DX11Framework.h" />
     <ClInclude Include="Model.h" />

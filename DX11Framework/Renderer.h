@@ -7,6 +7,7 @@
 #include <DirectXMath.h>
 #include "Structures.h"
 #include "model.h"
+#include "Camera.h"
 
 class ObjectManager;
 
@@ -61,6 +62,7 @@ private:
 	ConstantBuffer _cbData;
 	XMFLOAT4X4 _World;
 	XMFLOAT4X4 _World2;
+	Camera* _cam;
 	XMFLOAT4X4 _View;
 	XMFLOAT4X4 _Projection;
 };
