@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "Structures.h"
 #include <fstream>
+#include <sstream>
 
 ModelManager::ModelManager() {
 	_models = new std::map<std::string, Model*>();
@@ -115,66 +116,34 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
 
     std::string line;
 
-    bool mode = false;
     int vertPos;
-
     // The spaghetti!! Plan on redoing this later, I can't remember how to read files.
-    while (getline(modelFile, line, ' ')) {
-        if (line[0] == 'v') {
-            mode = true;
-        }
-        if (mode) { // It's a vertex!
-            if (vertPos == 3) {
-                vertPos = 0;
-            }
-            
-            float value = std::strtof(line.c_str(), NULL);
-            
-            vertPos++;
-        }
-        else { // It's a indice!
+    while (getline(modelFile, line)) {
+        std::istringstream stringStream(line);
+
+        std::string type{}, x{}, y{}, z{};
+
+        stringStream >> type >> x >> y >> z;
+
+        if (type == "v") {
+            SimpleVertex simpleVert{
+                XMFLOAT3(std::strtof(x.c_str(), NULL), std::strtof(y.c_str(), NULL), std::strtof(z.c_str(), NULL)),
+                XMFLOAT4(0.8f, 0.75f, 0.60f, 0.00f)
+            };
+            Vertexes.push_back(simpleVert);
 
         }
-            char split = ' '; // split by spacebar.
-            float x, y, z;
+        else if(type == "f") {
 
-            std::string strings[4];
-            int counter = 0;
-            for (int i = 0; i < line.length(); i++) {
-                if (line[i] == split) {
-                    counter++;
-                }
-                else {
-                    strings[counter].append(&line[i]);
-                }
-            }
+            // scuffed but it'll work?
+            WORD indice1 = std::stoi(x.c_str());
+            WORD indice2 = std::stoi(y.c_str());
+            WORD indice3 = std::stoi(z.c_str());
 
-            x = std::strtof(strings[1].c_str(), NULL);
-            y = std::strtof(strings[2].c_str(), NULL);
-            z = std::strtof(strings[3].c_str(), NULL);
-            XMFLOAT3 vertexFloat = XMFLOAT3(x, y, z);
-            SimpleVertex vert = { vertexFloat, XMFLOAT4(0.7f,0.7f,0.7f,0.0f) };
-            Vertexes.push_back(vert);
-        }
-        else if(line[0] == 'f') {
-            char split = ' '; // split by spacebar.
-            int x, y, z;
+            Indices.push_back(indice1);
+            Indices.push_back(indice2);
+            Indices.push_back(indice3);
 
-            std::string strings[4];
-            int counter = 0;
-            for (int i = 0; i < line.length(); i++) {
-                if (line[i] == split) {
-                    counter++;
-                }
-                else {
-                    strings[counter].append(&line[i]);
-                }
-            }
-
-            for (int i = 1; i < 4; i++) {
-                int indice = std::stoi(strings[i].c_str(), NULL);
-                Indices.push_back(indice);
-            }
         }
     }
 
