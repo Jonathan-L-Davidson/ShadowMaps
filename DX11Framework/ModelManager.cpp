@@ -3,6 +3,7 @@
 #include "Structures.h"
 #include <fstream>
 #include <sstream>
+#include <random>
 
 ModelManager::ModelManager() {
 	_models = new std::map<std::string, Model*>();
@@ -16,7 +17,7 @@ void ModelManager::Initialise() {
     CreateCube();
     //CreatePyramid();
 
-    LoadModelFromFile("space_station.obj", "Test Pyramid");
+    LoadModelFromFile("cube.obj", "Test Pyramid");
 }
 
 void ModelManager::AddModel(Model* model, std::string name) {
@@ -115,6 +116,8 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     }
 
     std::string line;
+    std::default_random_engine gen;
+    std::uniform_real_distribution<float> distribution(0.0, 1.0);
 
     int vertPos;
     // The spaghetti!! Plan on redoing this later, I can't remember how to read files.
@@ -124,25 +127,59 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
         std::string type{}, x{}, y{}, z{};
 
         stringStream >> type >> x >> y >> z;
-
         if (type == "v") {
             SimpleVertex simpleVert{
                 XMFLOAT3(std::strtof(x.c_str(), NULL), std::strtof(y.c_str(), NULL), std::strtof(z.c_str(), NULL)),
-                XMFLOAT4(0.8f, 0.75f, 0.60f, 0.00f)
+                XMFLOAT4(distribution(gen), distribution(gen), distribution(gen), 0.00f)
             };
             Vertexes.push_back(simpleVert);
 
         }
         else if(type == "f") {
 
-            // scuffed but it'll work?
-            WORD indice1 = std::stoi(x.c_str());
-            WORD indice2 = std::stoi(y.c_str());
-            WORD indice3 = std::stoi(z.c_str());
+            std::vector<std::string> faces;
 
-            Indices.push_back(indice1);
-            Indices.push_back(indice2);
-            Indices.push_back(indice3);
+            // scuffed but it'll work?? Only works on blender based exports. Tris only, no quads!
+            char splitter = '/';
+            std::string temp = "", original = x;
+            for (int i = 0; i < 3; i++) {
+                switch (i) {
+                    case(0):
+                        original = x;
+                        break;
+                    case(1):
+                        original = y;
+                        break;
+                    case(2):
+                        original = z;
+                        break;
+                }
+                std::istringstream iss(original);
+                int state = 0;
+                while (std::getline(iss, temp, splitter)) {
+                    if (state == 0) {
+                        faces.push_back(temp);
+                    }
+                    //if(state == 1) {
+                
+                    //}
+                    
+                    //if(state == 1) {
+                
+                    //}
+                    
+
+                }
+            }
+
+
+            //WORD indice1 = std::stoi(x.c_str());
+            //WORD indice2 = std::stoi(y.c_str());
+            //WORD indice3 = std::stoi(z.c_str());
+
+            //Indices.push_back(indice1);
+            //Indices.push_back(indice2);
+            //Indices.push_back(indice3);
 
         }
     }

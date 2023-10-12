@@ -52,7 +52,8 @@ private:
 	ID3D11InputLayout* _inputLayout;
 	ID3D11RasterizerState* _rasterizerState;
 	ID3D11Buffer* _constantBuffer;
-
+	ID3D11Texture2D* _depthStencilBuffer;
+	ID3D11DepthStencilView* _depthStencilView;
 
 	HWND _windowHandle;
 

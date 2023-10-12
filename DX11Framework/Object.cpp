@@ -5,7 +5,10 @@ Object::Object() {
 }
 
 Object::~Object() {
+	_model = nullptr;
 	_objManager = nullptr;
+	_renderManager = nullptr;
+
 }
 
 void Object::Initialise() {

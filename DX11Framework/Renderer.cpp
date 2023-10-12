@@ -14,6 +14,8 @@ Renderer::~Renderer() {
     DELETED3D(_vertexShader);
     DELETED3D(_pixelShader);
     DELETED3D(_constantBuffer);
+    DELETED3D(_depthStencilBuffer);
+    DELETED3D(_depthStencilView);
 }
 
 HRESULT Renderer::Initialise() {
@@ -110,6 +112,15 @@ HRESULT Renderer::CreateSwapChainAndFrameBuffer()
     framebufferDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
     hr = _device->CreateRenderTargetView(frameBuffer, &framebufferDesc, &_frameBufferView);
+
+    D3D11_TEXTURE2D_DESC depthBufferDesc = {};
+    frameBuffer->GetDesc(&depthBufferDesc);
+
+    depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+
+    _device->CreateTexture2D(&depthBufferDesc, nullptr, &_depthStencilBuffer);
+    _device->CreateDepthStencilView(_depthStencilBuffer, nullptr, &_depthStencilView);
 
     frameBuffer->Release();
 
@@ -233,8 +244,9 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
 
     //Present unbinds render target, so rebind and clear at start of each frame
     float backgroundColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };
-    _immediateContext->OMSetRenderTargets(1, &_frameBufferView, 0);
+    _immediateContext->OMSetRenderTargets(1, &_frameBufferView, _depthStencilView);
     _immediateContext->ClearRenderTargetView(_frameBufferView, backgroundColor);
+    _immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0.0f);
 
     //Write constant buffer data onto GPU
     D3D11_MAPPED_SUBRESOURCE mappedSubresource;

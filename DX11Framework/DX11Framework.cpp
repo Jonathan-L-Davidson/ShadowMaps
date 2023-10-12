@@ -65,7 +65,10 @@ DX11Framework::~DX11Framework()
     delete _modelManager;
     delete _objectManager;
 
-    delete _pyramid;
+    // Object Manager already deletes these.
+    //delete _pyramid;
+    _pyramid = nullptr;
+
     delete _cam;
 }
 
