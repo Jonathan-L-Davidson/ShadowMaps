@@ -17,7 +17,7 @@ void ModelManager::Initialise() {
     CreateCube();
     //CreatePyramid();
 
-    LoadModelFromFile("cube.obj", "Test Pyramid");
+    LoadModelFromFile("monkey.obj", "Test Pyramid");
 }
 
 void ModelManager::AddModel(Model* model, std::string name) {
@@ -137,8 +137,6 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
         }
         else if(type == "f") {
 
-            std::vector<std::string> faces;
-
             // scuffed but it'll work?? Only works on blender based exports. Tris only, no quads!
             char splitter = '/';
             std::string temp = "", original = x;
@@ -158,17 +156,20 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
                 int state = 0;
                 while (std::getline(iss, temp, splitter)) {
                     if (state == 0) {
-                        faces.push_back(temp);
+                        Indices.push_back(std::stoi(temp.c_str()) - 1);
                     }
                     //if(state == 1) {
-                
+                    //  textures.push_back(std::stoi(temp.c_str()));
                     //}
                     
-                    //if(state == 1) {
-                
+                    //if(state == 2) {
+                    //  normals.push_back(std::stoi(temp.c_str()));
                     //}
                     
-
+                    state++;
+                    if (state > 2) {
+                        state = 0;
+                    }
                 }
             }
 
