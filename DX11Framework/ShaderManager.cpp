@@ -106,8 +106,8 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
         shader.SetVertexShader(GetDefaultShader()->GetVertexShader());
     }
     else {
-
-        hr = _device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, shader.GetVertexShader());
+        ID3D11VertexShader* vs = shader.GetVertexShader();
+        hr = _device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vs);
         if (FAILED(hr)) return;
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,8 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
         shader.SetPixelShader(GetDefaultShader()->GetPixelShader());
     }
     else {
-        hr = _device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, shader.GetPixelShader());
+        ID3D11PixelShader* ps = shader.GetPixelShader();
+        hr = _device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &ps);
         if (FAILED(hr)) return;
     }
     vsBlob->Release();
