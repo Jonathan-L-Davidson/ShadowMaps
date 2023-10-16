@@ -75,6 +75,9 @@
     <ClCompile Include="model.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DX11Framework.h">
@@ -113,9 +116,12 @@
     <ClInclude Include="Model.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SimpleShaders.hlsl">
+    <None Include="Default.hlsl">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

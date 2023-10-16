@@ -16,11 +16,6 @@ struct SimpleVertex
 	XMFLOAT4 Color;
 };
 
-struct Shader {
-	ID3D11VertexShader* vertexShader;
-	ID3D11PixelShader* pixelShader;
-};
-
 struct ConstantBuffer
 {
 	XMMATRIX Projection;

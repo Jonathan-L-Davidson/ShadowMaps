@@ -4,6 +4,8 @@
 #define MODEL_H
 #include "ModelHelpers.h"
 
+class Shader;
+
 class Model
 {
 public:
@@ -15,8 +17,8 @@ public:
 	void SetTransform(XMFLOAT4X4 transform) { _transform = transform; };
 	XMFLOAT4X4 GetTransform() { return _transform; };
 
-	void SetVertexShader(ID3D11VertexShader* shader) { _vertexShader = shader; };
-	void SetPixelShader(ID3D11PixelShader* shader) { _pixelShader = shader; };
+	Shader* GetShader() { return _shader; };
+	void SetShader(Shader* shader) { _shader = shader; };
 
 	void Render(ID3D11DeviceContext* context);
 
@@ -25,9 +27,7 @@ private:
 
 	ModelBuffer* _modelBuffer;
 
-	ID3D11VertexShader* _vertexShader;
-	ID3D11PixelShader* _pixelShader;
-	
+	Shader* _shader;
 };
 
 #endif

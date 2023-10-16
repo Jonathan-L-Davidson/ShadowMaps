@@ -15,9 +15,10 @@ ModelManager::~ModelManager() {
 
 void ModelManager::Initialise() {
     CreateCube();
-    //CreatePyramid();
+    CreatePyramid();
 
-    LoadModelFromFile("monkey.obj", "Test Pyramid");
+    LoadModelFromFile("monkey.obj", "Monkey");
+    LoadModelFromFile("cube.obj", "Cube");
 }
 
 void ModelManager::AddModel(Model* model, std::string name) {
