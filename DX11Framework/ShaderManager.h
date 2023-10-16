@@ -18,7 +18,7 @@ public:
 
 
 	std::string GetID() { return _id; };
-	void SetID(std::string id) { _id = id};
+	void SetID(std::string id) { _id = id; };
 	void SetDefault(Shader* shader) { _default = shader; };
 
 private:
@@ -36,6 +36,7 @@ public:
 	~ShaderManager();
 	void Initialise();
 
+	ID3D11InputLayout* GetInputLayout() { return _inputLayout; };
 	Shader* GetDefaultShader() { return GetShader("Default"); };
 	Shader* GetShader() { return GetDefaultShader(); };
 	Shader* GetShader(std::string id);

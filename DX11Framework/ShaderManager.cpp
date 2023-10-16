@@ -17,6 +17,7 @@ ID3D11VertexShader* Shader::GetVertexShader() {
 	}
 	return _default->GetVertexShader();
 }
+
 ID3D11PixelShader* Shader::GetPixelShader() {
 	if (_pixelShader) {
 		return _pixelShader;
@@ -24,17 +25,18 @@ ID3D11PixelShader* Shader::GetPixelShader() {
 	return _default->GetPixelShader();
 }
 
-
 ShaderManager::ShaderManager() {
 	_shaders = new std::map<std::string, Shader*>();
 }
 ShaderManager::~ShaderManager() {
 	delete _shaders;
+    DELETED3D(_inputLayout);
 }
 
 void ShaderManager::Initialise() {
 
     HRESULT hr = S_OK;
+    ID3DBlob* vsBlob;
 
 
     D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
@@ -45,13 +47,14 @@ void ShaderManager::Initialise() {
 
     hr = _device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_inputLayout);
     if (FAILED(hr)) return;
+    vsBlob->Release();
 
 
 	CreateDefaultShader();
 }
 
 void ShaderManager::CreateDefaultShader() {
-	CreateShaderFromFile("Default")
+    CreateShaderFromFile("Default");
 }
 
 Shader* ShaderManager::GetShader(std::string id) {
@@ -104,7 +107,7 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
     }
     else {
 
-        hr = _device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &*shader.GetVertexShader());
+        hr = _device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, shader.GetVertexShader());
         if (FAILED(hr)) return;
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,7 +120,7 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
         shader.SetPixelShader(GetDefaultShader()->GetPixelShader());
     }
     else {
-        hr = _device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &*shader.GetPixelShader());
+        hr = _device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, shader.GetPixelShader());
         if (FAILED(hr)) return;
     }
     vsBlob->Release();

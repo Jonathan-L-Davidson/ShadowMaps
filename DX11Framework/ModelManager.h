@@ -7,6 +7,7 @@
 #include <string>
 
 class Renderer;
+class ShaderManager;
 
 class ModelManager
 {
@@ -30,6 +31,7 @@ public:
 private:
 	std::map<std::string, Model*>* _models;
 	Renderer* _renderManager;
+	ShaderManager* _shaderManager;
 
 	void CreateCube();
 	void CreatePyramid();

@@ -1,6 +1,7 @@
 #include "ModelManager.h"
 #include "Renderer.h"
 #include "Structures.h"
+#include "ShaderManager.h"
 #include <fstream>
 #include <sstream>
 #include <random>
@@ -14,6 +15,10 @@ ModelManager::~ModelManager() {
 }
 
 void ModelManager::Initialise() {
+    _shaderManager = new ShaderManager();
+    _shaderManager->SetDevice(_renderManager->GetDevice());
+    _shaderManager->Initialise();
+
     CreateCube();
     CreatePyramid();
 
@@ -65,10 +70,7 @@ void ModelManager::CreateCube() {
 
     Model* model = new Model(_renderManager->GetDevice(), VertexData, IndexData);
 
-    // TODO: Shader management too.
-    Shader shaders = _renderManager->GetShaders();
-    model->SetVertexShader(shaders.vertexShader);
-    model->SetPixelShader(shaders.pixelShader);
+    model->SetShader(_shaderManager->GetDefaultShader());
 
     AddModel(model, "Test Cube");
 }
@@ -95,11 +97,8 @@ void ModelManager::CreatePyramid() {
 
     Model* model = new Model(_renderManager->GetDevice(), VertexData, IndexData);
     
-    // TODO: Shader management too.
-    Shader shaders = _renderManager->GetShaders();
-    model->SetVertexShader(shaders.vertexShader);
-    model->SetPixelShader(shaders.pixelShader);
-    
+    model->SetShader(_shaderManager->GetDefaultShader());
+
     AddModel(model, "Test Pyramid");
 }
 
@@ -188,10 +187,7 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
 
     Model* model = new Model(_renderManager->GetDevice(), Vertexes, Indices);
 
-    // TODO: Shader management too.
-    Shader shaders = _renderManager->GetShaders();
-    model->SetVertexShader(shaders.vertexShader);
-    model->SetPixelShader(shaders.pixelShader);
+    model->SetShader(_shaderManager->GetDefaultShader());
 
     AddModel(model, modelName);
 

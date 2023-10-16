@@ -22,11 +22,6 @@ public:
 	void SetWindowInstance(HWND hwnd) { _windowHandle = hwnd; };
 	void SetCamera(Camera* cam) { _cam = cam; };
 
-	Shader GetShaders() { Shader shaderPack;
-						shaderPack.vertexShader = _vertexShader;
-						shaderPack.pixelShader = _pixelShader;
-						return shaderPack; };
-
 	ID3D11DeviceContext* GetDeviceContext() { return _immediateContext; };
 	ID3D11Device* GetDevice() { return _device; };
 
@@ -37,7 +32,6 @@ private:
 	// Initialisers
 	HRESULT CreateD3DDevice();
 	HRESULT CreateSwapChainAndFrameBuffer();
-	HRESULT InitShadersAndInputLayout();
 	HRESULT InitPipelineVariables();
 	HRESULT InitRunTimeData();
 

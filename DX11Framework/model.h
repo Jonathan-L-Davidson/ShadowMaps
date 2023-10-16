@@ -5,6 +5,7 @@
 #include "ModelHelpers.h"
 
 class Shader;
+class ShaderManager;
 
 class Model
 {
@@ -20,6 +21,7 @@ public:
 	Shader* GetShader() { return _shader; };
 	void SetShader(Shader* shader) { _shader = shader; };
 
+	void SetupInput(ID3D11DeviceContext* context);
 	void Render(ID3D11DeviceContext* context);
 
 private:
@@ -28,6 +30,7 @@ private:
 	ModelBuffer* _modelBuffer;
 
 	Shader* _shader;
+	ShaderManager* _shaderManager;
 };
 
 #endif
