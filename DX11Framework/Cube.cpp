@@ -10,7 +10,7 @@ Cube::~Cube() {
 }
 
 void Cube::Initialise() {
-
+    
 }
 
 void Cube::Update(float deltaTime) {

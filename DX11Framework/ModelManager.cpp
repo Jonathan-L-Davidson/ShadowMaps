@@ -42,15 +42,15 @@ Model* ModelManager::GetModel(std::string name) {
 
 void ModelManager::CreateCube() {
     std::vector<SimpleVertex> VertexData = {
-        //Position                     //Color             
-        { XMFLOAT3(-1.00f,  1.00f, -1.00f), XMFLOAT4(1.0f,  0.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(1.00f,  1.00f, -1.00f),  XMFLOAT4(0.0f,  1.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, -1.00f), XMFLOAT4(0.0f,  0.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, -1.00f),  XMFLOAT4(1.0f,  0.6f, 0.4f,  0.0f)},
-        { XMFLOAT3(-1.00f,  1.00f, 1.00f), XMFLOAT4(1.0f,  1.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(1.00f,  1.00f, 1.00f),  XMFLOAT4(0.0f,  1.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, 1.00f), XMFLOAT4(1.0f,  0.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, 1.00f),  XMFLOAT4(0.5f,  0.5f, 1.0f,  0.0f)},
+        //Position                          //Normal
+        { XMFLOAT3(-1.00f,  1.00f, -1.00f), XMFLOAT3(-1.00f,  1.00f, -1.00f)    },
+        { XMFLOAT3(1.00f,  1.00f, -1.00f),  XMFLOAT3(1.00f,  1.00f, -1.00f)     },
+        { XMFLOAT3(-1.00f, -1.00f, -1.00f), XMFLOAT3(-1.00f, -1.00f, -1.00f)    },
+        { XMFLOAT3(1.00f, -1.00f, -1.00f),  XMFLOAT3(1.00f, -1.00f, -1.00f)     },
+        { XMFLOAT3(-1.00f,  1.00f, 1.00f),  XMFLOAT3(-1.00f,  1.00f, 1.00f)     },
+        { XMFLOAT3(1.00f,  1.00f, 1.00f),   XMFLOAT3(1.00f,  1.00f, 1.00f)      },
+        { XMFLOAT3(-1.00f, -1.00f, 1.00f),  XMFLOAT3(-1.00f, -1.00f, 1.00f)     },
+        { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f)      },
     };
 
     std::vector<WORD> IndexData = {
@@ -78,12 +78,12 @@ void ModelManager::CreateCube() {
 
 void ModelManager::CreatePyramid() {
     std::vector<SimpleVertex> VertexData = {
-        //Position                     //Color             
-        { XMFLOAT3(0.00f,  1.00f, 0.00f), XMFLOAT4(1.0f,  0.0f, 0.0f,  0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, -1.00f), XMFLOAT4(0.0f,  0.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, -1.00f),  XMFLOAT4(1.0f,  0.6f, 0.4f,  0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, 1.00f), XMFLOAT4(1.0f,  0.0f, 1.0f,  0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, 1.00f),  XMFLOAT4(0.5f,  0.5f, 1.0f,  0.0f)},
+        //Position                          //Color             
+        { XMFLOAT3(0.00f,  1.00f, 0.00f),   XMFLOAT3(0.00f,  1.00f, 0.00f)      },
+        { XMFLOAT3(-1.00f, -1.00f, -1.00f), XMFLOAT3(-1.00f, -1.00f, -1.00f)    },
+        { XMFLOAT3(1.00f, -1.00f, -1.00f),  XMFLOAT3(1.00f, -1.00f, -1.00f)     },
+        { XMFLOAT3(-1.00f, -1.00f, 1.00f),  XMFLOAT3(-1.00f, -1.00f, 1.00f)     },
+        { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f)      },
     };
 
     std::vector<WORD> IndexData = {
@@ -108,7 +108,10 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
 
     modelFile.open(path);
     
-    std::vector<SimpleVertex> Vertexes;
+    std::vector<SimpleVertex> SimpleVerts;
+    std::vector<XMFLOAT3> Vertices;
+    std::vector<XMFLOAT3> Normals;
+    std::vector<XMFLOAT2> Textures;
     std::vector<WORD> Indices;
 
     if (!modelFile) {
@@ -128,20 +131,28 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
         std::string type{}, x{}, y{}, z{};
 
         stringStream >> type >> x >> y >> z;
-        if (type == "v") {
-            SimpleVertex simpleVert{
-                XMFLOAT3(std::strtof(x.c_str(), NULL), std::strtof(y.c_str(), NULL), std::strtof(z.c_str(), NULL)),
-                XMFLOAT4(distribution(gen), distribution(gen), distribution(gen), 0.00f)
+        if (type[0] == 'v') { // Are we dealing with a vertex?
+            
+            if (type == "v") { // Vertices!
+                Vertices.push_back(XMFLOAT3(std::strtof(x.c_str(), NULL), std::strtof(y.c_str(), NULL), std::strtof(z.c_str(), NULL)));
             };
-            Vertexes.push_back(simpleVert);
 
+            if (type == "vn") { // Normals!
+                Normals.push_back(XMFLOAT3(std::strtof(x.c_str(), NULL), std::strtof(y.c_str(), NULL), std::strtof(z.c_str(), NULL)));
+            }
+
+            if (type == "vt") { // Textures!
+                Textures.push_back(XMFLOAT2(std::strtof(x.c_str(), NULL), std::strtof(y.c_str(), NULL)));
+            }
         }
-        else if(type == "f") {
+        
+        if(type == "f") { // Faces, the painful part!
 
             // scuffed but it'll work?? Only works on blender based exports. Tris only, no quads!
             char splitter = '/';
             std::string temp = "", original = x;
             for (int i = 0; i < 3; i++) {
+                
                 switch (i) {
                     case(0):
                         original = x;
@@ -153,25 +164,33 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
                         original = z;
                         break;
                 }
+
                 std::istringstream iss(original);
                 int state = 0;
+                
+                SimpleVertex simpleVert;
+
                 while (std::getline(iss, temp, splitter)) {
-                    if (state == 0) {
+                    if (state == 0) { // v
+                        simpleVert.Position = Vertices.at(std::stoi(temp.c_str()) - 1);
                         Indices.push_back(std::stoi(temp.c_str()) - 1);
                     }
-                    //if(state == 1) {
-                    //  textures.push_back(std::stoi(temp.c_str()));
+                    
+                    //if(state == 1) { // vt
+                    //    
                     //}
                     
-                    //if(state == 2) {
-                    //  normals.push_back(std::stoi(temp.c_str()));
-                    //}
+                    if(state == 2) { // vn
+                        simpleVert.Normal = Normals.at(std::stoi(temp.c_str()) - 1);
+                    }
                     
-                    state++;
+                    state++; // Handle reading the `v/vt/vn` state swapping
                     if (state > 2) {
-                        state = 0;
+                        state = 0; // reset back to v
                     }
                 }
+
+                SimpleVerts.push_back(simpleVert);
             }
 
 
@@ -186,7 +205,7 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
         }
     }
 
-    Model* model = new Model(_renderManager->GetDevice(), Vertexes, Indices);
+    Model* model = new Model(_renderManager->GetDevice(), SimpleVerts, Indices);
 
     model->SetShader(_shaderManager->GetDefaultShader());
 

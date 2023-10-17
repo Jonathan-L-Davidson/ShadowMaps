@@ -56,6 +56,13 @@ private:
 	Camera* _cam;
 	XMFLOAT4X4 _View;
 	XMFLOAT4X4 _Projection;
+
+	// TODO: Make light objects for the object manager.
+	XMFLOAT4 _diffuseLight;
+	XMFLOAT4 _diffuseMaterial;
+	XMFLOAT3 _lightDir;
+	
+
 };
 
 #endif

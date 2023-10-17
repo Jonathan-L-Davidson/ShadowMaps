@@ -17,6 +17,7 @@ public:
 	ModelBuffer* GetModelBuffer() { return _modelBuffer; };
 	void SetTransform(XMFLOAT4X4 transform) { _transform = transform; };
 	XMFLOAT4X4 GetTransform() { return _transform; };
+	XMFLOAT4 GetColor() { return _color; };
 
 	Shader* GetShader() { return _shader; };
 	void SetShader(Shader* shader) { _shader = shader; };
@@ -27,6 +28,7 @@ public:
 
 private:
 	XMFLOAT4X4 _transform;
+	XMFLOAT4 _color;
 
 	ModelBuffer* _modelBuffer;
 
