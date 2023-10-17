@@ -15,6 +15,24 @@ Model::~Model() {
     _shaderManager = nullptr;
 }
 
+void Model::SetShader(std::string shaderFile) {
+    Shader* shader = _shaderManager->GetShader(shaderFile);
+    if(shader != nullptr) {
+        _shader = shader;
+        return;
+    }
+
+    _shaderManager->AddShader(shaderFile);
+    shader = _shaderManager->GetShader(shaderFile);
+
+    if (shader == nullptr) {
+        return; // Error!
+    }
+
+    _shader = shader;
+
+}
+
 void Model::SetupInput(ID3D11DeviceContext* context) {
     //Input Assembler
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

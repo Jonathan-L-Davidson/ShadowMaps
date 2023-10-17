@@ -80,20 +80,25 @@ void ShaderManager::CreateDefaultShader() {
 }
 
 Shader* ShaderManager::GetShader(std::string id) {
-	return _shaders->find(id)->second;
+
+    if (_shaders->count(id)) {
+        return _shaders->find(id)->second;
+    }
+    return nullptr;
 }
 
 void ShaderManager::AddShader(Shader* shader, std::string id) {
     if (id != "Default") {
         shader->SetDefault(GetShader("Default"));
     }
-
+    shader->SetID(id);
 	_shaders->insert(std::make_pair(id, shader));
 }
 
 void ShaderManager::AddShader(std::string id) {
-	if (_shaders->find(id)->second != nullptr)
-		return; // Already created.
+    if (_shaders->count(id)) {
+        return; // Already created.
+    }
 
 	CreateShaderFromFile(id);
 }

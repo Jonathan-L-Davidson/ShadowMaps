@@ -21,7 +21,6 @@ public:
 
 	virtual void Initialise();
 
-	std::string GetName() { return _name; };
 	XMFLOAT4 GetColor() { return _color; };
 
 	void SetManager(ObjectManager* manager) { _objManager = manager; }
@@ -34,6 +33,8 @@ public:
 	Model* GetModel() { return _model; };
 	void SetModel(Model* model) { _model = model; };
 
+	virtual std::string GetModelName() { return GetName(); };
+	std::string GetName() { return _name; };
 	void SetName(std::string name) { _name = name; };
 
 	virtual void Update(float deltaTime);

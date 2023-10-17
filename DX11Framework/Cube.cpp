@@ -10,7 +10,7 @@ Cube::~Cube() {
 }
 
 void Cube::Initialise() {
-    _color = XMFLOAT4(0.2f, 0.2f, 0.8f, 1.0f);
+    _color = XMFLOAT4(0.025f, 0.025f, 0.1f, 1.0f);
 }
 
 void Cube::Update(float deltaTime) {

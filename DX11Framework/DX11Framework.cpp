@@ -56,7 +56,13 @@ HRESULT DX11Framework::InitCube()
     Monkey* monkey = new Monkey();
     monkey->SetName("Monkey");
     _objectManager->AddObject(monkey, XMFLOAT3(-5, 0.0f, 5.0f));
+    monkey->GetModel()->SetShader("VertexShading");
 
+    Monkey* monkey2 = new Monkey();
+    monkey2->SetName("Monkey2");
+    _modelManager->LoadModelFromFile("monkey.obj", "Monkey2");
+    _objectManager->AddObject(monkey2, XMFLOAT3(5, 0.0f, 5.0f));
+    
 
     return S_OK;
 }

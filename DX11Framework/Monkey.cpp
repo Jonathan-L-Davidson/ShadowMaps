@@ -10,8 +10,8 @@ Monkey::~Monkey() {
 }
 
 void Monkey::Initialise() {
-    _color = XMFLOAT4(0.2f, 1.0f, 0.1f, 1.0f);
-
+    _color = XMFLOAT4(0.05f, 0.125f, 0.05f, 1.0f);
+    return;
 }
 
 void Monkey::Update(float deltaTime) {

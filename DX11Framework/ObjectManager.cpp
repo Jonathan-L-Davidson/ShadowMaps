@@ -31,9 +31,10 @@ void ObjectManager::AddObject(Object* obj, XMFLOAT3 pos) {
 		_objects.push_back(obj);
 		obj->SetManager(this);
 		obj->SetRenderManager(_renderManager);
-		obj->Initialise(); // Todo: Figure out proper OOP practices again.
-		Model* model = _modelManager->GetModel(obj->GetName());
+		Model* model = _modelManager->GetModel(obj->GetModelName());
 		obj->SetModel(model);
 		obj->SetPosition(pos); // Fix position stuff lol
+
+		obj->Initialise(); // Todo: Figure out proper OOP practices again.
 	}
 }

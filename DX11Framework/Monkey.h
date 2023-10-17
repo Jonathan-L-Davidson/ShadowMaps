@@ -12,6 +12,8 @@ public:
 
 	void Initialise();
 	void Update(float deltaTime);
+
+	//std::string GetModelName() { return "Monkey"; };
 private:
 };
 

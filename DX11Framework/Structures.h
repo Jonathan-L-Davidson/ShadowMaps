@@ -21,6 +21,7 @@ struct ConstantBuffer
 	XMMATRIX Projection;
 	XMMATRIX View;
 	XMMATRIX World;
+	XMFLOAT4 AmbientLight;
 	XMFLOAT4 DiffuseLight;
 	XMFLOAT4 DiffuseMaterial;
 	XMFLOAT3 LightDir;

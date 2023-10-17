@@ -1,7 +1,7 @@
 #include "Object.h"
 
 Object::Object() {
-	_color = XMFLOAT4(0.8f, 0.5f, 0.8f, 1.0f);
+	_color = XMFLOAT4(0.1f, 0.0675f, 0.1f, 1.0f);
 	Initialise();
 }
 

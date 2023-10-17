@@ -169,7 +169,7 @@ HRESULT Renderer::InitRunTimeData()
     // TODO: Move this into it's own corresponding objects.
     _diffuseLight = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
     _diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-    _lightDir = XMFLOAT3(0, 0.5f, -0.5f);
+    _lightDir = XMFLOAT3(0.5f, -0.5f, 0.0f);
 
     return S_OK;
 }
@@ -200,7 +200,7 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
         Model* model = obj->GetModel();
         if (model) {
             model->SetupInput(_immediateContext);
-            _cbData.DiffuseMaterial = obj->GetColor();
+            _cbData.AmbientLight = obj->GetColor();
             _cbData.World = XMMatrixTranspose(obj->GetWorldMatrix());
             _immediateContext->Map(_constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
             memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));
