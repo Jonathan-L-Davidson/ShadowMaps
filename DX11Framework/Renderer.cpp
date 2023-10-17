@@ -200,7 +200,7 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
         Model* model = obj->GetModel();
         if (model) {
             model->SetupInput(_immediateContext);
-            _cbData.DiffuseMaterial = model->GetColor();
+            _cbData.DiffuseMaterial = obj->GetColor();
             _cbData.World = XMMatrixTranspose(obj->GetWorldMatrix());
             _immediateContext->Map(_constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
             memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));

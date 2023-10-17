@@ -12,6 +12,7 @@
 #include "ModelManager.h"
 #include "Cube.h"
 #include "Pyramid.h"
+#include "Monkey.h"
 #include "Camera.h"
 
 //#include <wrl.h>

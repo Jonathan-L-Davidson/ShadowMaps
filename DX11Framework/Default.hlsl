@@ -15,7 +15,7 @@ struct VS_Out
     float4 color : COLOR;
 };
 
-VS_Out VS_main(float3 Position : POSITION, float4 Color : COLOR, float3 Normal : NORMAL)
+VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL)
 {   
     
     
@@ -27,7 +27,7 @@ VS_Out VS_main(float3 Position : POSITION, float4 Color : COLOR, float3 Normal :
     output.position = mul(output.position, View);
     output.position = mul(output.position, Projection);
     
-    output.color = Color;
+    output.color = DiffuseMaterial;
     
     return output;
 }

@@ -10,7 +10,7 @@ Pyramid::~Pyramid() {
 }
 
 void Pyramid::Initialise() {
-
+    _color = XMFLOAT4(0.8f, 0.2f, 0.15f, 1.0f);
 
 }
 

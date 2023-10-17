@@ -22,6 +22,7 @@ public:
 	virtual void Initialise();
 
 	std::string GetName() { return _name; };
+	XMFLOAT4 GetColor() { return _color; };
 
 	void SetManager(ObjectManager* manager) { _objManager = manager; }
 	void SetRenderManager(Renderer* manager) { _renderManager = manager; }
@@ -42,6 +43,7 @@ protected:
 	XMFLOAT4X4 _worldTransform;
 
 	Model* _model;
+	XMFLOAT4 _color;
 
 	virtual void UpdatePosition();
 	ObjectManager* _objManager;

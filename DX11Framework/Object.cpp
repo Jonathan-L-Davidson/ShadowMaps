@@ -1,6 +1,7 @@
 #include "Object.h"
 
 Object::Object() {
+	_color = XMFLOAT4(0.8f, 0.5f, 0.8f, 1.0f);
 	Initialise();
 }
 

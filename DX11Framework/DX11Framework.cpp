@@ -53,6 +53,11 @@ HRESULT DX11Framework::InitCube()
     _pyramid->SetName("Test Pyramid");
     _objectManager->AddObject(_pyramid, XMFLOAT3(-3.0f, 0.0f, 5.0f));
 
+    Monkey* monkey = new Monkey();
+    monkey->SetName("Monkey");
+    _objectManager->AddObject(monkey, XMFLOAT3(-5, 0.0f, 5.0f));
+
+
     return S_OK;
 }
 
