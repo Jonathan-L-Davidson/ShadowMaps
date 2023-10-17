@@ -1,4 +1,5 @@
 #include "model.h"
+#include "Structures.h"
 #include "ShaderManager.h"
 
 Model::Model(ID3D11Device* device) {
@@ -53,4 +54,15 @@ void Model::Render(ID3D11DeviceContext* context) {
     context->PSSetShader(_shader->GetPixelShader(), nullptr, 0);
 
     context->DrawIndexed(GetIndices(), 0, 0);
+}
+
+void Model::UpdateCBData(ConstantBuffer* cbData) {
+    cbData->DiffuseLight = _diffuseLight;
+    cbData->DiffuseMaterial = _diffuseMaterial;
+    cbData->LightDir = _lightDir;
+
+    cbData->SpecularLight = _specularLight;
+    cbData->SpecularMaterial = _specularMaterial;
+    cbData->SpecPower = _specPower;
+
 }

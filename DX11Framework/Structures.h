@@ -25,6 +25,13 @@ struct ConstantBuffer
 	XMFLOAT4 DiffuseLight;
 	XMFLOAT4 DiffuseMaterial;
 	XMFLOAT3 LightDir;
+
+	XMFLOAT4 SpecularLight;
+	XMFLOAT4 SpecularMaterial;
+	float    SpecPower;
+
+	XMFLOAT3 CameraPos;
+
 	float Time;
 };
 

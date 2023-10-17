@@ -3,10 +3,19 @@ cbuffer ConstantBuffer : register(b0)
     float4x4 Projection;
     float4x4 View;
     float4x4 World;
+    
     float4 AmbientLight;
     float4 DiffuseLight;
     float4 DiffuseMaterial;
     float3 LightDir;
+    
+    float4 SpecularLight;
+    float4 SpecularMaterial;
+    float  SpecPower;
+    
+    float3 CameraPos;
+    
+    
     float Time;
 }
 
@@ -44,7 +53,7 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float4 output = input.color;
     
     float4 posW = input.positionW;
-    float3 normW = input.normW;
+    float3 normW = normalize(input.normW);
     
     // Calculate potential reflection:
     float4 potentialDiffuse = DiffuseLight * DiffuseMaterial;

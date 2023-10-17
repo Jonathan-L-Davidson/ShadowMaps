@@ -7,6 +7,7 @@
 
 class Shader;
 class ShaderManager;
+class Buffer;
 
 class Model
 {
@@ -27,11 +28,20 @@ public:
 	void SetShaderManager(ShaderManager* manager) { _shaderManager = manager; };
 	void SetupInput(ID3D11DeviceContext* context);
 	void Render(ID3D11DeviceContext* context);
+	void UpdateCBData(ConstantBuffer* cbData);
 
 private:
 	XMFLOAT4X4 _transform;
 
 	ModelBuffer* _modelBuffer;
+	XMFLOAT4 _diffuseLight = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
+	XMFLOAT4 _diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	XMFLOAT3 _lightDir = XMFLOAT3(0.5f, -0.5f, 0.0f);
+
+	XMFLOAT4 _specularLight = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
+	XMFLOAT4 _specularMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	float _specPower = 10.0f;
+
 
 	Shader* _shader;
 	ShaderManager* _shaderManager;
