@@ -7,7 +7,7 @@ Shader::Shader() {
 
 Shader::~Shader() {
 	if (_vertexShader)	DELETED3D(_vertexShader);
-
+    if (_inputLayout)   DELETED3D(_inputLayout);
 	if (_pixelShader)	DELETED3D(_pixelShader);
 }
 
@@ -20,13 +20,21 @@ ID3D11VertexShader* Shader::GetVertexShader() {
 		return _vertexShader;
 	}
 
-    ID3D11VertexShader* defShader = _default->GetVertexShader();
-    if (defShader != nullptr) {
-        return defShader;
+    return _default->GetVertexShader();
+}
+
+ID3D11InputLayout* Shader::GetInputLayout() {
+    if (this == nullptr) {
+        return nullptr;
     }
 
-    return nullptr;
+    if (_inputLayout != nullptr) {
+        return _inputLayout;
+    }
+
+    return _default->GetInputLayout();
 }
+
 
 ID3D11PixelShader* Shader::GetPixelShader() {
     if (this == nullptr) {
@@ -36,12 +44,8 @@ ID3D11PixelShader* Shader::GetPixelShader() {
 	if (_pixelShader != nullptr) {
 		return _pixelShader;
 	}
-    ID3D11PixelShader* defShader = _default->GetPixelShader();
-    if (defShader != nullptr) {
-        return defShader;
-    }
 
-    return nullptr;
+    return _default->GetPixelShader();
 }
 
 ShaderManager::ShaderManager() {
@@ -49,7 +53,6 @@ ShaderManager::ShaderManager() {
 }
 ShaderManager::~ShaderManager() {
 	delete _shaders;
-    DELETED3D(_inputLayout);
 }
 
 void ShaderManager::Initialise() {
@@ -81,6 +84,10 @@ Shader* ShaderManager::GetShader(std::string id) {
 }
 
 void ShaderManager::AddShader(Shader* shader, std::string id) {
+    if (id != "Default") {
+        shader->SetDefault(GetShader("Default"));
+    }
+
 	_shaders->insert(std::make_pair(id, shader));
 }
 
@@ -143,8 +150,12 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA,   0 },
     };
 
-    hr = _device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_inputLayout);
+    ID3D11InputLayout* il;
+
+    hr = _device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &il);
     if (FAILED(hr)) return;
+
+    shader->SetInputLayout(il);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 

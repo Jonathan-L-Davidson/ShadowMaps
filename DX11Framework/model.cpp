@@ -18,7 +18,8 @@ Model::~Model() {
 void Model::SetupInput(ID3D11DeviceContext* context) {
     //Input Assembler
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    context->IASetInputLayout(_shaderManager->GetInputLayout());
+    ID3D11InputLayout* il = _shaderManager->GetDefaultShader()->GetInputLayout();
+    context->IASetInputLayout(il);
 }
 
 void Model::Render(ID3D11DeviceContext* context) {

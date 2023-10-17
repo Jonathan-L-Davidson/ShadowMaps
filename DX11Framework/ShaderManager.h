@@ -12,8 +12,10 @@ public:
 	~Shader();
 
 	ID3D11VertexShader* GetVertexShader();
+	ID3D11InputLayout* GetInputLayout();
 	ID3D11PixelShader* GetPixelShader();
 	void SetVertexShader(ID3D11VertexShader* vertShader) { _vertexShader = vertShader; };
+	void SetInputLayout(ID3D11InputLayout* inputLayout) { _inputLayout = inputLayout;}
 	void SetPixelShader(ID3D11PixelShader* pixelShader) { _pixelShader = pixelShader; };
 
 
@@ -23,6 +25,7 @@ public:
 
 private:
 	ID3D11VertexShader* _vertexShader;
+	ID3D11InputLayout* _inputLayout;
 	ID3D11PixelShader* _pixelShader;
 
 	std::string _id;
@@ -36,7 +39,6 @@ public:
 	~ShaderManager();
 	void Initialise();
 
-	ID3D11InputLayout* GetInputLayout() { return _inputLayout; };
 	Shader* GetDefaultShader() { return GetShader("Default"); };
 	Shader* GetShader() { return GetDefaultShader(); };
 	Shader* GetShader(std::string id);
@@ -50,7 +52,6 @@ public:
 private:
 	std::map<std::string, Shader*>* _shaders;
 
-	ID3D11InputLayout* _inputLayout;
 	ID3D11Device* _device;
 
 	void CreateShaderFromFile(std::string);
