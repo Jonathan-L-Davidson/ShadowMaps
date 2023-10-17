@@ -123,6 +123,7 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     std::default_random_engine gen;
     std::uniform_real_distribution<float> distribution(0.0, 1.0);
 
+    int indiceCount = 0;
     int vertPos;
     // The spaghetti!! Plan on redoing this later, I can't remember how to read files.
     while (getline(modelFile, line)) {
@@ -145,7 +146,7 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
                 Textures.push_back(XMFLOAT2(std::strtof(x.c_str(), NULL), std::strtof(y.c_str(), NULL)));
             }
         }
-        
+
         if(type == "f") { // Faces, the painful part!
 
             // scuffed but it'll work?? Only works on blender based exports. Tris only, no quads!
@@ -173,7 +174,6 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
                 while (std::getline(iss, temp, splitter)) {
                     if (state == 0) { // v
                         simpleVert.Position = Vertices.at(std::stoi(temp.c_str()) - 1);
-                        Indices.push_back(std::stoi(temp.c_str()) - 1);
                     }
                     
                     //if(state == 1) { // vt
@@ -191,6 +191,8 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
                 }
 
                 SimpleVerts.push_back(simpleVert);
+                Indices.push_back(indiceCount);
+                indiceCount++;
             }
 
 
