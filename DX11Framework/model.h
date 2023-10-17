@@ -21,6 +21,7 @@ public:
 	Shader* GetShader() { return _shader; };
 	void SetShader(Shader* shader) { _shader = shader; };
 
+	void SetShaderManager(ShaderManager* manager) { _shaderManager = manager; };
 	void SetupInput(ID3D11DeviceContext* context);
 	void Render(ID3D11DeviceContext* context);
 

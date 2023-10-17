@@ -27,6 +27,7 @@ void ModelManager::Initialise() {
 }
 
 void ModelManager::AddModel(Model* model, std::string name) {
+    model->SetShaderManager(_shaderManager);
 	_models->insert(std::make_pair(name, model));
 }
 

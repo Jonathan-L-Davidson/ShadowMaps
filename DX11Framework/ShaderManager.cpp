@@ -2,7 +2,7 @@
 #include "Structures.h"
 
 Shader::Shader() {
-
+    
 }
 
 Shader::~Shader() {
@@ -12,17 +12,36 @@ Shader::~Shader() {
 }
 
 ID3D11VertexShader* Shader::GetVertexShader() {
-	if (_vertexShader) {
+    if (this == nullptr) {
+        return nullptr;
+    }
+
+	if (_vertexShader != nullptr) {
 		return _vertexShader;
 	}
-	return _default->GetVertexShader();
+
+    ID3D11VertexShader* defShader = _default->GetVertexShader();
+    if (defShader != nullptr) {
+        return defShader;
+    }
+
+    return nullptr;
 }
 
 ID3D11PixelShader* Shader::GetPixelShader() {
-	if (_pixelShader) {
+    if (this == nullptr) {
+        return nullptr;
+    }
+
+	if (_pixelShader != nullptr) {
 		return _pixelShader;
 	}
-	return _default->GetPixelShader();
+    ID3D11PixelShader* defShader = _default->GetPixelShader();
+    if (defShader != nullptr) {
+        return defShader;
+    }
+
+    return nullptr;
 }
 
 ShaderManager::ShaderManager() {
@@ -35,19 +54,19 @@ ShaderManager::~ShaderManager() {
 
 void ShaderManager::Initialise() {
 
-    HRESULT hr = S_OK;
-    ID3DBlob* vsBlob;
+    //HRESULT hr = S_OK;
+    //ID3DBlob* vsBlob;
 
 
-    D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
-    {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA,   0 },
-        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA,   0 },
-    };
+    //D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
+    //{
+    //    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA,   0 },
+    //    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA,   0 },
+    //};
 
-    hr = _device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_inputLayout);
-    if (FAILED(hr)) return;
-    vsBlob->Release();
+    //hr = _device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_inputLayout);
+    //if (FAILED(hr)) return;
+    //vsBlob->Release();
 
 
 	CreateDefaultShader();
@@ -78,7 +97,7 @@ void ShaderManager::RemoveShader(std::string id) {
 
 void ShaderManager::CreateShaderFromFile(std::string id) {
 
-    Shader shader;
+    Shader* shader = new Shader();
 
     HRESULT hr = S_OK;
     ID3DBlob* errorBlob;
@@ -94,40 +113,61 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
 
     ID3DBlob* vsBlob;
     
-    id.append(".hlsl");
+    std::string fileName = id;
+    fileName.append(".hlsl");
 
-    std::wstring idTemp = std::wstring(id.begin(), id.end());
+    std::wstring idTemp = std::wstring(fileName.begin(), fileName.end());
     LPCWSTR path = idTemp.c_str();
     
     
     hr = D3DCompileFromFile(path, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VS_main", "vs_5_0", dwShaderFlags, 0, &vsBlob, &errorBlob);
     if (FAILED(hr)) {
-        // TODO Check if vertex shader exists.
-        shader.SetVertexShader(GetDefaultShader()->GetVertexShader());
+        return;
     }
-    else {
-        ID3D11VertexShader* vs = shader.GetVertexShader();
-        hr = _device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vs);
-        if (FAILED(hr)) return;
+    // TODO Check if vertex shader exists.
+    //shader.SetVertexShader(GetDefaultShader()->GetVertexShader());    
+    ID3D11VertexShader* vs;
+    hr = _device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vs);
+
+    if (FAILED(hr)) {
+        return;
     }
+
+    shader->SetVertexShader(vs);
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
+    {
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA,   0 },
+        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA,   0 },
+    };
+
+    hr = _device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_inputLayout);
+    if (FAILED(hr)) return;
+
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
     ID3DBlob* psBlob;
 
     hr = D3DCompileFromFile(path, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PS_main", "ps_5_0", dwShaderFlags, 0, &psBlob, &errorBlob);
     if (FAILED(hr)) {
-        // TODO Check if pixel shader exists.
-        shader.SetPixelShader(GetDefaultShader()->GetPixelShader());
+        return;
     }
-    else {
-        ID3D11PixelShader* ps = shader.GetPixelShader();
-        hr = _device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &ps);
-        if (FAILED(hr)) return;
-    }
+    
+    ID3D11PixelShader* ps;
+    hr = _device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &ps);
+    if (FAILED(hr)) return;
+    
+    shader->SetPixelShader(ps);
+
+    // TODO Check if pixel shader exists.
+    //shader.SetPixelShader(GetDefaultShader()->GetPixelShader());
+    
+    
     vsBlob->Release();
     psBlob->Release();
 
-    Shader* S = new Shader(shader);
-    AddShader(S, id);
+    AddShader(shader, id);
 
 }
