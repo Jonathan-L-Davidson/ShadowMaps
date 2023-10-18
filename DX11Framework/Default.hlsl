@@ -52,17 +52,29 @@ float4 PS_main(VS_Out input) : SV_TARGET
 {
     float4 output = input.color;
     
-    float4 posW = input.positionW;
-    float3 normW = normalize(input.normW);
+    float4 posW = input.positionW; // Vertex position in worldspace.
+    float4 normW = normalize(input.normW);
     
-    // Calculate potential reflection:
+    // Calculate potential diffused amount:
     float4 potentialDiffuse = DiffuseLight * DiffuseMaterial;
 
     // Get intensity from normal and lightdir.
     // Lambert's cosine law: Cos(dot(N, L))
-    float diffuseAmount = saturate(dot(-LightDir, normW));
+    float diffuseAmount = saturate(dot(-LightDir, normW.xyz));
 
     output += potentialDiffuse * diffuseAmount;
 
+    // 1. Get dir from light to surface.
+    float3 dirFromLight = normalize(posW.xyz - LightDir);
+    
+    // 2. reflection off of that.
+    float3 reflection = reflect(dirFromLight, normW.xyz);
+    
+    // 3. dir towards camera.
+    float3 dirToCamera = normalize(CameraPos - posW.xyz);
+    
+    float reflectionIntensity = saturate(dot(reflection, dirToCamera));
+    reflectionIntensity = pow(reflectionIntensity, 5);
+    output += (SpecularLight * SpecularMaterial) * reflectionIntensity;
     return output;
 }

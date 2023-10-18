@@ -134,6 +134,7 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
     
     hr = D3DCompileFromFile(path, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VS_main", "vs_5_0", dwShaderFlags, 0, &vsBlob, &errorBlob);
     if (FAILED(hr)) {
+        char* error = (char*)errorBlob->GetBufferPointer();
         return;
     }
     // TODO Check if vertex shader exists.

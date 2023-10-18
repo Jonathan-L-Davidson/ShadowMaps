@@ -36,7 +36,7 @@ private:
 	ModelBuffer* _modelBuffer;
 	XMFLOAT4 _diffuseLight = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
 	XMFLOAT4 _diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	XMFLOAT3 _lightDir = XMFLOAT3(0.5f, -0.5f, 0.0f);
+	XMFLOAT3 _lightDir = XMFLOAT3(0.5f, 0.0f, 0.5f);
 
 	XMFLOAT4 _specularLight = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
 	XMFLOAT4 _specularMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);

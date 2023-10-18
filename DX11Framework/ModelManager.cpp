@@ -103,6 +103,7 @@ void ModelManager::CreatePyramid() {
     AddModel(model, "Test Pyramid");
 }
 
+// Author: Jonathan Davidson (2023)
 void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     std::ifstream modelFile;
 
@@ -194,16 +195,6 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
                 Indices.push_back(indiceCount);
                 indiceCount++;
             }
-
-
-            //WORD indice1 = std::stoi(x.c_str());
-            //WORD indice2 = std::stoi(y.c_str());
-            //WORD indice3 = std::stoi(z.c_str());
-
-            //Indices.push_back(indice1);
-            //Indices.push_back(indice2);
-            //Indices.push_back(indice3);
-
         }
     }
 
