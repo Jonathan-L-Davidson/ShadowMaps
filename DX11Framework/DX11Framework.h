@@ -34,7 +34,6 @@ class DX11Framework
 	ModelManager* _modelManager;
 
 	Camera* _cam;
-	Object* _pyramid;
 	
 public:
 	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);

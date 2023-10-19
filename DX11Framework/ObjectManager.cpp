@@ -11,6 +11,10 @@ ObjectManager::~ObjectManager() {
 		delete obj;
 	}
 	_objects.clear();
+
+	_renderManager = nullptr;
+	_modelManager = nullptr;
+
 }
 
 void ObjectManager::Update(float deltaTime) {

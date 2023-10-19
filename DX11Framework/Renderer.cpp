@@ -9,10 +9,17 @@ Renderer::Renderer() {
 Renderer::~Renderer() {
     DELETED3D(_immediateContext);
     DELETED3D(_device);
+    DELETED3D(_dxgiFactory);
+    DELETED3D(_frameBufferView);
+    DELETED3D(_swapChain);
     DELETED3D(_rasterizerState);
     DELETED3D(_constantBuffer);
     DELETED3D(_depthStencilBuffer);
     DELETED3D(_depthStencilView);
+
+    _cam = nullptr;
+
+    Camera* _cam;
 }
 
 HRESULT Renderer::Initialise() {

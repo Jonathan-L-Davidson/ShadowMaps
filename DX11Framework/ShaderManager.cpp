@@ -53,7 +53,11 @@ ShaderManager::ShaderManager() {
 	_shaders = new std::map<std::string, Shader*>();
 }
 ShaderManager::~ShaderManager() {
-	delete _shaders;
+    for (auto obj : *_shaders) {
+        delete obj.second;
+    }
+    _shaders->clear();
+    _device = nullptr;
 }
 
 void ShaderManager::Initialise() {

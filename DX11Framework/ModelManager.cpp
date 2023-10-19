@@ -11,7 +11,13 @@ ModelManager::ModelManager() {
 };
 
 ModelManager::~ModelManager() {
-	delete _models;
+    for (auto obj : *_models) {
+        delete obj.second;
+    }
+    _models->clear();
+
+    _renderManager = nullptr;
+    delete _shaderManager;
 }
 
 void ModelManager::Initialise() {

@@ -1,5 +1,6 @@
 #include "DX11Framework.h"
 #include <string>
+#include "Dxgidebug.h"
 
 //#define RETURNFAIL(x) if(FAILED(x)) return x;
 
@@ -49,7 +50,7 @@ HRESULT DX11Framework::InitCube()
     cube->SetName("Test Cube");
     _objectManager->AddObject(cube, XMFLOAT3(0.0f, 3.0f, 5.0f));
 
-    _pyramid = new Pyramid();
+    Pyramid* _pyramid = new Pyramid();
     _pyramid->SetName("Test Pyramid");
     _objectManager->AddObject(_pyramid, XMFLOAT3(-3.0f, 0.0f, 5.0f));
 
@@ -76,11 +77,8 @@ DX11Framework::~DX11Framework()
     delete _modelManager;
     delete _objectManager;
 
-    // Object Manager already deletes these.
-    //delete _pyramid;
-    _pyramid = nullptr;
-
     delete _cam;
+
 }
 
 
