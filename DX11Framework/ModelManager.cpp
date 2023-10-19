@@ -27,6 +27,7 @@ void ModelManager::Initialise() {
 
     CreateCube();
     CreatePyramid();
+    CreatePlane();
 
     LoadModelFromFile("monkey.obj", "Monkey");
     LoadModelFromFile("cube.obj", "Cube");
@@ -107,6 +108,29 @@ void ModelManager::CreatePyramid() {
     model->SetShader(_shaderManager->GetDefaultShader());
 
     AddModel(model, "Test Pyramid");
+}
+
+void ModelManager::CreatePlane() {
+    std::vector<SimpleVertex> VertexData = {
+        //Position                          //Color             
+        { XMFLOAT3(50.00f,  -5.00f, 50.00f),  XMFLOAT3(0.5f, 0.3f, 0.50f)      },
+        { XMFLOAT3(-50.00f, -5.00f, -50.00f), XMFLOAT3(0.5f, 0.3f, 0.50f)    },
+        { XMFLOAT3(50.00f, -5.00f, -50.00f),  XMFLOAT3(0.5f, 0.3f, 0.50f)     },
+        { XMFLOAT3(-50.00f, -5.00f, 50.00f),  XMFLOAT3(0.5f, 0.3f, 0.50f)     },
+    };
+
+    std::vector<WORD> IndexData = {
+        //Indices
+        3,0,1,
+        2,1,0,
+    };
+
+
+    Model* model = new Model(_renderManager->GetDevice(), VertexData, IndexData);
+
+    model->SetShader(_shaderManager->GetDefaultShader());
+
+    AddModel(model, "Floor Plane");
 }
 
 // Author: Jonathan Davidson (2023)

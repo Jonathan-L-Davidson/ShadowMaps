@@ -63,7 +63,10 @@ HRESULT DX11Framework::InitCube()
     monkey2->SetName("Monkey2");
     _modelManager->LoadModelFromFile("monkey.obj", "Monkey2");
     _objectManager->AddObject(monkey2, XMFLOAT3(5, 0.0f, 5.0f));
-    
+
+    Object* plane = new Object();
+    plane->SetName("Floor Plane");
+    _objectManager->AddObject(plane, XMFLOAT3(0.0f, 0.0f, 0.0f));
 
     return S_OK;
 }

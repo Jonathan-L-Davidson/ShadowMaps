@@ -7,7 +7,9 @@ cbuffer ConstantBuffer : register(b0)
     float4 AmbientLight;
     float4 DiffuseLight;
     float4 DiffuseMaterial;
-    float3 LightDir;
+    
+    float4 LightPosition;
+    float3 LightRotation;
     
     float4 SpecularLight;
     float4 SpecularMaterial;
@@ -53,15 +55,24 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float4 posW = input.positionW; // Vertex position in worldspace.
     float4 normW = normalize(input.normW);
     
+    
+    float4 lightPos = mul(LightPosition, World);
+    float3 lightDir = normalize(posW - lightPos); // From light to model position.
+    
+    float spotlightIntensity = dot(lightDir, LightRotation);
+    
+    
+    //////////////// DIFFUSE ////////////////
     // Calculate potential diffused amount:
     float4 potentialDiffuse = DiffuseLight * DiffuseMaterial;
 
     // Get intensity from normal and lightdir.
     // Lambert's cosine law: Cos(dot(N, L))
-    float diffuseAmount = saturate(dot(-LightDir, normW.xyz));
+    float diffuseAmount = saturate(dot(-lightDir, normW.xyz));
 
+    //////////////// SPECULAR ////////////////
     // 1. Get dir from light to surface.
-    float3 dirFromLight = normalize(posW.xyz - LightDir);
+    float3 dirFromLight = normalize(posW.xyz - lightPos.xyz);
     
     // 2. reflection off of that.
     float3 reflection = reflect(-dirFromLight, normW.xyz);
@@ -72,7 +83,8 @@ float4 PS_main(VS_Out input) : SV_TARGET
     // Get the dot product from the reflection.
     float reflectionIntensity = saturate(dot(reflection, dirToCamera));
     reflectionIntensity = pow(reflectionIntensity, 5);
-
+    
+    //////////////// Lighting Compilation //////////////// 
     float3 ambient = AmbientLight.rgb;
     float3 diffuse = (potentialDiffuse * diffuseAmount).rgb;
     float3 specular = (SpecularLight * SpecularMaterial).rgb * reflectionIntensity;

@@ -10,6 +10,11 @@
 
 using namespace DirectX;
 
+struct SimpleLight {
+	XMFLOAT4 Position;
+	XMFLOAT3 Rotation;
+};
+
 struct SimpleVertex
 {
 	XMFLOAT3 Position;
@@ -24,7 +29,9 @@ struct ConstantBuffer
 	XMFLOAT4 AmbientLight;
 	XMFLOAT4 DiffuseLight;
 	XMFLOAT4 DiffuseMaterial;
-	XMFLOAT3 LightDir;
+
+	XMFLOAT4 LightPosition;
+	XMFLOAT3 LightRotation;
 
 	XMFLOAT4 SpecularLight;
 	XMFLOAT4 SpecularMaterial;
