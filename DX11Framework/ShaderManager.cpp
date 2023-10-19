@@ -1,5 +1,6 @@
 #include "ShaderManager.h"
 #include "Structures.h"
+#include <stdexcept>
 
 Shader::Shader() {
     
@@ -135,6 +136,7 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
     hr = D3DCompileFromFile(path, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "VS_main", "vs_5_0", dwShaderFlags, 0, &vsBlob, &errorBlob);
     if (FAILED(hr)) {
         char* error = (char*)errorBlob->GetBufferPointer();
+        throw std::invalid_argument(error);
         return;
     }
     // TODO Check if vertex shader exists.
@@ -143,6 +145,8 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
     hr = _device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vs);
 
     if (FAILED(hr)) {
+        char* error = (char*)errorBlob->GetBufferPointer();
+        throw std::invalid_argument(error);
         return;
     }
 
@@ -159,7 +163,11 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
     ID3D11InputLayout* il;
 
     hr = _device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &il);
-    if (FAILED(hr)) return;
+    if (FAILED(hr)) { 
+        char* error = (char*)errorBlob->GetBufferPointer();
+        throw std::invalid_argument(error);
+        return;
+    }
 
     shader->SetInputLayout(il);
 
@@ -169,13 +177,19 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
 
     hr = D3DCompileFromFile(path, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "PS_main", "ps_5_0", dwShaderFlags, 0, &psBlob, &errorBlob);
     if (FAILED(hr)) {
+        char* error = (char*)errorBlob->GetBufferPointer();
+        throw std::invalid_argument(error);
         return;
     }
     
     ID3D11PixelShader* ps;
     hr = _device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &ps);
-    if (FAILED(hr)) return;
-    
+    if (FAILED(hr)) {
+        char* error = (char*)errorBlob->GetBufferPointer();
+        throw std::invalid_argument(error);
+        return;
+    }
+
     shader->SetPixelShader(ps);
 
     // TODO Check if pixel shader exists.
