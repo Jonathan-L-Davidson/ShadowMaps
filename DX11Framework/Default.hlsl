@@ -42,9 +42,7 @@ VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL)
     output.positionW = output.position;
     output.position = mul(output.position, View);
     output.position = mul(output.position, Projection);
-    
-    output.color = AmbientLight;
-    
+        
     return output;
 }
 
@@ -62,19 +60,27 @@ float4 PS_main(VS_Out input) : SV_TARGET
     // Lambert's cosine law: Cos(dot(N, L))
     float diffuseAmount = saturate(dot(-LightDir, normW.xyz));
 
-    output += potentialDiffuse * diffuseAmount;
-
     // 1. Get dir from light to surface.
     float3 dirFromLight = normalize(posW.xyz - LightDir);
     
     // 2. reflection off of that.
-    float3 reflection = reflect(dirFromLight, normW.xyz);
+    float3 reflection = reflect(-dirFromLight, normW.xyz);
     
     // 3. dir towards camera.
     float3 dirToCamera = normalize(CameraPos - posW.xyz);
     
+    // Get the dot product from the reflection.
     float reflectionIntensity = saturate(dot(reflection, dirToCamera));
     reflectionIntensity = pow(reflectionIntensity, 5);
-    output += (SpecularLight * SpecularMaterial) * reflectionIntensity;
+
+    float3 ambient = AmbientLight.rgb;
+    float3 diffuse = (potentialDiffuse * diffuseAmount).rgb;
+    float3 specular = (SpecularLight * SpecularMaterial).rgb * reflectionIntensity;
+
+    float4 colour;
+    
+    // I compiled all of the lighting types into this one line so it's easier for me to understand.
+    output.rgb = (ambient + diffuseAmount + specular);
+    
     return output;
 }
