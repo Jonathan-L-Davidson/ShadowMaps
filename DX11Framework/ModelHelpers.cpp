@@ -16,7 +16,6 @@ VertexBuffer::VertexBuffer(ID3D11Device* device) {
 
 VertexBuffer::~VertexBuffer() {
 	_buffer->Release();
-	_buffer = 0;
 	_vertices->clear();
 	delete _vertices;
 }
@@ -67,7 +66,6 @@ IndexBuffer::IndexBuffer(ID3D11Device* device) {
 }
 IndexBuffer::~IndexBuffer() {
 	_buffer->Release();
-	_buffer = 0;
 	_indices->clear();
 	delete _indices;
 }
@@ -127,7 +125,4 @@ ModelBuffer::ModelBuffer(ID3D11Device* device, std::vector<SimpleVertex> verts, 
 ModelBuffer::~ModelBuffer() {
 	delete _vBuffer;
 	delete _iBuffer;
-
-	_vBuffer = 0;
-	_iBuffer = 0;
 }

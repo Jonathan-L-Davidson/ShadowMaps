@@ -10,6 +10,8 @@ Shader::~Shader() {
 	if (_vertexShader)	DELETED3D(_vertexShader);
     if (_inputLayout)   DELETED3D(_inputLayout);
 	if (_pixelShader)	DELETED3D(_pixelShader);
+
+    _default = nullptr;
 }
 
 ID3D11VertexShader* Shader::GetVertexShader() {
