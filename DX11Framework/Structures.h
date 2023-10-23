@@ -33,6 +33,8 @@ struct ConstantBuffer
 	XMFLOAT4 LightPosition;
 	XMFLOAT3 LightRotation;
 
+	float packing;
+
 	XMFLOAT4 SpecularLight;
 	XMFLOAT4 SpecularMaterial;
 	float    SpecPower;
@@ -40,6 +42,8 @@ struct ConstantBuffer
 	XMFLOAT3 CameraPos;
 
 	float Time;
+	XMFLOAT3 packing2;
+
 };
 
 struct Rect{

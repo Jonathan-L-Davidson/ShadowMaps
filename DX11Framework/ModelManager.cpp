@@ -113,10 +113,10 @@ void ModelManager::CreatePyramid() {
 void ModelManager::CreatePlane() {
     std::vector<SimpleVertex> VertexData = {
         //Position                          //Color             
-        { XMFLOAT3(50.00f,  -5.00f, 50.00f),  XMFLOAT3(0.5f, 0.3f, 0.50f)      },
-        { XMFLOAT3(-50.00f, -5.00f, -50.00f), XMFLOAT3(0.5f, 0.3f, 0.50f)    },
-        { XMFLOAT3(50.00f, -5.00f, -50.00f),  XMFLOAT3(0.5f, 0.3f, 0.50f)     },
-        { XMFLOAT3(-50.00f, -5.00f, 50.00f),  XMFLOAT3(0.5f, 0.3f, 0.50f)     },
+        { XMFLOAT3(50.00f,  -5.00f, 50.00f),  XMFLOAT3(0.5f, 0.3f, 0.50f)       },
+        { XMFLOAT3(-50.00f, -5.00f, -50.00f), XMFLOAT3(0.5f, 0.3f, 0.50f)       },
+        { XMFLOAT3(50.00f, -5.00f, -50.00f),  XMFLOAT3(0.5f, 0.3f, 0.50f)       },
+        { XMFLOAT3(-50.00f, -5.00f, 50.00f),  XMFLOAT3(0.5f, 0.3f, 0.50f)       },
     };
 
     std::vector<WORD> IndexData = {

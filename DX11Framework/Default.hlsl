@@ -11,6 +11,8 @@ cbuffer ConstantBuffer : register(b0)
     float4 LightPosition;
     float3 LightRotation;
     
+    float packing;
+    
     float4 SpecularLight;
     float4 SpecularMaterial;
     float  SpecPower;
@@ -19,6 +21,7 @@ cbuffer ConstantBuffer : register(b0)
     
     
     float Time;
+    float3 packing2;
 }
 
 struct VS_Out
@@ -56,23 +59,17 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float4 normW = normalize(input.normW);
     
     
-    float4 lightPos = mul(LightPosition, World);
-    float3 lightDir = normalize(posW - lightPos); // From light to model position.
-    
-    float spotlightIntensity = dot(lightDir, LightRotation);
-    
-    
     //////////////// DIFFUSE ////////////////
     // Calculate potential diffused amount:
     float4 potentialDiffuse = DiffuseLight * DiffuseMaterial;
 
     // Get intensity from normal and lightdir.
     // Lambert's cosine law: Cos(dot(N, L))
-    float diffuseAmount = saturate(dot(-lightDir, normW.xyz));
+    float diffuseAmount = saturate(dot(-LightRotation, normW.xyz));
 
     //////////////// SPECULAR ////////////////
     // 1. Get dir from light to surface.
-    float3 dirFromLight = normalize(posW.xyz - lightPos.xyz);
+    float3 dirFromLight = normalize(posW.xyz - LightRotation);
     
     // 2. reflection off of that.
     float3 reflection = reflect(-dirFromLight, normW.xyz);
@@ -92,7 +89,7 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float4 colour;
     
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
-    output.rgb = (ambient + diffuseAmount + specular);
+    output.rgb = (diffuseAmount);
     
     return output;
 }
