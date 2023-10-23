@@ -58,6 +58,11 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float4 posW = input.positionW; // Vertex position in worldspace.
     float4 normW = normalize(input.normW);
     
+    float4 lightPos = mul(LightPosition, World);
+    float3 lightDir = normalize(posW - lightPos); // From light to model position.
+    
+    float spotlightIntensity = dot(lightDir, LightRotation);
+    
     
     //////////////// DIFFUSE ////////////////
     // Calculate potential diffused amount:
@@ -65,11 +70,11 @@ float4 PS_main(VS_Out input) : SV_TARGET
 
     // Get intensity from normal and lightdir.
     // Lambert's cosine law: Cos(dot(N, L))
-    float diffuseAmount = saturate(dot(-LightRotation, normW.xyz));
+    float diffuseAmount = saturate(dot(-lightDir, normW.xyz));
 
     //////////////// SPECULAR ////////////////
     // 1. Get dir from light to surface.
-    float3 dirFromLight = normalize(posW.xyz - LightRotation);
+    float3 dirFromLight = normalize(posW.xyz - lightPos.xyz);
     
     // 2. reflection off of that.
     float3 reflection = reflect(-dirFromLight, normW.xyz);
@@ -89,7 +94,7 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float4 colour;
     
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
-    output.rgb = (diffuseAmount);
+    output.rgb = (ambient + diffuseAmount + specular);
     
     return output;
 }
