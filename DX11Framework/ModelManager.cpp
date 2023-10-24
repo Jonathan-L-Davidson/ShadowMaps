@@ -95,11 +95,11 @@ void ModelManager::CreateCube() {
 void ModelManager::CreatePyramid() {
     std::vector<SimpleVertex> VertexData = {
         //Position                          //Normal                            // TexCoords
-        { XMFLOAT3(0.00f,  1.00f, 0.00f),   XMFLOAT3(0.00f,  1.00f, 0.00f),     XMFLOAT2(0.0f, 0.0f)},
+        { XMFLOAT3(0.00f,  1.00f, 0.00f),   XMFLOAT3(0.00f,  1.00f, 0.00f),     XMFLOAT2(0.5f, 0.5f)},
         { XMFLOAT3(-1.00f, -1.00f, -1.00f), XMFLOAT3(-1.00f, -1.00f, -1.00f),   XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, -1.00f),  XMFLOAT3(1.00f, -1.00f, -1.00f),    XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, 1.00f),  XMFLOAT3(-1.00f, -1.00f, 1.00f),    XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f),     XMFLOAT2(0.0f, 0.0f)},
+        { XMFLOAT3(1.00f, -1.00f, -1.00f),  XMFLOAT3(1.00f, -1.00f, -1.00f),    XMFLOAT2(1.0f, 0.0f)},
+        { XMFLOAT3(-1.00f, -1.00f, 1.00f),  XMFLOAT3(-1.00f, -1.00f, 1.00f),    XMFLOAT2(0.0f, 1.0f)},
+        { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f),     XMFLOAT2(1.0f, 1.0f)},
     };                                                                          
 
     std::vector<WORD> IndexData = {
