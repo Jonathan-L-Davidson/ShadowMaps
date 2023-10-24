@@ -71,14 +71,14 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float4 normW = normalize(input.normW);
     
     // Calculate potential diffused amount:
-    float4 potentialDiffuse = DiffuseLight * texColor;
+    float4 potentialDiffuse = DiffuseLight * DiffuseMaterial;
     
     // Get intensity from normal and lightdir.
     // Lambert's cosine law: Cos(dot(N, L))
-    float diffuseAmount = saturate(dot(LightRotation, normW.xyz));
+    float diffuseAmount = dot(LightRotation, normW.xyz);
     
-    float4 color = potentialDiffuse * diffuseAmount;
-    return color;
+    float4 diffuseColor = potentialDiffuse * diffuseAmount;
+    return diffuseColor;
     
     // TODO: Rework ALL of this garbo.
     /*

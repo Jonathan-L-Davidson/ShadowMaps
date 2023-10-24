@@ -182,7 +182,6 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
     XMFLOAT4X4 camView = _cam->GetView();
     _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&camView));
     _cbData.Projection = XMMatrixTranspose(XMLoadFloat4x4(&_Projection));
-    _cbData.Time = simpleCount;
     
     _cbData.CameraPos = _cam->GetPosition();
 

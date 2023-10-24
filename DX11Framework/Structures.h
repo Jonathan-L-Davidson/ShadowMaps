@@ -27,6 +27,7 @@ struct ConstantBuffer
 	XMMATRIX Projection;
 	XMMATRIX View;
 	XMMATRIX World;
+
 	XMFLOAT4 AmbientLight;
 	XMFLOAT4 DiffuseLight;
 	XMFLOAT4 DiffuseMaterial;
@@ -38,12 +39,11 @@ struct ConstantBuffer
 
 	XMFLOAT4 SpecularLight;
 	XMFLOAT4 SpecularMaterial;
+
 	float    SpecPower;
 
 	XMFLOAT3 CameraPos;
-
-	float Time;
-	XMFLOAT3 packing2;
+	unsigned int UseTexture;
 
 };
 

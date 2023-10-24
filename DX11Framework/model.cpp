@@ -5,8 +5,6 @@
 
 Model::Model(ID3D11Device* device) {
     _modelBuffer = new ModelBuffer(device);
-    _light.Position = XMFLOAT4(20.0f, -40.0f, -30.0f, 1.0f);
-    _light.Rotation = XMFLOAT3(0.5f, 0.0f, 0.5f);
 }
 
 Model::Model(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<WORD> indices) {
@@ -46,12 +44,15 @@ void Model::SetupInput(ID3D11DeviceContext* context) {
 
 void Model::SetupTextures(ID3D11DeviceContext* context) {
     Texture* texture = GetTexture();
+    _useTexture = false; // Reset to 0 incase we lose our texture later on.
 
     if (texture != nullptr) {
         ID3D11SamplerState* sampler = texture->GetSampler();
         context->PSSetSamplers(0, 1, &sampler);
         ID3D11ShaderResourceView* textureResource = texture->GetResourceTexture();
         context->PSSetShaderResources(0, 1, &textureResource);
+        
+        _useTexture = true;
     }
 }
 
@@ -74,10 +75,14 @@ void Model::Render(ID3D11DeviceContext* context) {
 void Model::UpdateCBData(ConstantBuffer* cbData) {
     cbData->DiffuseLight = _diffuseLight;
     cbData->DiffuseMaterial = _diffuseMaterial;
+    
     cbData->LightPosition = _light.Position;
     cbData->LightRotation = _light.Rotation;
+    
     cbData->SpecularLight = _specularLight;
     cbData->SpecularMaterial = _specularMaterial;
+    
     cbData->SpecPower = _specPower;
-
+    
+    cbData->UseTexture = _useTexture;
 }

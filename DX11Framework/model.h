@@ -41,12 +41,16 @@ private:
 	ModelBuffer* _modelBuffer;
 	XMFLOAT4 _diffuseLight = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
 	XMFLOAT4 _diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	SimpleLight _light;
+	
+	SimpleLight _light = {
+		XMFLOAT4(20.0f, -40.0f, -30.0f, 1.0f), // Position
+		XMFLOAT3(0.0f, 0.5f, -0.5f) }; // Rotation
 
 	XMFLOAT4 _specularLight = XMFLOAT4(0.6f, 0.6f, 0.6f, 1.0f);
 	XMFLOAT4 _specularMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	float _specPower = 10.0f;
 
+	bool _useTexture = 0;
 
 	Shader* _shader;
 	ShaderManager* _shaderManager;
