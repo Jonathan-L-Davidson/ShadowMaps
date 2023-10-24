@@ -10,7 +10,7 @@ Monkey::~Monkey() {
 }
 
 void Monkey::Initialise() {
-    _color = XMFLOAT4(0.05f, 0.125f, 0.05f, 1.0f);
+    _color = XMFLOAT4(0.005f, 0.125f, 0.005f, 1.0f);
     return;
 }
 
