@@ -60,6 +60,8 @@ void TextureManager::AddTexture(std::string path) {
 	}
 
 	tex->SetSampler(_bilinearSamplerState);
+	tex->SetID(path);
+	tex->SetResourceTexture(texturePath);
 	// Add it to the texture list.
 	_textures->insert(std::make_pair(path, tex));
 
@@ -68,10 +70,6 @@ void TextureManager::AddTexture(std::string path) {
 Texture* TextureManager::GetTexture(std::string path) {
 	if (_textures->count(path)) {
 		return _textures->find(path)->second;
-	}
-
-	if (path != "Default") {
-		return GetDefaultTexture();
 	}
 
 	AddTexture(path);
