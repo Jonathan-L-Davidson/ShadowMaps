@@ -78,7 +78,8 @@ void Model::UpdateCBData(ConstantBuffer* cbData) {
     
     cbData->LightPosition = _light.Position;
     cbData->LightRotation = _light.Rotation;
-    
+    cbData->LightFallOff = _light.FallOff;
+
     cbData->SpecularLight = _specularLight;
     cbData->SpecularMaterial = _specularMaterial;
     

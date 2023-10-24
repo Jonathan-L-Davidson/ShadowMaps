@@ -14,8 +14,7 @@ cbuffer ConstantBuffer : register(b0)
     
     float4 LightPosition;
     float3 LightRotation;
-    
-    float packing;
+    float  LightFalloff;
     
     float4 SpecularLight;
     float4 SpecularMaterial;
@@ -30,8 +29,8 @@ struct VS_Out
     float4 position : SV_POSITION;
     float4 positionW : POSITION;
     float4 normW : NORMAL;
-    float4 color : COLOR;
     float2 texCoord : TEXCOORDS;
+    float4 lightPositionW : LIGHT_POSITION;
 };
 
 VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL, float2 TexCoord : TEXCOORDS)
@@ -49,63 +48,56 @@ VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL, float2 TexCoo
     output.positionW = output.position;
     output.position = mul(output.position, View);
     output.position = mul(output.position, Projection);
+    
+    output.lightPositionW = LightPosition;
     output.texCoord = TexCoord;
     return output;
 }
 
 float4 PS_main(VS_Out input) : SV_TARGET
 {
-    float4 output = input.color;
+    float4 posW = input.positionW; // Vertex position in worldspace.
+    float4 normW = normalize(input.normW);
     
+    // Worldspace light calculations.
+    float4 lightPos = input.lightPositionW;
+    float3 lightDir = normalize(posW - lightPos); // From light to model position.
+  
+    
+    //////////////// TEXTURE ////////////////
     float4 texColor = DiffuseMaterial;
     if (UseTexture > 0)
     {
         texColor = diffuseTex.Sample(bilinearSampler, input.texCoord);
     }
     
+    
+    
     //////////////// AMBIENT ////////////////
     float4 ambient = AmbientLight * texColor;
-
-    //////////////// DIFFUSE ////////////////
-    float4 posW = input.positionW;
-    float4 normW = normalize(input.normW);
     
-    // Calculate potential diffused amount:
-    float4 potentialDiffuse = DiffuseLight * DiffuseMaterial;
     
-    // Get intensity from normal and lightdir.
-    // Lambert's cosine law: Cos(dot(N, L))
-    float diffuseAmount = dot(LightRotation, normW.xyz);
-    
-    float4 diffuseColor = potentialDiffuse * diffuseAmount;
-    return diffuseColor;
-    
-    // TODO: Rework ALL of this garbo.
-    /*
-    float4 posW = input.positionW; // Vertex position in worldspace.
-    float4 normW = normalize(input.normW);
-    
-    float4 lightPos = mul(LightPosition, World);
-    float3 lightDir = normalize(posW - lightPos); // From light to model position.
-    
-    float spotlightIntensity = dot(lightDir, LightRotation);
     
     //////////////// DIFFUSE ////////////////
     // Calculate potential diffused amount:
-    float4 potentialDiffuse = DiffuseLight * DiffuseMaterial;
+    float4 potentialDiffuse = DiffuseLight * texColor;
 
     // Get intensity from normal and lightdir.
-    // Lambert's cosine law: Cos(dot(N, L))
-    float diffuseAmount = saturate(dot(-lightDir, normW.xyz));
+    // Dot product compares the vector's rotation to the other vector, 1 is when they're the same, -1 is the inverse.
+    float diffuseAmount = saturate(dot(lightDir, normW.xyz));
 
-
+    //// DIFFUSE COLOUR ////
+    float4 diffuse = potentialDiffuse * diffuseAmount;
+    
+    
+    
     
     //////////////// SPECULAR ////////////////
     // 1. Get dir from light to surface.
-    float3 dirFromLight = normalize(posW.xyz - lightPos.xyz);
+    float3 dirFromLight = normalize(lightPos.xyz - posW.xyz);
     
     // 2. reflection off of that.
-    float3 reflection = reflect(-dirFromLight, normW.xyz);
+    float3 reflection = reflect(-lightDir, normW.xyz);
     
     // 3. dir towards camera.
     float3 dirToCamera = normalize(CameraPos - posW.xyz);
@@ -114,15 +106,22 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float reflectionIntensity = saturate(dot(reflection, dirToCamera));
     reflectionIntensity = pow(reflectionIntensity, 5);   
     
-    //////////////// Lighting Compilation //////////////// 
-    float4 diffuse = (potentialDiffuse * diffuseAmount);
+    //// SPECULAR COLOUR ////
     float4 specular = (SpecularLight * SpecularMaterial) * reflectionIntensity;
+    
+    
+    
+    
+    //////////////// Lighting Compilation ////////////////
+    // Distance from light to object.
+    float lightDistance = distance(posW, lightPos);
 
-    float4 colour;
-        
+    // Create a gredient based off of the distance & falloff (https://www.ths-concepts.co.uk/how-to-calculate-gradients/)
+    float falloffGradient = saturate(LightFalloff / lightDistance);
+    
+    
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
-    output = (ambient + diffuseAmount + specular);
+    float4 output = ambient + ((diffuse + specular) * falloffGradient);
     
     return output;
-    */
 }

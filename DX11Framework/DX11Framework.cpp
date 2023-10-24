@@ -50,31 +50,27 @@ HRESULT DX11Framework::InitCube()
 
     Object* cube = new Cube();
     cube->SetName("Test Cube");
-    _objectManager->AddObject(cube, XMFLOAT3(0.0f, 3.0f, 5.0f));
+    _objectManager->AddObject(cube, XMFLOAT3(0.0f, 0.0f, 0.0f));
     Texture* tex = _modelManager->GetTexture("Crate_COLOR");
     cube->SetTexture(tex);
 
     Pyramid* _pyramid = new Pyramid();
     _pyramid->SetName("Test Pyramid");
     _objectManager->AddObject(_pyramid, XMFLOAT3(-3.0f, 0.0f, 5.0f));
-    _pyramid->SetTexture(defaultTexture);
 
     Monkey* monkey = new Monkey();
     monkey->SetName("Monkey");
     _objectManager->AddObject(monkey, XMFLOAT3(-5, 0.0f, 5.0f));
     monkey->GetModel()->SetShader("VertexShading");
-    monkey->SetTexture(defaultTexture);
 
     Monkey* monkey2 = new Monkey();
     monkey2->SetName("Monkey2");
     _modelManager->LoadModelFromFile("monkey.obj", "Monkey2");
     _objectManager->AddObject(monkey2, XMFLOAT3(5, 0.0f, 5.0f));
-    monkey2->SetTexture(defaultTexture);
 
     Object* plane = new Object();
     plane->SetName("Floor Plane");
-    _objectManager->AddObject(plane, XMFLOAT3(0.0f, 0.0f, 0.0f));
-    plane->SetTexture(defaultTexture);
+    _objectManager->AddObject(plane, XMFLOAT3(0.0f, -5.0f, 0.0f));
 
 
     return S_OK;
