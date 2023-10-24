@@ -59,14 +59,14 @@ Texture* ModelManager::GetTexture(std::string path) {
 void ModelManager::CreateCube() {
     std::vector<SimpleVertex> VertexData = {
         //Position                          //Normal                            // TexCoords
-        { XMFLOAT3(-1.00f,  1.00f, -1.00f), XMFLOAT3(-1.00f,  1.00f, -1.00f),   XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(1.00f,  1.00f, -1.00f),  XMFLOAT3(1.00f,  1.00f, -1.00f),    XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, -1.00f), XMFLOAT3(-1.00f, -1.00f, -1.00f),   XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, -1.00f),  XMFLOAT3(1.00f, -1.00f, -1.00f),    XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(-1.00f,  1.00f, 1.00f),  XMFLOAT3(-1.00f,  1.00f, 1.00f),    XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(1.00f,  1.00f, 1.00f),   XMFLOAT3(1.00f,  1.00f, 1.00f),     XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(-1.00f, -1.00f, 1.00f),  XMFLOAT3(-1.00f, -1.00f, 1.00f),    XMFLOAT2(0.0f, 0.0f)},
-        { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f),     XMFLOAT2(0.0f, 0.0f)},
+        { XMFLOAT3(-1.00f,  1.00f, -1.00f), XMFLOAT3(-1.00f,  1.00f, -1.00f),   XMFLOAT2(0.0f, 0.0f)}, // 0
+        { XMFLOAT3(1.00f,  1.00f, -1.00f),  XMFLOAT3(1.00f,  1.00f, -1.00f),    XMFLOAT2(1.0f, 0.0f)}, // 1
+        { XMFLOAT3(-1.00f, -1.00f, -1.00f), XMFLOAT3(-1.00f, -1.00f, -1.00f),   XMFLOAT2(0.0f, 1.0f)}, // 2
+        { XMFLOAT3(1.00f, -1.00f, -1.00f),  XMFLOAT3(1.00f, -1.00f, -1.00f),    XMFLOAT2(1.0f, 1.0f)}, // 3
+        { XMFLOAT3(-1.00f,  1.00f, 1.00f),  XMFLOAT3(-1.00f,  1.00f, 1.00f),    XMFLOAT2(1.0f, 0.0f)}, // 4
+        { XMFLOAT3(1.00f,  1.00f, 1.00f),   XMFLOAT3(1.00f,  1.00f, 1.00f),     XMFLOAT2(0.0f, 0.0f)}, // 5
+        { XMFLOAT3(-1.00f, -1.00f, 1.00f),  XMFLOAT3(-1.00f, -1.00f, 1.00f),    XMFLOAT2(1.0f, 1.0f)}, // 6
+        { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f),     XMFLOAT2(0.0f, 1.0f)}, // 7
     };
 
     std::vector<WORD> IndexData = {
