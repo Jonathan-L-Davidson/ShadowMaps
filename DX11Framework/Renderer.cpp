@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "ObjectManager.h"
+#include "TextureManager.h"
 #include "Camera.h"
+
 
 Renderer::Renderer() {
 
@@ -198,12 +200,21 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
         Model* model = obj->GetModel();
         if (model) {
             model->SetupInput(_immediateContext);
+            
+            ID3D11ShaderResourceView* texture = model->GetTexture()->GetResourceTexture();
+            ID3D11SamplerState* bilinearSampler = model->GetTexture()->GetSampler();
+            _immediateContext->PSGetSamplers(0, 1, &bilinearSampler);
+            _immediateContext->PSSetShaderResources(0, 1, &texture);
+
             _cbData.AmbientLight = obj->GetColor();
             model->UpdateCBData(&_cbData);
+            
             _cbData.World = XMMatrixTranspose(obj->GetWorldMatrix());
+            
             _immediateContext->Map(_constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
             memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));
             _immediateContext->Unmap(_constantBuffer, 0);
+            
             model->Render(_immediateContext);
         }
     }

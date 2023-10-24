@@ -8,6 +8,8 @@
 
 class Renderer;
 class ShaderManager;
+class TextureManager;
+class Texture;
 
 class ModelManager
 {
@@ -20,6 +22,7 @@ public:
 	void RemoveModel(std::string name);
 	Model* GetModel(std::string name);
 
+	Texture* GetTexture(std::string path);
 
 
 	std::map<std::string, Model*>* GetModels() { return _models; };
@@ -33,6 +36,7 @@ private:
 
 	Renderer* _renderManager;
 	ShaderManager* _shaderManager;
+	TextureManager* _textureManager;
 
 	void CreateCube();
 	void CreatePyramid();

@@ -48,6 +48,8 @@ HRESULT DX11Framework::InitCube()
 {
     Object* cube = new Cube();
     cube->SetName("Test Cube");
+    Texture* tex = _modelManager->GetTexture("Crate_COLOR");
+    cube->SetTexture(tex);
     _objectManager->AddObject(cube, XMFLOAT3(0.0f, 3.0f, 5.0f));
 
     Pyramid* _pyramid = new Pyramid();
@@ -67,6 +69,7 @@ HRESULT DX11Framework::InitCube()
     Object* plane = new Object();
     plane->SetName("Floor Plane");
     _objectManager->AddObject(plane, XMFLOAT3(0.0f, 0.0f, 0.0f));
+
 
     return S_OK;
 }

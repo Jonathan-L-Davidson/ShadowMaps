@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "Structures.h"
 #include "ShaderManager.h"
+#include "TextureManager.h"
 #include <fstream>
 #include <sstream>
 #include <random>
@@ -25,6 +26,10 @@ void ModelManager::Initialise() {
     _shaderManager->SetDevice(_renderManager->GetDevice());
     _shaderManager->Initialise();
 
+    _textureManager = new TextureManager();
+    _textureManager->SetDevice(_renderManager->GetDevice());
+    _textureManager->Initialise();
+
     CreateCube();
     CreatePyramid();
     CreatePlane();
@@ -45,6 +50,10 @@ void ModelManager::RemoveModel(std::string name) {
 Model* ModelManager::GetModel(std::string name) {
 	Model* model = _models->find(name)->second;
 	return model;
+}
+
+Texture* ModelManager::GetTexture(std::string path) {
+    return _textureManager->GetTexture(path);
 }
 
 void ModelManager::CreateCube() {

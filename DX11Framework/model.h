@@ -8,6 +8,7 @@
 class Shader;
 class ShaderManager;
 class Buffer;
+class Texture;
 
 class Model
 {
@@ -30,6 +31,9 @@ public:
 	void Render(ID3D11DeviceContext* context);
 	void UpdateCBData(ConstantBuffer* cbData);
 
+	Texture* GetTexture() { return _texture; }
+	void SetTexture(Texture* texture) { _texture = texture; }
+
 private:
 	XMFLOAT4X4 _transform;
 
@@ -45,6 +49,8 @@ private:
 
 	Shader* _shader;
 	ShaderManager* _shaderManager;
+
+	Texture* _texture;
 };
 
 #endif

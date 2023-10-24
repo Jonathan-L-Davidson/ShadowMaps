@@ -32,6 +32,8 @@ public:
 
 	Model* GetModel() { return _model; };
 	void SetModel(Model* model) { _model = model; };
+	void SetTexture(Texture* tex) { _model->SetTexture(tex); }
+
 
 	virtual std::string GetModelName() { return GetName(); };
 	std::string GetName() { return _name; };
