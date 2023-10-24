@@ -19,6 +19,7 @@ struct SimpleVertex
 {
 	XMFLOAT3 Position;
 	XMFLOAT3 Normal;
+	XMFLOAT2 TexCoord;
 };
 
 struct ConstantBuffer
