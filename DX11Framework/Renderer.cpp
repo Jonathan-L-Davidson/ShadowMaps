@@ -201,10 +201,7 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
         if (model) {
             model->SetupInput(_immediateContext);
             
-            ID3D11ShaderResourceView* texture = model->GetTexture()->GetResourceTexture();
-            ID3D11SamplerState* bilinearSampler = model->GetTexture()->GetSampler();
-            _immediateContext->PSGetSamplers(0, 1, &bilinearSampler);
-            _immediateContext->PSSetShaderResources(0, 1, &texture);
+            model->SetupTextures(_immediateContext);
 
             _cbData.AmbientLight = obj->GetColor();
             model->UpdateCBData(&_cbData);

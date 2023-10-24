@@ -1,6 +1,7 @@
 #include "model.h"
 #include "Structures.h"
 #include "ShaderManager.h"
+#include "TextureManager.h"
 
 Model::Model(ID3D11Device* device) {
     _modelBuffer = new ModelBuffer(device);
@@ -43,7 +44,19 @@ void Model::SetupInput(ID3D11DeviceContext* context) {
     context->IASetInputLayout(il);
 }
 
+void Model::SetupTextures(ID3D11DeviceContext* context) {
+    Texture* texture = GetTexture();
+
+    if (texture != nullptr) {
+        ID3D11SamplerState* sampler = texture->GetSampler();
+        context->PSSetSamplers(0, 1, &sampler);
+        ID3D11ShaderResourceView* textureResource = texture->GetResourceTexture();
+        context->PSSetShaderResources(0, 1, &textureResource);
+    }
+}
+
 void Model::Render(ID3D11DeviceContext* context) {
+
     //Set object variables and draw
     UINT stride = { sizeof(SimpleVertex) };
     UINT offset = 0;

@@ -1,3 +1,7 @@
+Texture2D diffuseTex : register(t0);
+SamplerState bilinearSampler : register(s0);
+
+
 cbuffer ConstantBuffer : register(b0)
 {
     float4x4 Projection;
@@ -30,9 +34,10 @@ struct VS_Out
     float4 positionW : POSITION;
     float4 normW : NORMAL;
     float4 color : COLOR;
+    float2 texCoord : TEXCOORDS;
 };
 
-VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL)
+VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL, float2 TexCoord : TEXCOORDS)
 {      
     VS_Out output = (VS_Out)0;
         
@@ -47,7 +52,7 @@ VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL)
     output.positionW = output.position;
     output.position = mul(output.position, View);
     output.position = mul(output.position, Projection);
-        
+    output.texCoord = TexCoord;
     return output;
 }
 
@@ -92,6 +97,9 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float3 specular = (SpecularLight * SpecularMaterial).rgb * reflectionIntensity;
 
     float4 colour;
+    
+    float4 texColor = diffuseTex.Sample(bilinearSampler, input.texCoord);
+    return texColor;
     
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
     output.rgb = (ambient + diffuseAmount + specular);
