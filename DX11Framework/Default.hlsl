@@ -22,10 +22,7 @@ cbuffer ConstantBuffer : register(b0)
     float  SpecPower;
     
     float3 CameraPos;
-    
-    
-    float Time;
-    float3 packing2;
+    uint UseTexture;
 }
 
 struct VS_Out
@@ -60,6 +57,31 @@ float4 PS_main(VS_Out input) : SV_TARGET
 {
     float4 output = input.color;
     
+    float4 texColor = DiffuseMaterial;
+    if (UseTexture > 0)
+    {
+        texColor = diffuseTex.Sample(bilinearSampler, input.texCoord);
+    }
+    
+    //////////////// AMBIENT ////////////////
+    float4 ambient = AmbientLight * texColor;
+
+    //////////////// DIFFUSE ////////////////
+    float4 posW = input.positionW;
+    float4 normW = normalize(input.normW);
+    
+    // Calculate potential diffused amount:
+    float4 potentialDiffuse = DiffuseLight * texColor;
+    
+    // Get intensity from normal and lightdir.
+    // Lambert's cosine law: Cos(dot(N, L))
+    float diffuseAmount = saturate(dot(LightRotation, normW.xyz));
+    
+    float4 color = potentialDiffuse * diffuseAmount;
+    return color;
+    
+    // TODO: Rework ALL of this garbo.
+    /*
     float4 posW = input.positionW; // Vertex position in worldspace.
     float4 normW = normalize(input.normW);
     
@@ -67,7 +89,6 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float3 lightDir = normalize(posW - lightPos); // From light to model position.
     
     float spotlightIntensity = dot(lightDir, LightRotation);
-    
     
     //////////////// DIFFUSE ////////////////
     // Calculate potential diffused amount:
@@ -77,6 +98,8 @@ float4 PS_main(VS_Out input) : SV_TARGET
     // Lambert's cosine law: Cos(dot(N, L))
     float diffuseAmount = saturate(dot(-lightDir, normW.xyz));
 
+
+    
     //////////////// SPECULAR ////////////////
     // 1. Get dir from light to surface.
     float3 dirFromLight = normalize(posW.xyz - lightPos.xyz);
@@ -89,20 +112,17 @@ float4 PS_main(VS_Out input) : SV_TARGET
     
     // Get the dot product from the reflection.
     float reflectionIntensity = saturate(dot(reflection, dirToCamera));
-    reflectionIntensity = pow(reflectionIntensity, 5);
+    reflectionIntensity = pow(reflectionIntensity, 5);   
     
     //////////////// Lighting Compilation //////////////// 
-    float3 ambient = AmbientLight.rgb;
-    float3 diffuse = (potentialDiffuse * diffuseAmount).rgb;
-    float3 specular = (SpecularLight * SpecularMaterial).rgb * reflectionIntensity;
+    float4 diffuse = (potentialDiffuse * diffuseAmount);
+    float4 specular = (SpecularLight * SpecularMaterial) * reflectionIntensity;
 
     float4 colour;
-    
-    float4 texColor = diffuseTex.Sample(bilinearSampler, input.texCoord);
-    return texColor;
-    
+        
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
-    output.rgb = (ambient + diffuseAmount + specular);
+    output = (ambient + diffuseAmount + specular);
     
     return output;
+    */
 }
