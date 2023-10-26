@@ -71,7 +71,9 @@ float4 PS_main(VS_Out input) : SV_TARGET
         texColor = diffuseTex.Sample(bilinearSampler, input.texCoord);
     }
     
-    
+    // Distance from light to object.
+    float lightDistance = distance(posW, lightPos);
+
     
     //////////////// AMBIENT ////////////////
     float4 ambient = AmbientLight * texColor;
@@ -84,7 +86,7 @@ float4 PS_main(VS_Out input) : SV_TARGET
 
     // Get intensity from normal and lightdir.
     // Dot product compares the vector's rotation to the other vector, 1 is when they're the same, -1 is the inverse.
-    float diffuseAmount = saturate(dot(lightDir, normW.xyz));
+    float diffuseAmount = saturate(dot(-lightDir, normW.xyz));
 
     //// DIFFUSE COLOUR ////
     float4 diffuse = potentialDiffuse * diffuseAmount;
@@ -97,25 +99,19 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float3 dirFromLight = normalize(lightPos.xyz - posW.xyz);
     
     // 2. reflection off of that.
-    float3 reflection = reflect(-lightDir, normW.xyz);
+    float3 reflection = reflect(lightDir, normW.xyz);
     
     // 3. dir towards camera.
     float3 dirToCamera = normalize(CameraPos - posW.xyz);
     
     // Get the dot product from the reflection.
     float reflectionIntensity = saturate(dot(reflection, dirToCamera));
-    reflectionIntensity = pow(reflectionIntensity, 5);   
+    reflectionIntensity = pow(reflectionIntensity, 5 * lightDistance);
     
     //// SPECULAR COLOUR ////
     float4 specular = (SpecularLight * SpecularMaterial) * reflectionIntensity;
     
-    
-    
-    
     //////////////// Lighting Compilation ////////////////
-    // Distance from light to object.
-    float lightDistance = distance(posW, lightPos);
-
     // Create a gredient based off of the distance & falloff (https://www.ths-concepts.co.uk/how-to-calculate-gradients/)
     float falloffGradient = saturate(LightFalloff / lightDistance);
     

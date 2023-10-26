@@ -4,7 +4,6 @@
 
 TextureManager::TextureManager() {
 	_textures = new std::map<std::string, Texture*>();
-
 }
 
 TextureManager::~TextureManager() {
@@ -40,6 +39,7 @@ void TextureManager::AddTexture(std::string path) {
 	if (_textures->count(path)) {
 		return;
 	}
+
 
 	// Sets the path correctly to a texture file.
 	std::string fullPath = "Textures\\" + path + ".dds";
