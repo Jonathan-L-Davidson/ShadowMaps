@@ -3,11 +3,26 @@ cbuffer ConstantBuffer : register(b0)
     float4x4 Projection;
     float4x4 View;
     float4x4 World;
+    
     float4 AmbientLight;
     float4 DiffuseLight;
     float4 DiffuseMaterial;
-    float3 LightDir;
-    float Time;
+    
+    float4 LightPosition;
+    float3 LightRotation;
+    float  LightFalloff;
+    
+    float4 SpecularLight;
+    float4 SpecularMaterial;
+    float  SpecPower;
+    
+    float3 CameraPos;
+    
+    uint UseTexture;
+    uint UseDiffuse;
+    uint UseDisplacement;
+    uint UseNormal;
+    uint UseSpecular;
 }
 
 struct VS_Out
@@ -28,13 +43,16 @@ VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL)
     float3 normW = mul(float4(Normal, 0), World);
     normW = normalize(normW);
     
-    // Get intensity from normal and lightdir.
-    // Lambert's cosine law: Cos(dot(N, L))
-    float diffuseAmount = saturate(dot(-LightDir, normW));
-
-
     float4 Pos4 = float4(Position, 1.0f);
     output.position = mul(Pos4, World);
+    
+    float3 lightDir = normalize(output.position - LightPosition); // From light to model position.
+    
+    // Get intensity from normal and lightdir.
+    // Lambert's cosine law: Cos(dot(N, L))
+    float diffuseAmount = saturate(dot(-lightDir, normW));
+
+
     
     output.position = mul(output.position, View);
     output.position = mul(output.position, Projection);

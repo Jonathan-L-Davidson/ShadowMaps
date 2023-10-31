@@ -48,7 +48,7 @@ private:
 		float(0.5f) }; // falloff -- NOTE: 1.0f can reach end of either plane. Less means less distance.
 	XMFLOAT4 _specularLight = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
 	XMFLOAT4 _specularMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	float _specPower = 10.0f;
+	float _specPower = 15.0f;
 
 	unsigned int _useTexture = 0;
 

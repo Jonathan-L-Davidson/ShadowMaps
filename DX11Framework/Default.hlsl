@@ -111,15 +111,15 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float3 dirToCamera = normalize(CameraPos - posW.xyz);
     
     // Check the specular intensity based off of the texture, if it doesnt have that, just use the base specpower.
-    float specPow = SpecPower;
+    float specTextureReflect = 1;
     if (UseTexture > 0 && UseSpecular > 0)
     {
-        specPow = specularTex.Sample(bilinearSampler, input.texCoord);
+        specTextureReflect = specularTex.Sample(bilinearSampler, input.texCoord);
     }
     
     // Get the dot product from the reflection.
     float reflectionIntensity = saturate(dot(reflection, dirToCamera));    
-    reflectionIntensity = pow(reflectionIntensity, specPow * lightDistance);
+    reflectionIntensity = pow((reflectionIntensity * specTextureReflect), SpecPower);
     
     //// SPECULAR COLOUR ////
     float4 specular = (SpecularLight * SpecularMaterial) * reflectionIntensity;
@@ -131,6 +131,5 @@ float4 PS_main(VS_Out input) : SV_TARGET
     
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
     float4 output = ambient + ((diffuse + specular) * falloffGradient);
-        
     return output;
 }
