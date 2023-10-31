@@ -42,7 +42,13 @@ struct ConstantBuffer
 	float    SpecPower;
 
 	XMFLOAT3 CameraPos;
+	float padding;
+
 	unsigned int UseTexture;
+	unsigned int UseDiffuse;
+	unsigned int UseDisplacement;
+	unsigned int UseNormal;
+	unsigned int UseSpecular;
 
 };
 
@@ -50,4 +56,5 @@ struct Rect{
 	int x;
 	int y;
 };
+
 #endif

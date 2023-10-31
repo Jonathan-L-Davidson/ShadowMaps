@@ -45,7 +45,7 @@ private:
 	SimpleLight _light = {
 		XMFLOAT4(0.0f, 0.0f, 10.0f, 1.0f), // Position
 		XMFLOAT3(0.0f, 0.5f, -0.5f), // Rotation
-		float(0.8f) }; // falloff
+		float(500.0f) }; // falloff
 	XMFLOAT4 _specularLight = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
 	XMFLOAT4 _specularMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	float _specPower = 10.0f;

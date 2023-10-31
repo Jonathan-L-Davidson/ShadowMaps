@@ -16,6 +16,10 @@ enum TextureType {
 class Texture
 {
 public:
+
+	Texture();
+	~Texture();
+	
 	std::string GetID() { return _id; };
 	void SetID(std::string id) { _id = id; };
 
@@ -39,19 +43,19 @@ public:
 		switch (type) {
 			case(DIFFUSE):
 				_diffuseTexture = texture;
-				hasDiffuse = true;
+				hasDiffuse = 1;
 				break;
 			case(SPECULAR):
 				_specularTexture = texture;
-				hasSpecular = true;
+				hasSpecular = 1;
 				break;
 			case(DISPLACEMENT):
 				_displacementTexture = texture;
-				hasDisplacement = true;
+				hasDisplacement = 1;
 				break;
 			case(NORMAL):
 				_normalTexture = texture;
-				hasNormal = true;
+				hasNormal = 1;
 				break;
 		}
 	}
@@ -59,10 +63,10 @@ public:
 	ID3D11SamplerState* GetSampler() { return _sampler; }
 	void SetSampler(ID3D11SamplerState* sampler) { _sampler = sampler; }
 
-	bool hasDiffuse = false;
-	bool hasSpecular = false;
-	bool hasDisplacement = false;
-	bool hasNormal = false;
+	unsigned int hasDiffuse = 0;
+	unsigned int hasSpecular = 0;
+	unsigned int hasDisplacement = 0;
+	unsigned int hasNormal = 0;
 
 private:
 	std::string _id;
@@ -87,7 +91,8 @@ public:
 
 	void AddTexture(Texture* texture, std::string path);
 	void AddTexture(std::string path);
-	Texture* LoadTextureFromFile(std::string, TextureType type);
+	void LoadTextureFromPath(std::string path, Texture* texture, TextureType type);
+	Texture* LoadTextureFromFile(std::string path);
 	Texture* GetTexture(std::string path);
 	
 	void CreateSampler();

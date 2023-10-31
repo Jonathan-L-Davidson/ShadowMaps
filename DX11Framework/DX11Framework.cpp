@@ -51,7 +51,7 @@ HRESULT DX11Framework::InitCube()
     Object* cube = new Cube();
     cube->SetName("Test Cube");
     _objectManager->AddObject(cube, XMFLOAT3(0.0f, 0.0f, 0.0f));
-    Texture* tex = _modelManager->GetTexture("Crate_COLOR");
+    Texture* tex = _modelManager->GetTexture("Crate");
     cube->SetTexture(tex);
 
     Pyramid* _pyramid = new Pyramid();

@@ -1,4 +1,7 @@
 Texture2D diffuseTex : register(t0);
+Texture2D displacementTex : register(t1);
+Texture2D normalTex : register(t2);
+Texture2D specularTex : register(t3);
 SamplerState bilinearSampler : register(s0);
 
 
@@ -21,7 +24,13 @@ cbuffer ConstantBuffer : register(b0)
     float  SpecPower;
     
     float3 CameraPos;
+    float padding;
+    
     uint UseTexture;
+    uint UseDiffuse;
+    uint UseDisplacement;
+    uint UseNormal;
+    uint UseSpecular;
 }
 
 struct VS_Out
@@ -104,9 +113,12 @@ float4 PS_main(VS_Out input) : SV_TARGET
     // 3. dir towards camera.
     float3 dirToCamera = normalize(CameraPos - posW.xyz);
     
+    // Check the specular intensity based off of the texture, if it doesnt have that, just use the base specpower.
+    
+    
     // Get the dot product from the reflection.
-    float reflectionIntensity = saturate(dot(reflection, dirToCamera));
-    reflectionIntensity = pow(reflectionIntensity, 5 * lightDistance);
+    float reflectionIntensity = saturate(dot(reflection, dirToCamera));    
+    reflectionIntensity = pow(reflectionIntensity, SpecPower * lightDistance);
     
     //// SPECULAR COLOUR ////
     float4 specular = (SpecularLight * SpecularMaterial) * reflectionIntensity;
@@ -118,6 +130,6 @@ float4 PS_main(VS_Out input) : SV_TARGET
     
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
     float4 output = ambient + ((diffuse + specular) * falloffGradient);
-    
+    return diffuse;
     return output;
 }

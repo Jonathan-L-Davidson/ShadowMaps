@@ -167,6 +167,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DDSTextureLoader.h" />
     <ClInclude Include="DX11Framework.h" />
+    <ClInclude Include="FileHelpers.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelHelpers.h" />
     <ClInclude Include="ModelManager.h" />

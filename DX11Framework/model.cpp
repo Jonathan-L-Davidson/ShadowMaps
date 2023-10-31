@@ -49,9 +49,24 @@ void Model::SetupTextures(ID3D11DeviceContext* context) {
     if (texture != nullptr) {
         ID3D11SamplerState* sampler = texture->GetSampler();
         context->PSSetSamplers(0, 1, &sampler);
-        ID3D11ShaderResourceView* textureResource = texture->GetResourceTexture();
-        context->PSSetShaderResources(0, 1, &textureResource);
-        
+        ID3D11ShaderResourceView* textureResource;
+        if (texture->hasDiffuse) {
+            textureResource = texture->GetResourceTexture(TextureType::DIFFUSE);
+            context->PSSetShaderResources(0, 1, &textureResource);
+        }
+        if (texture->hasDisplacement) {
+            textureResource = texture->GetResourceTexture(TextureType::DISPLACEMENT);
+            context->PSSetShaderResources(1, 1, &textureResource);
+        }
+        if (texture->hasNormal) {
+            textureResource = texture->GetResourceTexture(TextureType::NORMAL);
+            context->PSSetShaderResources(2, 1, &textureResource);
+        }
+        if (texture->hasSpecular) {
+            textureResource = texture->GetResourceTexture(TextureType::SPECULAR);
+            context->PSSetShaderResources(3, 1, &textureResource);
+        }
+
         _useTexture = true;
     }
 }
@@ -84,6 +99,13 @@ void Model::UpdateCBData(ConstantBuffer* cbData) {
     cbData->SpecularMaterial = _specularMaterial;
     
     cbData->SpecPower = _specPower;
-    
+
     cbData->UseTexture = _useTexture;
+    
+    if (_useTexture) {
+        cbData->UseDiffuse = GetTexture()->hasDiffuse;
+        cbData->UseDisplacement = GetTexture()->hasDisplacement;
+        cbData->UseNormal = GetTexture()->hasNormal;
+        cbData->UseSpecular = GetTexture()->hasSpecular;
+    }
 }

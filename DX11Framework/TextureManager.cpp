@@ -1,6 +1,21 @@
 #include "TextureManager.h"
 #include "DDSTextureLoader.h"
+#include "FileHelpers.h"
 #include <stdexcept>
+
+Texture::Texture() {
+
+}
+
+Texture::~Texture() {
+	DELETED3D(_diffuseTexture);
+	DELETED3D(_displacementTexture);
+	DELETED3D(_specularTexture);
+	DELETED3D(_normalTexture);
+	DELETED3D(_sampler);
+
+}
+
 
 TextureManager::TextureManager() {
 	_textures = new std::map<std::string, Texture*>();
@@ -42,29 +57,67 @@ void TextureManager::AddTexture(std::string path) {
 
 
 	// Sets the path correctly to a texture file.
-	std::string fullPath = "Textures\\" + path + ".dds";
-	std::wstring widePath = std::wstring(fullPath.begin(), fullPath.end());
+	std::string diffusePath = "Textures\\" + path + "_COLOR.dds";
+	std::string displacementPath = "Textures\\" + path + "_DISP.dds";
+	std::string normalPath = "Textures\\" + path + "_NRM.dds";
+	std::string specularPath = "Textures\\" + path + "_SPEC.dds";
 
 	// Texture construction.
 	Texture* tex = new Texture();
-	ID3D11ShaderResourceView* texturePath = tex->GetResourceTexture();
+
+	if (Helpers::FileExists(diffusePath.c_str())) {
+		LoadTextureFromPath(diffusePath, tex, TextureType::DIFFUSE);
+	}
+	if (Helpers::FileExists(displacementPath.c_str())) {
+		LoadTextureFromPath(displacementPath, tex, TextureType::DISPLACEMENT);
+	}
+	if (Helpers::FileExists(normalPath.c_str())) {
+		LoadTextureFromPath(normalPath, tex, TextureType::NORMAL);
+	}
+	if (Helpers::FileExists(specularPath.c_str())) {
+		LoadTextureFromPath(specularPath, tex, TextureType::SPECULAR);
+	}
+
+
+	tex->SetSampler(_bilinearSamplerState);
+	tex->SetID(path);
+	// Add it to the texture list.
+	_textures->insert(std::make_pair(path, tex));
+}
+
+void TextureManager::LoadTextureFromPath(std::string path, Texture* texture, TextureType type) {
+
+	std::wstring widePath = std::wstring(path.begin(), path.end());
+	
+	ID3D11ShaderResourceView* texturePath;
+	texturePath = texture->GetResourceTexture(type);
 	
 	// Load the texture file.
 	HRESULT hr = S_OK;
 	hr = CreateDDSTextureFromFile(_device, widePath.c_str(), nullptr, &texturePath);
-	
-	if(FAILED(hr)) {
+
+	if (FAILED(hr)) {
 		throw std::invalid_argument("Texture failed to be created");
-		delete tex;
+		delete texture;
 		return;
 	}
 
-	tex->SetSampler(_bilinearSamplerState);
-	tex->SetID(path);
-	tex->SetResourceTexture(texturePath);
-	// Add it to the texture list.
-	_textures->insert(std::make_pair(path, tex));
+	texture->SetResourceTexture(texturePath, type);
 
+	switch (type) {
+	case(DIFFUSE):
+		texture->hasDiffuse = 1;
+		break;
+	case(SPECULAR):
+		texture->hasSpecular = 1;
+		break;
+	case(DISPLACEMENT):
+		texture->hasDisplacement = 1;
+		break;
+	case(NORMAL):
+		texture->hasNormal = 1;
+		break;
+	}
 }
 
 Texture* TextureManager::GetTexture(std::string path) {

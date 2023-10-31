@@ -164,7 +164,6 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     std::uniform_real_distribution<float> distribution(0.0, 1.0);
 
     int indiceCount = 0;
-    int vertPos;
     // The spaghetti!! Plan on redoing this later, I can't remember how to read files.
     while (getline(modelFile, line)) {
         std::istringstream stringStream(line);
