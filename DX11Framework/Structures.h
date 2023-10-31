@@ -33,8 +33,8 @@ struct ConstantBuffer
 	XMFLOAT4 DiffuseLight;
 	XMFLOAT4 DiffuseMaterial;
 
-	XMFLOAT3 LightRotation;
 	XMFLOAT4 LightPosition;
+	XMFLOAT3 LightRotation;
 	float	 LightFallOff;
 
 	XMFLOAT4 SpecularLight;
@@ -42,7 +42,6 @@ struct ConstantBuffer
 	float    SpecPower;
 
 	XMFLOAT3 CameraPos;
-	float padding;
 
 	unsigned int UseTexture;
 	unsigned int UseDiffuse;

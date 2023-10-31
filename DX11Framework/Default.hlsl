@@ -24,7 +24,6 @@ cbuffer ConstantBuffer : register(b0)
     float  SpecPower;
     
     float3 CameraPos;
-    float padding;
     
     uint UseTexture;
     uint UseDiffuse;
@@ -75,7 +74,7 @@ float4 PS_main(VS_Out input) : SV_TARGET
     
     //////////////// TEXTURE ////////////////
     float4 texColor = DiffuseMaterial;
-    if (UseTexture > 0)
+    if (UseTexture > 0 && UseDiffuse > 0)
     {
         texColor = diffuseTex.Sample(bilinearSampler, input.texCoord);
     }
@@ -86,9 +85,7 @@ float4 PS_main(VS_Out input) : SV_TARGET
     
     //////////////// AMBIENT ////////////////
     float4 ambient = AmbientLight * texColor;
-    
-    
-    
+
     //////////////// DIFFUSE ////////////////
     // Calculate potential diffused amount:
     float4 potentialDiffuse = DiffuseLight * texColor;
@@ -114,11 +111,15 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float3 dirToCamera = normalize(CameraPos - posW.xyz);
     
     // Check the specular intensity based off of the texture, if it doesnt have that, just use the base specpower.
-    
+    float specPow = SpecPower;
+    if (UseTexture > 0 && UseSpecular > 0)
+    {
+        specPow = specularTex.Sample(bilinearSampler, input.texCoord);
+    }
     
     // Get the dot product from the reflection.
     float reflectionIntensity = saturate(dot(reflection, dirToCamera));    
-    reflectionIntensity = pow(reflectionIntensity, SpecPower * lightDistance);
+    reflectionIntensity = pow(reflectionIntensity, specPow * lightDistance);
     
     //// SPECULAR COLOUR ////
     float4 specular = (SpecularLight * SpecularMaterial) * reflectionIntensity;
@@ -130,6 +131,6 @@ float4 PS_main(VS_Out input) : SV_TARGET
     
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
     float4 output = ambient + ((diffuse + specular) * falloffGradient);
-    return diffuse;
+        
     return output;
 }

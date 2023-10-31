@@ -1,4 +1,4 @@
-#pragma once
+#pragma once.
 
 #ifndef MODEL_H
 #define MODEL_H
@@ -43,14 +43,14 @@ private:
 	XMFLOAT4 _diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	SimpleLight _light = {
-		XMFLOAT4(0.0f, 0.0f, 10.0f, 1.0f), // Position
+		XMFLOAT4(10.0f, 0.0f, 0.0f, 1.0f), // Position
 		XMFLOAT3(0.0f, 0.5f, -0.5f), // Rotation
-		float(500.0f) }; // falloff
+		float(0.5f) }; // falloff -- NOTE: 1.0f can reach end of either plane. Less means less distance.
 	XMFLOAT4 _specularLight = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
 	XMFLOAT4 _specularMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	float _specPower = 10.0f;
 
-	bool _useTexture = 0;
+	unsigned int _useTexture = 0;
 
 	Shader* _shader;
 	ShaderManager* _shaderManager;

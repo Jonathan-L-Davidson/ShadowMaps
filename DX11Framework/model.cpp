@@ -44,7 +44,7 @@ void Model::SetupInput(ID3D11DeviceContext* context) {
 
 void Model::SetupTextures(ID3D11DeviceContext* context) {
     Texture* texture = GetTexture();
-    _useTexture = false; // Reset to 0 incase we lose our texture later on.
+    _useTexture = 0; // Reset to 0 incase we lose our texture later on.
 
     if (texture != nullptr) {
         ID3D11SamplerState* sampler = texture->GetSampler();
@@ -67,7 +67,7 @@ void Model::SetupTextures(ID3D11DeviceContext* context) {
             context->PSSetShaderResources(3, 1, &textureResource);
         }
 
-        _useTexture = true;
+        _useTexture = 1;
     }
 }
 
