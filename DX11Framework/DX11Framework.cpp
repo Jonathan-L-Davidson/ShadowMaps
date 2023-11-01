@@ -68,12 +68,12 @@ HRESULT DX11Framework::InitCube()
     _modelManager->LoadModelFromFile("monkey.obj", "Monkey2");
     _objectManager->AddObject(monkey2, XMFLOAT3(5, 0.0f, 5.0f));
 
-    Object* photogrammetry = new Object();
-    photogrammetry->SetName("Photogrammetry");
-    _modelManager->LoadModelFromFile("photogrammetry.obj", "Photogrammetry");
-    _objectManager->AddObject(photogrammetry, XMFLOAT3(0.0f, -80.0f, 0.0f));
-    Texture* photoTex = _modelManager->GetTexture("photogrammetry");
-    photogrammetry->SetTexture(photoTex);
+    //Object* photogrammetry = new Object();
+    //photogrammetry->SetName("Photogrammetry");
+    //_modelManager->LoadModelFromFile("photogrammetry.obj", "Photogrammetry");
+    //_objectManager->AddObject(photogrammetry, XMFLOAT3(0.0f, -80.0f, 0.0f));
+    //Texture* photoTex = _modelManager->GetTexture("photogrammetry");
+    //photogrammetry->SetTexture(photoTex);
 
     return S_OK;
 }
