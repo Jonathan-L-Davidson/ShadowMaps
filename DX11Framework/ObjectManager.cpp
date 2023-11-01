@@ -1,4 +1,5 @@
 #include "ObjectManager.h"
+#include "Object.h"
 #include "ModelManager.h"
 #include <stdexcept>
 

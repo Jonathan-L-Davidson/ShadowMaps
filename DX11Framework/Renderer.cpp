@@ -205,7 +205,7 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
             _cbData.AmbientLight = obj->GetColor();
             model->UpdateCBData(&_cbData);
             
-            _cbData.World = XMMatrixTranspose(obj->GetWorldMatrix());
+            _cbData.World = XMMatrixTranspose(obj->transform->GetWorldMatrix());
             
             _immediateContext->Map(_constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
             memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));

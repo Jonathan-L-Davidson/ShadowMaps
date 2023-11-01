@@ -14,5 +14,6 @@ void Cube::Initialise() {
 }
 
 void Cube::Update(float deltaTime) {
-    XMStoreFloat4x4(&_worldTransform, XMMatrixIdentity() * XMMatrixRotationZ(0.5 * deltaTime) * XMMatrixRotationY(0.5 * deltaTime) * XMLoadFloat4x4(&_worldTransform));
+    Object::Update(deltaTime);
+    transform->AddRotation(XMFLOAT3(0.0f, 0.5f * deltaTime, 0.5f * deltaTime));
 }

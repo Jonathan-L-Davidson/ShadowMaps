@@ -2,6 +2,7 @@
 
 Object::Object() {
 	_color = XMFLOAT4(0.01f, 0.00675f, 0.01f, 1.0f);
+	transform = new Transform(this);
 	Initialise();
 }
 
@@ -16,22 +17,12 @@ void Object::Initialise() {
 }
 
 void Object::Update(float deltaTime) {
+	UpdatePosition();
 	return;
 }
 
 void Object::UpdatePosition() {
-	// Order: Local transform, to model, to world.
-
-	XMFLOAT4X4 localTransform = _model->GetTransform();
-	XMStoreFloat4x4(&_worldTransform, XMMatrixIdentity() * XMLoadFloat4x4(&localTransform) * XMLoadFloat4x4(&_worldTransform));
-
+	// Order: Local transform, to model, to world. --- Future me reading this, this is dumb, ignore this. It should be modelTransform -> parentTransform -> worldTransform.
+	transform->UpdateWorldMatrix();
 }
 
-// SETTERS & GETTERS
-void Object::SetPosition(XMFLOAT3 pos) {
-	XMStoreFloat4x4(&_worldTransform, XMMatrixIdentity() * XMMatrixTranslation(pos.x, pos.y, pos.z));
-}
-
-XMFLOAT3 Object::GetPosition() {
-	return XMFLOAT3(_worldTransform._11, _worldTransform._22, _worldTransform._33);
-}

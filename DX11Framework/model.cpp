@@ -2,13 +2,17 @@
 #include "Structures.h"
 #include "ShaderManager.h"
 #include "TextureManager.h"
+#include "Transform.h"
 
 Model::Model(ID3D11Device* device) {
     _modelBuffer = new ModelBuffer(device);
+    transform = new Transform();
 }
 
 Model::Model(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<WORD> indices) {
     _modelBuffer = new ModelBuffer(device, verts, indices);
+    transform = new Transform();
+
 }
 
 Model::~Model() {

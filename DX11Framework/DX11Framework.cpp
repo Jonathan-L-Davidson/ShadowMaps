@@ -50,7 +50,7 @@ HRESULT DX11Framework::InitCube()
 
     Object* cube = new Cube();
     cube->SetName("Test Cube");
-    _objectManager->AddObject(cube, XMFLOAT3(0.0f, 0.0f, 0.0f));
+    _objectManager->AddObject(cube, XMFLOAT3(5.0f, 0.0f, 0.0f));
     Texture* tex = _modelManager->GetTexture("Crate");
     cube->SetTexture(tex);
 
@@ -82,6 +82,7 @@ HRESULT DX11Framework::InitCube()
     _modelManager->LoadModelFromFile("plane.obj", "Plane");
     _objectManager->AddObject(plane, XMFLOAT3(0.0f, -5.0f, 0.0f));
 
+    cube->transform->parent = _pyramid->transform;
 
     return S_OK;
 }

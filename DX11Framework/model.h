@@ -9,6 +9,7 @@ class Shader;
 class ShaderManager;
 class Buffer;
 class Texture;
+class Transform;
 
 class Model
 {
@@ -18,9 +19,7 @@ public:
 	~Model();
 	int GetIndices() { return _modelBuffer->GetIndBuffer()->GetCount(); };
 	ModelBuffer* GetModelBuffer() { return _modelBuffer; };
-	void SetTransform(XMFLOAT4X4 transform) { _transform = transform; };
-	XMFLOAT4X4 GetTransform() { return _transform; };
-
+	
 	Shader* GetShader() { return _shader; };
 	void SetShader(Shader* shader) { _shader = shader; };
 	void SetShader(std::string shaderFile);
@@ -35,8 +34,8 @@ public:
 	Texture* GetTexture() { return _texture; }
 	void SetTexture(Texture* texture) { _texture = texture; }
 
+	Transform* transform;
 private:
-	XMFLOAT4X4 _transform;
 
 	ModelBuffer* _modelBuffer;
 	XMFLOAT4 _diffuseLight = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);

@@ -15,5 +15,7 @@ void Monkey::Initialise() {
 }
 
 void Monkey::Update(float deltaTime) {
-    XMStoreFloat4x4(&_worldTransform, XMMatrixIdentity() * XMMatrixRotationZ(1 * deltaTime) * XMLoadFloat4x4(&_worldTransform) * XMMatrixRotationX(0.5 * deltaTime));
+    Object::Update(deltaTime);
+    
+    transform->AddRotation(XMFLOAT3(0.5f * deltaTime, 0.0f, 1.0f * deltaTime));
 }

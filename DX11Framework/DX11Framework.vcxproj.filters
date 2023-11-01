@@ -34,6 +34,18 @@
     <Filter Include="Source Files\Helpers">
       <UniqueIdentifier>{01a2a469-af58-4648-87ea-0861c6aea810}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Objects\Prefabs">
+      <UniqueIdentifier>{2c03ae85-b657-4bd0-af34-6bbc8ca723ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects\Core">
+      <UniqueIdentifier>{e28e222b-d7df-4442-99d9-cea64f26e009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects\Core">
+      <UniqueIdentifier>{dae032de-4e66-464d-83bc-addfb793f324}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects\Prefabs">
+      <UniqueIdentifier>{1d22bab6-ec89-4523-871a-3a56d18c62b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DX11Framework.cpp">
@@ -54,15 +66,6 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="Pyramid.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Structures.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
@@ -72,20 +75,32 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="model.cpp">
-      <Filter>Source Files\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="ShaderManager.cpp">
       <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="Monkey.cpp">
-      <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
     <ClCompile Include="DDSTextureLoader.cpp">
       <Filter>Source Files\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>Source Files\Objects\Prefabs</Filter>
+    </ClCompile>
+    <ClCompile Include="Monkey.cpp">
+      <Filter>Source Files\Objects\Prefabs</Filter>
+    </ClCompile>
+    <ClCompile Include="Pyramid.cpp">
+      <Filter>Source Files\Objects\Prefabs</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\Objects\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files\Objects\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="model.cpp">
+      <Filter>Source Files\Objects\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,15 +119,6 @@
     <ClInclude Include="Renderer.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="Pyramid.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Header Files\Helpers</Filter>
     </ClInclude>
@@ -122,14 +128,8 @@
     <ClInclude Include="Structures.h">
       <Filter>Header Files\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>Header Files\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="ShaderManager.h">
       <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Monkey.h">
-      <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>Header Files\Managers</Filter>
@@ -140,10 +140,31 @@
     <ClInclude Include="FileHelpers.h">
       <Filter>Header Files\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Header Files\Objects\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\Objects\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files\Objects\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Header Files\Objects\Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="Monkey.h">
+      <Filter>Header Files\Objects\Prefabs</Filter>
+    </ClInclude>
+    <ClInclude Include="Pyramid.h">
+      <Filter>Header Files\Objects\Prefabs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Default.hlsl">
+    <FxCompile Include="Shaders\VertexShading.hlsl">
       <Filter>Shaders</Filter>
-    </None>
+    </FxCompile>
+    <FxCompile Include="Shaders\Default.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

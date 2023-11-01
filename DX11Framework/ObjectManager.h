@@ -2,10 +2,9 @@
 
 #ifndef OBJECTMANAGER_H
 #define OBJECTMANAGER_H
-
-#include "Object.h"
 #include <string>
 #include <vector>
+#include "Object.h"
 
 class Renderer;
 class ModelManager;
