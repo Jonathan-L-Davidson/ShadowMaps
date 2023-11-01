@@ -75,6 +75,14 @@ HRESULT DX11Framework::InitCube()
     //Texture* photoTex = _modelManager->GetTexture("photogrammetry");
     //photogrammetry->SetTexture(photoTex);
 
+    Object* plane = new Object();
+    plane->SetName("Plane");
+    plane->SetColor(XMFLOAT4(0.05f, 0.1f, 0.1f, 1.0f));
+
+    _modelManager->LoadModelFromFile("plane.obj", "Plane");
+    _objectManager->AddObject(plane, XMFLOAT3(0.0f, -5.0f, 0.0f));
+
+
     return S_OK;
 }
 

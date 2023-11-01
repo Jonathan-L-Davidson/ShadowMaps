@@ -146,7 +146,9 @@ void ModelManager::CreatePlane() {
 void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     std::ifstream modelFile;
 
-    modelFile.open(path);
+    std::string tempPath = "Models\\" + path;
+
+    modelFile.open(tempPath);
     
     std::vector<SimpleVertex> SimpleVerts;
     std::vector<XMFLOAT3> Vertices;

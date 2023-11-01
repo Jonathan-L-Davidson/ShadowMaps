@@ -22,9 +22,10 @@ public:
 	virtual void Initialise();
 
 	XMFLOAT4 GetColor() { return _color; };
+	void SetColor(XMFLOAT4 color) { _color = color; };
 
-	void SetManager(ObjectManager* manager) { _objManager = manager; }
-	void SetRenderManager(Renderer* manager) { _renderManager = manager; }
+	void SetManager(ObjectManager* manager) { _objManager = manager; };
+	void SetRenderManager(Renderer* manager) { _renderManager = manager; };
 	void SetPosition(XMFLOAT3 pos);
 	XMFLOAT3 GetPosition();
 	XMFLOAT4X4 GetTransform() { return _worldTransform; };

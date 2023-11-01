@@ -132,7 +132,7 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
 
     ID3DBlob* vsBlob;
     
-    std::string fileName = id;
+    std::string fileName = "Shaders\\" + id;
     fileName.append(".hlsl");
 
     std::wstring idTemp = std::wstring(fileName.begin(), fileName.end());
