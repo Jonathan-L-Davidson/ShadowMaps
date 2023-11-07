@@ -102,9 +102,9 @@ void SceneManager::InitHardcodedObjects() {
 Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugliness so I actually written it into a seperate function now.
     Transform* transform = new Transform();
 
-    const YAML::Node nPosition = node["Position"];
-    const YAML::Node nRotation = node["Rotation"];
-    const YAML::Node nScale = node["Scale"];
+    const YAML::Node nPosition = node["position"];
+    const YAML::Node nRotation = node["rotation"];
+    const YAML::Node nScale = node["scale"];
 
     transform->position = XMFLOAT3(
         nPosition["x"].as<float>(),
@@ -119,9 +119,9 @@ Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugli
     );
 
     transform->scale = XMFLOAT3(
-        nRotation["x"].as<float>(),
-        nRotation["y"].as<float>(),
-        nRotation["z"].as<float>()
+        nScale["x"].as<float>(),
+        nScale["y"].as<float>(),
+        nScale["z"].as<float>()
     );
 
     return transform;
@@ -160,33 +160,33 @@ bool SceneManager::LoadScene(const char* path) {
     /// First time using YAML without a very simplified helper so this is quite easy to comprehend.
 
     //  File Structure so far:
-    /// Shaders[]
+    /// Shaders:
     ///    Name
-    /// Textures[]
+    /// Textures:
     ///    Name
-    /// Models[]
-    ///    Model
+    /// Models:
+    ///    Model:
     ///      Name
     ///      ObjPath
     ///      Shader
     ///      Texture
-    ///      Transform
+    ///      Transform:
     ///          Position
     ///          Rotation
     ///          Scale
-    /// Lights[]
-    ///    Light
+    /// Lights:
+    ///    Light:
     ///      position
     ///      rotation
     ///      Type
     ///      Falloff
     ///      
-    /// Objects[]
-    ///    Object
+    /// Objects:
+    ///    Object:
     ///      Type
     ///      Name
     ///      ModelName
-    ///      Transform
+    ///      Transform:
     ///          Position
     ///          Rotation
     ///          Scale
@@ -195,21 +195,20 @@ bool SceneManager::LoadScene(const char* path) {
 
     // SHADER
     {
-        const YAML::Node shaders = levelFile["shaders"];
+        const YAML::Node shaders = levelFile["Shaders"];
 
-        for (YAML::const_iterator it = shaders.begin(); it != shaders.end(); it++) {
-            const YAML::Node shader = *it;
-
+        for (YAML::const_iterator it = shaders.begin(); it != shaders.end(); ++it) {
+            const YAML::Node& shader = *it;
             _modelManager->CreateShader(shader["Name"].as<std::string>());
         }
     }
 
     // TEXTURE
     {
-        const YAML::Node textures = levelFile["textures"];
+        const YAML::Node textures = levelFile["Textures"];
 
         for (YAML::const_iterator it = textures.begin(); it != textures.end(); it++) {
-            const YAML::Node texture = *it;
+            const YAML::Node& texture = *it;
 
             _modelManager->GetTexture(texture["Name"].as<std::string>());
         }
@@ -219,11 +218,11 @@ bool SceneManager::LoadScene(const char* path) {
     // MODEL
     {
         // Get list of models to load:
-        const YAML::Node models = levelFile["models"];
+        const YAML::Node models = levelFile["Models"];
 
         // Load all the models in the Model Manager
         for (YAML::const_iterator it = models.begin(); it != models.end(); it++) {
-            const YAML::Node model = *it;
+            const YAML::Node& model = *it;
             // Load .obj file.
             Model* modelObj = _modelManager->LoadModelFromFile(model["ObjPath"].as<std::string>(), model["Name"].as<std::string>());
 
@@ -255,7 +254,7 @@ bool SceneManager::LoadScene(const char* path) {
     // OBJECT
     {
         // Get list of objects:
-        const YAML::Node objects = levelFile["objects"];
+        const YAML::Node objects = levelFile["Objects"];
 
         // Load all the objects into the object manager.
         for (YAML::const_iterator it = objects.begin(); it != objects.end(); it++) {

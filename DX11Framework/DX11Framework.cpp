@@ -25,7 +25,7 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
     hr = _activeScene->Initialise(_renderManager);
     if (FAILED(hr)) return E_FAIL;
 
-    _activeScene->LoadScene("TestLevel");
+    _activeScene->LoadScene("Test");
 
     return hr;
 }

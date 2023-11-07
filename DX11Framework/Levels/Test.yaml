@@ -1,2 +1,26 @@
 ---
-  
+  Shaders:
+  Textures:
+    - Texture:
+      Name: "Crate"
+  Models:
+    - Model:
+      Name: "Cubee"
+      ObjPath: "cube.obj"
+      Shader: "Default"
+      Texture: "Crate"
+      Transform:
+        position:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+        rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+        scale:
+          x: 1.0
+          y: 1.0
+          z: 1.0
+  Lights:
+  Objects:
