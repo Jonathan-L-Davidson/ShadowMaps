@@ -144,6 +144,7 @@
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="Pyramid.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="Structures.cpp" />
     <ClCompile Include="TextureManager.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="Structures.h" />
     <ClInclude Include="TextureManager.h" />

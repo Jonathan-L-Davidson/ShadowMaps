@@ -10,6 +10,9 @@
 
 class Camera;
 class ObjectManager;
+class SceneManager;;
+
+using namespace DirectX;
 
 class Renderer
 {
@@ -25,7 +28,7 @@ public:
 	ID3D11DeviceContext* GetDeviceContext() { return _immediateContext; };
 	ID3D11Device* GetDevice() { return _device; };
 
-	void Render(float simpleCount, ObjectManager* objManager);
+	void Render(float simpleCount, SceneManager* sceneManager);
 private:
 	Rect* _windowRect;
 

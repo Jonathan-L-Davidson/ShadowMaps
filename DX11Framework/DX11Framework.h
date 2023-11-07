@@ -5,15 +5,9 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <list>
-#include "Model.h"
 #include "Renderer.h"
 #include "WindowManager.h"
-#include "ObjectManager.h"
-#include "ModelManager.h"
-#include "Cube.h"
-#include "Pyramid.h"
-#include "Monkey.h"
-#include "Camera.h"
+#include "sceneManager.h"
 
 //#include <wrl.h>
 
@@ -23,6 +17,11 @@ using namespace DirectX;
 
 class DX11Framework
 {
+public:
+	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
+	~DX11Framework();
+	void Update();
+private:
 	int _windW = 1280;
 	int _windH = 768;
 
@@ -30,14 +29,8 @@ class DX11Framework
 
 	Renderer* _renderManager;
 	WindowManager* _windowManager;
-	ObjectManager* _objectManager;
-	ModelManager* _modelManager;
 
-	Camera* _cam;
+	SceneManager* _activeScene;
+
 	
-public:
-	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
-	HRESULT InitCube();
-	~DX11Framework();
-	void Update();
 };

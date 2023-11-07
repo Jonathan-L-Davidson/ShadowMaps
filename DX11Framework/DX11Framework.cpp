@@ -21,84 +21,19 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
     hr = _renderManager->Initialise();
     if (FAILED(hr)) return E_FAIL;
 
-    // ModelManager Init
-    _modelManager = new ModelManager();
-    _modelManager->SetRenderManager(_renderManager);
-    _modelManager->Initialise();
-
-    // ObjManager Init
-    _objectManager = new ObjectManager();
-    _objectManager->SetRenderManager(_renderManager);
-    _objectManager->SetModelManager(_modelManager);
-    hr = InitCube(); // Renderer Class
+    _activeScene = new SceneManager();
+    hr = _activeScene->Initialise(_renderManager);
     if (FAILED(hr)) return E_FAIL;
-    
-    // Camera Init
-    XMFLOAT3X3 CamPos = XMFLOAT3X3(0, 0, -10.0f, // eye
-        0, 0, 0, // at
-        0, 1, 0); // up
 
-    _cam = new Camera(CamPos);
-    _renderManager->SetCamera(_cam);
+    _activeScene->LoadScene("TestLevel");
 
     return hr;
 }
-
-HRESULT DX11Framework::InitCube()
-{
-    Texture* defaultTexture = _modelManager->GetTexture("Default");
-
-    Object* cube = new Cube();
-    cube->SetName("Test Cube");
-    _objectManager->AddObject(cube, XMFLOAT3(5.0f, 0.0f, 0.0f));
-    Texture* tex = _modelManager->GetTexture("Crate");
-    cube->SetTexture(tex);
-
-    Pyramid* _pyramid = new Pyramid();
-    _pyramid->SetName("Test Pyramid");
-    _objectManager->AddObject(_pyramid, XMFLOAT3(-3.0f, 0.0f, 5.0f));
-
-    cube->SetParent(_pyramid);
-
-    Monkey* monkey = new Monkey();
-    monkey->SetName("Monkey");
-    _objectManager->AddObject(monkey, XMFLOAT3(-5, 0.0f, 5.0f));
-    monkey->GetModel()->SetShader("VertexShading");
-
-    Monkey* monkey2 = new Monkey();
-    monkey2->SetName("Monkey2");
-    _modelManager->LoadModelFromFile("monkey.obj", "Monkey2");
-    _objectManager->AddObject(monkey2, XMFLOAT3(5, 0.0f, 5.0f));
-
-    //Object* photogrammetry = new Object();
-    //photogrammetry->SetName("Photogrammetry");
-    //_modelManager->LoadModelFromFile("photogrammetry.obj", "Photogrammetry");
-    //_objectManager->AddObject(photogrammetry, XMFLOAT3(0.0f, -80.0f, 0.0f));
-    //Texture* photoTex = _modelManager->GetTexture("photogrammetry");
-    //photogrammetry->SetTexture(photoTex);
-
-    Object* plane = new Object();
-    plane->SetName("Plane");
-    plane->SetColor(XMFLOAT4(0.05f, 0.1f, 0.1f, 1.0f));
-
-    _modelManager->LoadModelFromFile("plane.obj", "Plane");
-    _objectManager->AddObject(plane, XMFLOAT3(0.0f, -5.0f, 0.0f));
-
-    cube->transform->parent = _pyramid->transform;
-
-    return S_OK;
-}
-
-
 
 DX11Framework::~DX11Framework()
 {
     delete _renderManager;
     delete _windowManager;
-    delete _modelManager;
-    delete _objectManager;
-
-    delete _cam;
 
 }
 
@@ -128,7 +63,7 @@ void DX11Framework::Update()
     //_cam->LookAt(_pyramid->GetPosition());
 
     // Normal standard loop.
-    _objectManager->Update(deltaTime);
-    _renderManager->Render(simpleCount, _objectManager);
+    _activeScene->Update(deltaTime);
+    _renderManager->Render(simpleCount, _activeScene);
 
 }

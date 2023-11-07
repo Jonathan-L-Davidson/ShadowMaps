@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "ObjectManager.h"
+#include "SceneManager.h"
 #include "TextureManager.h"
 #include "Camera.h"
 
@@ -177,7 +178,7 @@ HRESULT Renderer::InitRunTimeData()
     return S_OK;
 }
 
-void Renderer::Render(float simpleCount, ObjectManager* objManager) {
+void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
     //Store this frames data in constant buffer struct
     XMFLOAT4X4 camView = _cam->GetView();
     _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&camView));
@@ -194,7 +195,7 @@ void Renderer::Render(float simpleCount, ObjectManager* objManager) {
     //Write constant buffer data onto GPU
     D3D11_MAPPED_SUBRESOURCE mappedSubresource;
 
-
+    ObjectManager* objManager = sceneManager->GetObjManager();
     for (Object* obj : objManager->GetObjects()) {
         Model* model = obj->GetModel();
         if (model) {
