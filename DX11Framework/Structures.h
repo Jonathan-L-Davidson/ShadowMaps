@@ -13,6 +13,7 @@ using namespace DirectX;
 struct SimpleLight {
 	XMFLOAT4 Position;
 	XMFLOAT3 Rotation;
+	int Type;
 	float FallOff;
 };
 

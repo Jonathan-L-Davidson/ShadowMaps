@@ -56,6 +56,10 @@ Texture* ModelManager::GetTexture(std::string path) {
     return _textureManager->GetTexture(path);
 }
 
+Shader* ModelManager::GetShader(std::string path) {
+    return _shaderManager->GetShader(path);
+}
+
 void ModelManager::CreateCube() {
     std::vector<SimpleVertex> VertexData = {
         //Position                          //Normal                            // TexCoords
@@ -143,7 +147,7 @@ void ModelManager::CreatePlane() {
 }
 
 // Author: Jonathan Davidson (2023)
-void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
+Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     std::ifstream modelFile;
 
     std::string tempPath = "Models\\" + path;
@@ -158,6 +162,7 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
 
     if (!modelFile) {
         // throw an error!!!
+        throw std::invalid_argument("No ModelFile!");
         return;
     }
 
@@ -243,5 +248,5 @@ void ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     model->SetShader(_shaderManager->GetDefaultShader());
 
     AddModel(model, modelName);
-
+    return model;
 }

@@ -24,12 +24,13 @@ public:
 
 	Texture* GetTexture(std::string path);
 
+	Shader* GetShader(std::string path);
 
 	std::map<std::string, Model*>* GetModels() { return _models; };
 
 	void SetRenderManager(Renderer* renderer) { _renderManager = renderer; };
 
-	void LoadModelFromFile(std::string path, std::string modelName);
+	Model* LoadModelFromFile(std::string path, std::string modelName);
 
 private:
 	std::map<std::string, Model*>* _models;

@@ -6,6 +6,7 @@
 #include "Cube.h"
 #include "Pyramid.h"
 #include "Monkey.h"
+#include <string>
 
 //Tells  yaml it is a .lib with no .dll
 #define YAML_CPP_STATIC_DEFINE
@@ -100,6 +101,71 @@ void SceneManager::InitHardcodedObjects() {
 
 bool SceneManager::LoadScene(const char* path) {
     // Load yaml.
+    std::string fullPath = "Levels\\";
+    fullPath.append(path);
+    fullPath.append(".yaml");
+    
+    YAML::Node levelFile = YAML::LoadFile(fullPath.c_str());
+    
+    // https://github.com/jbeder/yaml-cpp/wiki/Tutorial#basic-parsing-and-node-editing using the iterator example provided.
+    // Kind of, seems like YAML is made out of nodes so I can iterate through a node for the model node and read that node.
+    // First time using YAML without a very simplified helper so this is quite easy to comprehend.
+
+    // File Structure so far:
+    // Shaders
+    //    ShaderPath
+    //    ShaderName
+    // Textures
+    //    TextureName
+    // Models
+    //    Model[]
+    //      Name
+    //      ObjPath
+    //      Shader
+    //      Texture
+    //      Transform
+    //          Position
+    //          Rotation
+    //          Scale
+    // Lights
+    //    Light[]
+    //      position
+    //      rotation
+    //      Type
+    //      Falloff
+    //      
+    // Objects
+    //    Object[]
+    //      Name
+    //      ModelName
+    //      Transform
+    //          Position
+    //          Rotation
+    //          Scale
+    //      
+    //      
+
+
+    // Get list of models to load:
+    const YAML::Node models = levelFile["models"];
+
+    // Load all the models in the Model Manager
+    for (YAML::const_iterator it = models.begin(); it != models.end(); it++) {
+        const YAML::Node model = *it;
+        Model* modelObj = _modelManager->LoadModelFromFile(model["ObjPath"].as<std::string>(), model["Name"].as<std::string>());
+
+        
+        Shader* shader = _modelManager->GetShader(model["Shader"].as<std::string>());
+        if (shader == nullptr) {
+            throw new std::exception("Shader not found");
+            return;
+        }
+        modelObj->SetShader(shader);
+    }
+    
+
+
+
 
     return true;
 }

@@ -35,6 +35,8 @@ DX11Framework::~DX11Framework()
     delete _renderManager;
     delete _windowManager;
 
+    delete _activeScene;
+
 }
 
 
