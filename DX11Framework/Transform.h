@@ -34,9 +34,9 @@ public:
 	Transform* parent;
 	Transform* local;
 
-	XMFLOAT3 position;
-	XMFLOAT3 rotation;
-	XMFLOAT3 scale;
+	XMFLOAT3 position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 scale =	XMFLOAT3(1.0f, 1.0f, 1.0f);
 private:
 	XMFLOAT4X4 _worldTransform;
 };

@@ -161,35 +161,37 @@ bool SceneManager::LoadScene(const char* path) {
 
     //  File Structure so far:
     /// Shaders:
-    ///    Name
+    ///   - Shader:
+    ///     Name
     /// Textures:
-    ///    Name
+    ///   - Texture:
+    ///     Name:
     /// Models:
-    ///    Model:
-    ///      Name
-    ///      ObjPath
-    ///      Shader
-    ///      Texture
+    ///    - Model:
+    ///      Name:
+    ///      ObjPath:
+    ///      Shader:
+    ///      Texture:
     ///      Transform:
     ///          Position
     ///          Rotation
     ///          Scale
     /// Lights:
-    ///    Light:
-    ///      position
-    ///      rotation
-    ///      Type
-    ///      Falloff
+    ///    - Light:
+    ///      position:
+    ///      rotation:
+    ///      Type:
+    ///      Falloff:
     ///      
     /// Objects:
-    ///    Object:
-    ///      Type
-    ///      Name
-    ///      ModelName
+    ///    - Object:
+    ///      Type:
+    ///      Name:
+    ///      ModelName:
     ///      Transform:
-    ///          Position
-    ///          Rotation
-    ///          Scale
+    ///          Position:
+    ///          Rotation:
+    ///          Scale:
     ///      
     ///      
 
@@ -242,6 +244,7 @@ bool SceneManager::LoadScene(const char* path) {
             // Set Shader, Texture & Transformation
             modelObj->SetShader(shader);
             modelObj->SetTexture(texture);
+            delete modelObj->transform; // Just a scuffed solution to a poor planning to remove the memory leak.
             modelObj->transform = transform;
         }
     }
@@ -262,7 +265,8 @@ bool SceneManager::LoadScene(const char* path) {
 
             Object* obj = ParseObjType(object["Type"].as<std::string>().c_str());
             obj->SetName(object["Name"].as<std::string>());
-            
+            obj->SetModelName(object["ModelName"].as<std::string>());
+
             Transform* transform = YAMLReadTransform(object["Transform"]);
             delete obj->transform;
             obj->transform = transform;

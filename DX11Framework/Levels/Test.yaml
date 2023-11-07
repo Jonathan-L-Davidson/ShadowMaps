@@ -1,10 +1,10 @@
 ---
   Shaders:
   Textures:
-    - Texture:
+    - ExampleTexture:
       Name: "Crate"
   Models:
-    - Model:
+    - ExampleModel:
       Name: "Cubee"
       ObjPath: "cube.obj"
       Shader: "Default"
@@ -24,3 +24,20 @@
           z: 1.0
   Lights:
   Objects:
+    - TestMonkey:
+      Type: "Monkey"
+      Name: "Test Monkeyy"
+      ModelName: "Cubee"
+      Transform:
+        position:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+        rotation:
+          x: 0.0
+          y: 0.0
+          z: 0.0
+        scale:
+          x: 1.0
+          y: 1.0
+          z: 1.0

@@ -36,7 +36,9 @@ void ObjectManager::AddObject(Object* obj, XMFLOAT3 pos) {
 		_objects.push_back(obj);
 		obj->SetManager(this);
 		obj->SetRenderManager(_renderManager);
-		Model* model = _modelManager->GetModel(obj->GetModelName());
+		std::string modelName = obj->GetModelName();
+		if (modelName.length() < 1) { modelName = obj->GetName(); }
+		Model* model = _modelManager->GetModel(modelName);
 		obj->SetModel(model);
 		obj->SetPosition(pos); // Fix position stuff lol
 

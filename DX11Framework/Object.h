@@ -43,7 +43,8 @@ public:
 	XMFLOAT4 GetColor() { return _color; };
 	void SetColor(XMFLOAT4 color) { _color = color; };
 
-	virtual std::string GetModelName() { return GetName(); };
+	virtual std::string GetModelName() { return _modelName; };
+	void SetModelName(std::string name) { _modelName = name; };
 	std::string GetName() { return _name; };
 	void SetName(std::string name) { _name = name; };
 
@@ -54,6 +55,7 @@ public:
 
 protected:
 	std::string _name;
+	std::string _modelName;
 
 	Model* _model;
 	XMFLOAT4 _color;
