@@ -250,3 +250,7 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
     AddModel(model, modelName);
     return model;
 }
+
+void ModelManager::CreateShader(std::string path) {
+    _shaderManager->AddShader(path);
+}

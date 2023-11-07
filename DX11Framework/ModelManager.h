@@ -31,6 +31,7 @@ public:
 	void SetRenderManager(Renderer* renderer) { _renderManager = renderer; };
 
 	Model* LoadModelFromFile(std::string path, std::string modelName);
+	void CreateShader(std::string path);
 
 private:
 	std::map<std::string, Model*>* _models;

@@ -99,6 +99,34 @@ void SceneManager::InitHardcodedObjects() {
     cube->transform->parent = _pyramid->transform;
 }
 
+Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugliness so I actually written it into a seperate function now.
+    Transform* transform = new Transform();
+
+    const YAML::Node nPosition = node["Position"];
+    const YAML::Node nRotation = node["Rotation"];
+    const YAML::Node nScale = node["Scale"];
+
+    transform->position = XMFLOAT3(
+        nPosition["x"].as<float>(),
+        nPosition["y"].as<float>(),
+        nPosition["z"].as<float>()
+    );
+
+    transform->rotation = XMFLOAT3(
+        nRotation["x"].as<float>(),
+        nRotation["y"].as<float>(),
+        nRotation["z"].as<float>()
+    );
+
+    transform->scale = XMFLOAT3(
+        nRotation["x"].as<float>(),
+        nRotation["y"].as<float>(),
+        nRotation["z"].as<float>()
+    );
+
+    return transform;
+}
+
 bool SceneManager::LoadScene(const char* path) {
     // Load yaml.
     std::string fullPath = "Levels\\";
@@ -107,65 +135,99 @@ bool SceneManager::LoadScene(const char* path) {
     
     YAML::Node levelFile = YAML::LoadFile(fullPath.c_str());
     
-    // https://github.com/jbeder/yaml-cpp/wiki/Tutorial#basic-parsing-and-node-editing using the iterator example provided.
-    // Kind of, seems like YAML is made out of nodes so I can iterate through a node for the model node and read that node.
-    // First time using YAML without a very simplified helper so this is quite easy to comprehend.
+    /// https://github.com/jbeder/yaml-cpp/wiki/Tutorial#basic-parsing-and-node-editing using the iterator example provided.
+    /// Kind of, seems like YAML is made out of nodes so I can iterate through a node for the model node and read that node.
+    /// First time using YAML without a very simplified helper so this is quite easy to comprehend.
 
-    // File Structure so far:
-    // Shaders
-    //    ShaderPath
-    //    ShaderName
-    // Textures
-    //    TextureName
-    // Models
-    //    Model[]
-    //      Name
-    //      ObjPath
-    //      Shader
-    //      Texture
-    //      Transform
-    //          Position
-    //          Rotation
-    //          Scale
-    // Lights
-    //    Light[]
-    //      position
-    //      rotation
-    //      Type
-    //      Falloff
-    //      
-    // Objects
-    //    Object[]
-    //      Name
-    //      ModelName
-    //      Transform
-    //          Position
-    //          Rotation
-    //          Scale
-    //      
-    //      
+    //  File Structure so far:
+    /// Shaders
+    ///    ShaderName
+    /// Textures
+    ///    TextureName
+    /// Models
+    ///    Model[]
+    ///      Name
+    ///      ObjPath
+    ///      Shader
+    ///      Texture
+    ///      Transform
+    ///          Position
+    ///          Rotation
+    ///          Scale
+    /// Lights
+    ///    Light[]
+    ///      position
+    ///      rotation
+    ///      Type
+    ///      Falloff
+    ///      
+    /// Objects
+    ///    Object[]
+    ///      Name
+    ///      ModelName
+    ///      Transform
+    ///          Position
+    ///          Rotation
+    ///          Scale
+    ///      
+    ///      
 
+    // SHADER
+    { 
+        const YAML::Node shaders = levelFile["shaders"];
 
-    // Get list of models to load:
-    const YAML::Node models = levelFile["models"];
+        for (YAML::const_iterator it = shaders.begin(); it != shaders.end(); it++) {
+            const YAML::Node shader = *it;
 
-    // Load all the models in the Model Manager
-    for (YAML::const_iterator it = models.begin(); it != models.end(); it++) {
-        const YAML::Node model = *it;
-        Model* modelObj = _modelManager->LoadModelFromFile(model["ObjPath"].as<std::string>(), model["Name"].as<std::string>());
-
-        
-        Shader* shader = _modelManager->GetShader(model["Shader"].as<std::string>());
-        if (shader == nullptr) {
-            throw new std::exception("Shader not found");
-            return;
+            _modelManager->CreateShader(shader["Name"].as<std::string>());
         }
-        modelObj->SetShader(shader);
     }
-    
 
+    // TEXTURE
+    { 
 
+    }
 
+    // MODEL
+    { 
+        // Get list of models to load:
+        const YAML::Node models = levelFile["models"];
+
+        // Load all the models in the Model Manager
+        for (YAML::const_iterator it = models.begin(); it != models.end(); it++) {
+            const YAML::Node model = *it;
+            // Load .obj file.
+            Model* modelObj = _modelManager->LoadModelFromFile(model["ObjPath"].as<std::string>(), model["Name"].as<std::string>());
+
+            // Get shader.
+            Shader* shader = _modelManager->GetShader(model["Shader"].as<std::string>());
+            if (shader == nullptr) {
+                throw new std::exception("Shader not found");
+                return false;
+            }
+
+            // Get texture.
+            Texture* texture = _modelManager->GetTexture(model["Texture"].as<std::string>());
+
+            // Get transform.
+            Transform* transform = YAMLReadTransform(model["Transform"]);
+
+            // Set Shader, Texture & Transformation
+            modelObj->SetShader(shader);
+            modelObj->SetTexture(texture);
+            modelObj->transform = transform;
+        }
+    }
+
+    // TODO: LIGHT
+    {
+
+    }
+
+    // OBJECT
+    {
+
+    }
 
     return true;
 }

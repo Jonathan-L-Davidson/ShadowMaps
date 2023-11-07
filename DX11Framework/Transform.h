@@ -36,6 +36,7 @@ public:
 
 	XMFLOAT3 position;
 	XMFLOAT3 rotation;
+	XMFLOAT3 scale;
 private:
 	XMFLOAT4X4 _worldTransform;
 };
