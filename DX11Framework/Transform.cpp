@@ -49,8 +49,8 @@ void Transform::UpdateWorldMatrix() {
 		parentM = parent->GetWorldMatrix();
 	}
 
-	XMMATRIX worldTransform = (XMMatrixIdentity() * XMMatrixTranslation(position.x, position.y, position.z)) * (XMMatrixIdentity() * XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z));
+	XMMATRIX worldTransform = (XMMatrixIdentity() * XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z)) * (XMMatrixIdentity() * XMMatrixTranslation(position.x, position.y, position.z));
 
-	XMStoreFloat4x4(&_worldTransform, parentM * localM * worldTransform);
+	XMStoreFloat4x4(&_worldTransform, localM * worldTransform * parentM);
 
 }
