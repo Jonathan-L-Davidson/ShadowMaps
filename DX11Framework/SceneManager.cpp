@@ -127,25 +127,45 @@ Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugli
     return transform;
 }
 
+Object* SceneManager::ParseObjType(const char* type) {
+    
+    if (type == "Object")   return (Object*)(new Object());
+    if (type == "Monkey")   return (Object*)(new Monkey());
+    if (type == "Cube")     return (Object*)(new Monkey());
+    if (type == "Pyramid")  return (Object*)(new Monkey());
+
+    return new Object();
+}
+
 bool SceneManager::LoadScene(const char* path) {
     // Load yaml.
     std::string fullPath = "Levels\\";
     fullPath.append(path);
     fullPath.append(".yaml");
-    
-    YAML::Node levelFile = YAML::LoadFile(fullPath.c_str());
-    
+
+    YAML::Node levelFile;
+    try {
+        levelFile = YAML::LoadFile(fullPath.c_str());
+    }
+    catch (YAML::Exception e) {
+        std::string pain = "YAML failed to load: ";
+        pain.append(e.msg.c_str());
+        throw std::exception(pain.c_str());
+        return false;
+    }
+
+
     /// https://github.com/jbeder/yaml-cpp/wiki/Tutorial#basic-parsing-and-node-editing using the iterator example provided.
     /// Kind of, seems like YAML is made out of nodes so I can iterate through a node for the model node and read that node.
     /// First time using YAML without a very simplified helper so this is quite easy to comprehend.
 
     //  File Structure so far:
-    /// Shaders
-    ///    ShaderName
-    /// Textures
-    ///    TextureName
-    /// Models
-    ///    Model[]
+    /// Shaders[]
+    ///    Name
+    /// Textures[]
+    ///    Name
+    /// Models[]
+    ///    Model
     ///      Name
     ///      ObjPath
     ///      Shader
@@ -154,15 +174,16 @@ bool SceneManager::LoadScene(const char* path) {
     ///          Position
     ///          Rotation
     ///          Scale
-    /// Lights
-    ///    Light[]
+    /// Lights[]
+    ///    Light
     ///      position
     ///      rotation
     ///      Type
     ///      Falloff
     ///      
-    /// Objects
-    ///    Object[]
+    /// Objects[]
+    ///    Object
+    ///      Type
     ///      Name
     ///      ModelName
     ///      Transform
@@ -173,7 +194,7 @@ bool SceneManager::LoadScene(const char* path) {
     ///      
 
     // SHADER
-    { 
+    {
         const YAML::Node shaders = levelFile["shaders"];
 
         for (YAML::const_iterator it = shaders.begin(); it != shaders.end(); it++) {
@@ -184,12 +205,19 @@ bool SceneManager::LoadScene(const char* path) {
     }
 
     // TEXTURE
-    { 
+    {
+        const YAML::Node textures = levelFile["textures"];
+
+        for (YAML::const_iterator it = textures.begin(); it != textures.end(); it++) {
+            const YAML::Node texture = *it;
+
+            _modelManager->GetTexture(texture["Name"].as<std::string>());
+        }
 
     }
 
     // MODEL
-    { 
+    {
         // Get list of models to load:
         const YAML::Node models = levelFile["models"];
 
@@ -226,7 +254,22 @@ bool SceneManager::LoadScene(const char* path) {
 
     // OBJECT
     {
+        // Get list of objects:
+        const YAML::Node objects = levelFile["objects"];
 
+        // Load all the objects into the object manager.
+        for (YAML::const_iterator it = objects.begin(); it != objects.end(); it++) {
+            const YAML::Node object = *it;
+
+            Object* obj = ParseObjType(object["Type"].as<std::string>().c_str());
+            obj->SetName(object["Name"].as<std::string>());
+            
+            Transform* transform = YAMLReadTransform(object["Transform"]);
+            delete obj->transform;
+            obj->transform = transform;
+
+            _objectManager->AddObject(obj, transform->GetPosition());
+        }
     }
 
     return true;

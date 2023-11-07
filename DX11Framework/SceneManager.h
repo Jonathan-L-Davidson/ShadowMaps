@@ -8,6 +8,7 @@ class ObjectManager;
 class ModelManager;
 class Renderer;
 class Camera;
+class Object;
 
 class SceneManager
 {
@@ -34,6 +35,7 @@ private:
 	// CameraHandler;
 
 	void InitHardcodedObjects();
+	Object* ParseObjType(const char* type);
 
 };
 

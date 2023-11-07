@@ -163,7 +163,7 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
     if (!modelFile) {
         // throw an error!!!
         throw std::invalid_argument("No ModelFile!");
-        return;
+        return nullptr;
     }
 
     std::string line;
