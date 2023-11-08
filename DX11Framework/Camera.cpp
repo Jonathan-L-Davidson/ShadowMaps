@@ -1,11 +1,9 @@
 #include "Camera.h"
 
-Camera::Camera(XMFLOAT3X3 EyeAtUp) {
-	Eye = XMFLOAT3(EyeAtUp._11, EyeAtUp._12, EyeAtUp._13);
-	At = XMFLOAT3(EyeAtUp._21, EyeAtUp._22, EyeAtUp._23);
-	Up = XMFLOAT3(EyeAtUp._31, EyeAtUp._32, EyeAtUp._33);
+Camera::Camera(Transform trans) {
+	transform = trans;
 
-	XMStoreFloat4x4(&_view, XMMatrixLookAtLH(XMLoadFloat3(&Eye), XMLoadFloat3(&At), XMLoadFloat3(&Up)));
+	LookFromTrans();
 }
 
 Camera::~Camera() {
@@ -13,31 +11,38 @@ Camera::~Camera() {
 }
 
 void Camera::UpdateViewMatrix() {
-	XMStoreFloat4x4(&_view, XMMatrixLookAtLH(XMLoadFloat3(&Eye), XMLoadFloat3(&At), XMLoadFloat3(&Up)));
+	UpdateProjectionMatrix();
+}
 
+void Camera::UpdateProjectionMatrix() {
+	XMStoreFloat4x4(&_projection, XMMatrixPerspectiveFovLH(XMConvertToRadians(90), _aspect, _depthNear, _depthFar));
 }
 
 void Camera::SetPosition(XMFLOAT3 pos) {
-	XMStoreFloat3(&Eye, XMLoadFloat3(&pos));
+	transform.SetPosition(pos);
 	UpdateViewMatrix();
 }
 
-void Camera::SetAt(XMFLOAT3 at) {
-	XMStoreFloat3(&At, XMLoadFloat3(&at));
+
+void Camera::LookTo(XMFLOAT3 rotation) {
+	XMStoreFloat4x4(&_view, XMMatrixLookToLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&rotation), XMLoadFloat3(&_upDir)));
 	UpdateViewMatrix();
 }
 
-void Camera::SetUp(XMFLOAT3 up) {
-	XMStoreFloat3(&Up, XMLoadFloat3(&up));
+void Camera::LookAt(Transform trans) {
+	XMStoreFloat4x4(&_view, XMMatrixLookAtLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&trans.position), XMLoadFloat3(&_upDir)));
 	UpdateViewMatrix();
 }
 
-void Camera::LookAt(XMFLOAT3 pos) {
-	XMFLOAT3 localDifference;
-	XMStoreFloat3(&localDifference, XMLoadFloat3(&pos) - XMLoadFloat3(&Eye));
-	
+//float EulerToView(float x) {
+//	float val = ((x * 100) % 90) / 100;
+//	return val;
+//}
 
+void Camera::LookFromTrans() {
 
-	XMStoreFloat3(&At, XMLoadFloat3(&localDifference));
+	//XMFLOAT3 rotDir = transform.GetDirection();
+	//XMStoreFloat4x4(&_view, XMMatrixLookToLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&rotDir), XMLoadFloat3(&_upDir)));
+	XMStoreFloat4x4(&_view, XMMatrixLookToLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&transform.rotation), XMLoadFloat3(&_upDir)));
 	UpdateViewMatrix();
 }

@@ -4,7 +4,6 @@
 #include "TextureManager.h"
 #include "Camera.h"
 
-
 Renderer::Renderer() {
 
 }
@@ -15,14 +14,15 @@ Renderer::~Renderer() {
     DELETED3D(_dxgiFactory);
     DELETED3D(_frameBufferView);
     DELETED3D(_swapChain);
-    DELETED3D(_rasterizerState);
+    DELETED3D(_rsDefault);
+    DELETED3D(_rsWireframe);
+    DELETED3D(_rsNoBackface);
     DELETED3D(_constantBuffer);
     DELETED3D(_depthStencilBuffer);
     DELETED3D(_depthStencilView);
 
-    _cam = nullptr;
-
-    Camera* _cam;
+    _activeRS = nullptr;
+    _activeCam = nullptr;
 }
 
 HRESULT Renderer::Initialise() {
@@ -35,9 +35,6 @@ HRESULT Renderer::Initialise() {
     if (FAILED(hr)) return E_FAIL;
 
     hr = InitPipelineVariables(); // Renderer Class
-    if (FAILED(hr)) return E_FAIL;
-
-    hr = InitRunTimeData(); // Renderer Class
     if (FAILED(hr)) return E_FAIL;
 
     return hr;
@@ -136,15 +133,32 @@ HRESULT Renderer::InitPipelineVariables()
 {
     HRESULT hr = S_OK;
 
-    //Rasterizer
-    D3D11_RASTERIZER_DESC rasterizerDesc = {};
-    rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-    rasterizerDesc.CullMode = D3D11_CULL_BACK;
+    //Default Rasterizer
+    D3D11_RASTERIZER_DESC rasterizerDescDefault = {};
+    rasterizerDescDefault.FillMode = D3D11_FILL_SOLID;
+    rasterizerDescDefault.CullMode = D3D11_CULL_BACK;
 
-    hr = _device->CreateRasterizerState(&rasterizerDesc, &_rasterizerState);
+    hr = _device->CreateRasterizerState(&rasterizerDescDefault, &_rsDefault);
     if (FAILED(hr)) return hr;
 
-    _immediateContext->RSSetState(_rasterizerState);
+
+    //Wireframe Rasterizer
+    D3D11_RASTERIZER_DESC rasterizerDescWireframe = {};
+    rasterizerDescWireframe.FillMode = D3D11_FILL_WIREFRAME;
+    rasterizerDescWireframe.CullMode = D3D11_CULL_NONE;
+
+    hr = _device->CreateRasterizerState(&rasterizerDescWireframe, &_rsWireframe);
+    if (FAILED(hr)) return hr;
+
+    //Rasterizer
+    D3D11_RASTERIZER_DESC rasterizerDescNoBackface = {};
+    rasterizerDescNoBackface.FillMode = D3D11_FILL_SOLID;
+    rasterizerDescNoBackface.CullMode = D3D11_CULL_NONE;
+
+    hr = _device->CreateRasterizerState(&rasterizerDescNoBackface, &_rsNoBackface);
+    if (FAILED(hr)) return hr;
+
+    _immediateContext->RSSetState(_rsWireframe);
 
     //Viewport Values
     _viewport = { 0.0f, 0.0f, (float)_windowRect->x, (float)_windowRect->y, 0.0f, 1.0f };
@@ -166,25 +180,14 @@ HRESULT Renderer::InitPipelineVariables()
     return S_OK;
 }
 
-HRESULT Renderer::InitRunTimeData()
-{
-    //Camera
-    float aspect = _viewport.Width / _viewport.Height;
-    
-    //Projection
-    XMMATRIX perspective = XMMatrixPerspectiveFovLH(XMConvertToRadians(90), aspect, 0.01f, 100.0f);
-    XMStoreFloat4x4(&_Projection, perspective);
-
-    return S_OK;
-}
-
 void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
     //Store this frames data in constant buffer struct
-    XMFLOAT4X4 camView = _cam->GetView();
+    XMFLOAT4X4 camView = _activeCam->GetView();
+    XMFLOAT4X4 camProjection = _activeCam->GetProjection();
     _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&camView));
-    _cbData.Projection = XMMatrixTranspose(XMLoadFloat4x4(&_Projection));
+    _cbData.Projection = XMMatrixTranspose(XMLoadFloat4x4(&camProjection));
     
-    _cbData.CameraPos = _cam->GetPosition();
+    _cbData.CameraPos = _activeCam->GetPosition();
 
     //Present unbinds render target, so rebind and clear at start of each frame
     float backgroundColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };

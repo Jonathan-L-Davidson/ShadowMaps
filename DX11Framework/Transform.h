@@ -22,8 +22,9 @@ public:
 	void AddPosition(XMFLOAT3 pos);
 
 	void SetRotation(XMFLOAT3 rad) { rotation = rad; };
-	XMFLOAT3 GetRotation() { return position; };
+	XMFLOAT3 GetRotation() { return rotation; };
 	void AddRotation(XMFLOAT3 rad);
+	XMFLOAT3 GetDirection();
 
 
 	void UpdateWorldMatrix();

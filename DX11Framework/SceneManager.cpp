@@ -42,12 +42,19 @@ HRESULT SceneManager::Initialise(Renderer* renderer) {
     _objectManager->SetModelManager(_modelManager);
     InitHardcodedObjects(); // Renderer Class
 
-    // Camera Init
-    XMFLOAT3X3 CamPos = XMFLOAT3X3(0, 0, -10.0f, // eye
-        0, 0, 0, // at
-        0, 1, 0); // up
+    //Camera
+    Transform camPos;
+    camPos.position = XMFLOAT3(0.0f, 0.0f, -10.0f);
+    camPos.rotation = XMFLOAT3(0.0f, 0.0f, 50.0f);
 
-    _cam = new Camera(CamPos);
+    D3D11_VIEWPORT view = _renderManager->GetViewPort();
+
+    _cam = new Camera();
+    _cam->SetAspect(view.Width / view.Height);
+    _cam->SetDepth(0.01f, 100.0f);
+    _cam->transform = camPos;
+    _cam->LookFromTrans();
+    
     _renderManager->SetCamera(_cam);
 
     return hr;
