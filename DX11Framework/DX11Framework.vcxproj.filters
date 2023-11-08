@@ -19,9 +19,6 @@
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{01e097b5-e2f8-434d-9c01-2511be2fea95}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Managers">
-      <UniqueIdentifier>{d657f183-a2e7-46ae-bda1-e08b14639360}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{a9687ff9-0dea-4021-b7a6-bd7306985f09}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,12 @@
     </Filter>
     <Filter Include="Header Files\Objects\Prefabs">
       <UniqueIdentifier>{1d22bab6-ec89-4523-871a-3a56d18c62b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Levels">
+      <UniqueIdentifier>{95d1ff10-9ee2-4e31-9b9a-49a10646408f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{d657f183-a2e7-46ae-bda1-e08b14639360}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +106,9 @@
       <Filter>Source Files\Objects\Core</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -164,6 +170,9 @@
     <ClInclude Include="SceneManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\VertexShading.hlsl">
@@ -172,5 +181,10 @@
     <FxCompile Include="Shaders\Default.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Levels\Test.yaml">
+      <Filter>Resource Files\Levels</Filter>
+    </None>
   </ItemGroup>
 </Project>

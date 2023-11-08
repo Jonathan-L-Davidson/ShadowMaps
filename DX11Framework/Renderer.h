@@ -10,7 +10,7 @@
 
 class Camera;
 class ObjectManager;
-class SceneManager;;
+class SceneManager;
 
 using namespace DirectX;
 
@@ -32,6 +32,7 @@ public:
 	ID3D11Device* GetDevice() { return _device; };
 
 	void Render(float simpleCount, SceneManager* sceneManager);
+	void SwapRS(const char input);
 private:
 	Rect* _windowRect;
 

@@ -25,6 +25,10 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
     hr = _activeScene->Initialise(_renderManager);
     if (FAILED(hr)) return E_FAIL;
 
+    _inputManager = new InputManager();
+    _inputManager->SetRenderManager(_renderManager);
+    _inputManager->SetSceneManager(_activeScene);
+
     _activeScene->LoadScene("Test");
 
     return hr;
@@ -36,6 +40,7 @@ DX11Framework::~DX11Framework()
     delete _windowManager;
 
     delete _activeScene;
+    delete _inputManager;
 
 }
 
@@ -63,9 +68,14 @@ void DX11Framework::Update()
     */
 
     //_cam->LookAt(_pyramid->GetPosition());
-
+    
     // Normal standard loop.
+    if (delay > maxDelay) {
+        _inputManager->Update();
+        delay = 0;
+    }
     _activeScene->Update(deltaTime);
     _renderManager->Render(simpleCount, _activeScene);
 
+    delay += deltaTime;
 }

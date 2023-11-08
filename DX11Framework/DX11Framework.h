@@ -8,6 +8,7 @@
 #include "Renderer.h"
 #include "WindowManager.h"
 #include "sceneManager.h"
+#include "InputManager.h"
 
 //#include <wrl.h>
 
@@ -32,5 +33,8 @@ private:
 
 	SceneManager* _activeScene;
 
-	
+	InputManager* _inputManager;
+
+	float delay = 0.0f;
+	float maxDelay = 0.05f;
 };

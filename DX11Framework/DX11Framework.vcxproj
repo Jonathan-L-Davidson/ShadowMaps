@@ -135,6 +135,7 @@
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DDSTextureLoader.cpp" />
     <ClCompile Include="DX11Framework.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="ModelHelpers.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="DDSTextureLoader.h" />
     <ClInclude Include="DX11Framework.h" />
     <ClInclude Include="FileHelpers.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelHelpers.h" />
     <ClInclude Include="ModelManager.h" />
@@ -179,6 +181,9 @@
     <FxCompile Include="Shaders\VertexShading.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Levels\Test.yaml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

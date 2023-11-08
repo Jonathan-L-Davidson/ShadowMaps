@@ -158,7 +158,7 @@ HRESULT Renderer::InitPipelineVariables()
     hr = _device->CreateRasterizerState(&rasterizerDescNoBackface, &_rsNoBackface);
     if (FAILED(hr)) return hr;
 
-    _immediateContext->RSSetState(_rsWireframe);
+    _activeRS = _rsDefault;
 
     //Viewport Values
     _viewport = { 0.0f, 0.0f, (float)_windowRect->x, (float)_windowRect->y, 0.0f, 1.0f };
@@ -188,6 +188,8 @@ void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
     _cbData.Projection = XMMatrixTranspose(XMLoadFloat4x4(&camProjection));
     
     _cbData.CameraPos = _activeCam->GetPosition();
+
+    _immediateContext->RSSetState(_activeRS);
 
     //Present unbinds render target, so rebind and clear at start of each frame
     float backgroundColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };
@@ -221,4 +223,18 @@ void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
 
     //Present Backbuffer to screen
     _swapChain->Present(0, 0);
+}
+
+void Renderer::SwapRS(const char input) {
+    switch (input) {
+        case 'D':
+            _activeRS = _rsDefault;
+            break;
+        case 'W':
+            _activeRS = _rsWireframe;
+            break;
+        case 'B':
+            _activeRS = _rsNoBackface;
+            break;
+    }
 }
