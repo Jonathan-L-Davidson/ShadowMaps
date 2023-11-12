@@ -91,6 +91,7 @@ void InputManager::HandleSceneKeys() {
 }
 
 void InputManager::HandleMiscKeys() {
+	/* // DX11 doesn't like me changing the depth values, woops!
 	Camera* cam = _sceneManager->GetActiveCam();
 
 	if (KeyDown(keyAdjustDepthNearIncrease)) {
@@ -105,5 +106,6 @@ void InputManager::HandleMiscKeys() {
 	if (KeyDown(keyAdjustDepthFarDecrease)) {
 		cam->SetDepth(0, cam->GetDepthFar() - 0.5f);
 	}
+	*/
 }
 
