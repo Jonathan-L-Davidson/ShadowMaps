@@ -3,6 +3,8 @@
 #include "SceneManager.h"
 #include <winuser.h>
 
+#define KeyDown(x) (GetAsyncKeyState(x) & 0x8000)
+
 void InputManager::Update() {
 
 	HandleRenderKeys();
@@ -12,8 +14,7 @@ void InputManager::Update() {
 }
 
 void InputManager::HandleRenderKeys() {
-	if (GetAsyncKeyState(keyWireframeToggle) & 0x8000) {
-
+	if (KeyDown(keyWireframeToggle)) {
 		if (!wireframeToggle) {
 			_renderManager->SwapRS('W');
 			wireframeToggle = true;
@@ -28,6 +29,18 @@ void InputManager::HandleRenderKeys() {
 }
 
 void InputManager::HandleMovementKeys() {
+	if (KeyDown(keyWireframeToggle)) {
+
+		if (!wireframeToggle) {
+			_renderManager->SwapRS('W');
+			wireframeToggle = true;
+		}
+		else {
+			_renderManager->SwapRS('D');
+			wireframeToggle = false;
+		}
+
+	}
 
 }
 
