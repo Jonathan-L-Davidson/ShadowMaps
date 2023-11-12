@@ -23,6 +23,10 @@ void Camera::SetPosition(XMFLOAT3 pos) {
 	UpdateViewMatrix();
 }
 
+void Camera::SetRotation(XMFLOAT3 rotation) {
+	transform.SetRotation(rotation);
+	UpdateViewMatrix();
+}
 
 void Camera::LookTo(XMFLOAT3 rotation) {
 	XMStoreFloat4x4(&_view, XMMatrixLookToLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&rotation), XMLoadFloat3(&_upDir)));

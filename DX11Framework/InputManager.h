@@ -35,7 +35,7 @@ private:
 	char keyRollCamLeft = 'Z';
 	char keyRollCamRight = 'C';
 	char keyPitchCamUp = 'R';
-	char keyPitchCaDown = 'F';
+	char keyPitchCamDown = 'F';
 
 	char keyAdjustDepthFarIncrease = ']';
 	char keyAdjustDepthFarDecrease = '[';

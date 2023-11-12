@@ -20,6 +20,9 @@ public:
 
     void SetPosition(XMFLOAT3 pos);
     XMFLOAT3 GetPosition() { return transform.position; };
+    void SetRotation(XMFLOAT3 rotation);
+    XMFLOAT3 GetRotation() { return transform.rotation; };
+
 
     void LookTo(XMFLOAT3 rotation);
     void LookAt(Transform trans);

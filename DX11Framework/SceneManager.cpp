@@ -23,7 +23,7 @@ SceneManager::~SceneManager() {
     delete _objectManager;
     delete _modelManager;
 
-    delete _cam;
+    delete _activeCam;
 }
 
 HRESULT SceneManager::Initialise(Renderer* renderer) {
@@ -42,26 +42,26 @@ HRESULT SceneManager::Initialise(Renderer* renderer) {
     _objectManager->SetModelManager(_modelManager);
     InitHardcodedObjects(); // Renderer Class
 
-    //Camera
-    Transform camPos;
-    camPos.position = XMFLOAT3(0.0f, 0.0f, -10.0f);
-    camPos.rotation = XMFLOAT3(0.0f, 0.0f, 50.0f);
-
-    D3D11_VIEWPORT view = _renderManager->GetViewPort();
-
-    _cam = new Camera();
-    _cam->SetAspect(view.Width / view.Height);
-    _cam->SetDepth(0.01f, 100.0f);
-    _cam->transform = camPos;
-    _cam->LookFromTrans();
+    SetupCameras();
     
-    _renderManager->SetCamera(_cam);
+    _renderManager->SetCamera(_activeCam);
 
     return hr;
 }
 
 void SceneManager::Update(float deltaTime) {
     _objectManager->Update(deltaTime);
+    UpdateCameras();
+}
+
+void SceneManager::UpdateCameras() {
+    _cameras[CAM_DEFAULT_WASD]->LookFromTrans();
+    _cameras[CAM_LOOKDOWN]->LookFromTrans();
+    
+    if (_selectedObj != nullptr) {
+        _cameras[CAM_LOOKAT]->LookAt(*_selectedObj);
+    }
+
 }
 
 void SceneManager::InitHardcodedObjects() {
@@ -104,6 +104,33 @@ void SceneManager::InitHardcodedObjects() {
     _objectManager->AddObject(plane, XMFLOAT3(0.0f, -5.0f, 0.0f));
 
     cube->transform->parent = _pyramid->transform;
+}
+
+void SceneManager::SetupCameras() {
+    //Camera
+    Transform camPos;
+    camPos.position = XMFLOAT3(0.0f, 0.0f, -10.0f);
+    camPos.rotation = XMFLOAT3(0.0f, 0.0f, 50.0f);
+
+    D3D11_VIEWPORT view = _renderManager->GetViewPort();
+
+    for (int i = 0; i < CAMERA_AMOUNT; i++) {
+        Camera* cam = new Camera();
+        cam->SetAspect(view.Width / view.Height);
+        cam->SetDepth(0.01f, 100.0f);
+        cam->transform = camPos;
+        cam->LookFromTrans();
+        _cameras[i] = cam;
+    }
+
+    _cameras[CAM_DEFAULT_WASD]->SetPosition(XMFLOAT3(0.0f, 0.0f, -10.0f));
+
+    _cameras[CAM_LOOKDOWN]->SetPosition(XMFLOAT3(0.0f, 10.0f, 0.0f));
+    _cameras[CAM_LOOKDOWN]->SetRotation(XMFLOAT3(-0.5f, 0.0f, 0.0f));
+
+    _cameras[CAM_LOOKAT]->SetPosition(XMFLOAT3(0.0f, 5.0f, -10.0f));
+
+    _activeCam = _cameras[CAM_DEFAULT_WASD];
 }
 
 Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugliness so I actually written it into a seperate function now.
