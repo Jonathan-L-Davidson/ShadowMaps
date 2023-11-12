@@ -37,10 +37,10 @@ private:
 	char keyPitchCamUp = 'R';
 	char keyPitchCamDown = 'F';
 
-	char keyAdjustDepthFarIncrease = ']';
-	char keyAdjustDepthFarDecrease = '[';
-	char keyAdjustDepthNearIncrease = '#';
-	char keyAdjustDepthNearDecrease = '\'';
+	char keyAdjustDepthFarIncrease = 'I';
+	char keyAdjustDepthFarDecrease = 'O';
+	char keyAdjustDepthNearIncrease = 'K';
+	char keyAdjustDepthNearDecrease = 'L';
 
 	bool wireframeToggle = false;
 	char keyWireframeToggle = 'X';
