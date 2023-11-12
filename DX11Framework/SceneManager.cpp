@@ -52,6 +52,7 @@ HRESULT SceneManager::Initialise(Renderer* renderer) {
 void SceneManager::Update(float deltaTime) {
     _objectManager->Update(deltaTime);
     UpdateCameras();
+    _renderManager->SetCamera(_activeCam);
 }
 
 void SceneManager::UpdateCameras() {
@@ -126,9 +127,11 @@ void SceneManager::SetupCameras() {
     _cameras[CAM_DEFAULT_WASD]->SetPosition(XMFLOAT3(0.0f, 0.0f, -10.0f));
 
     _cameras[CAM_LOOKDOWN]->SetPosition(XMFLOAT3(0.0f, 10.0f, 0.0f));
-    _cameras[CAM_LOOKDOWN]->SetRotation(XMFLOAT3(-0.5f, 0.0f, 0.0f));
+    _cameras[CAM_LOOKDOWN]->SetRotation(XMFLOAT3(0.0f, -1.0f, 0.5f));
 
     _cameras[CAM_LOOKAT]->SetPosition(XMFLOAT3(0.0f, 5.0f, -10.0f));
+    _selectedObj = _objectManager->GetObjects().at(2)->transform;
+
 
     _activeCam = _cameras[CAM_DEFAULT_WASD];
 }

@@ -34,7 +34,8 @@ public:
 
 	ObjectManager* GetObjManager() { return _objectManager; };
 
-	Camera* GetActiveCam() { return _activeCam; }
+	void SetActiveCam(Camera* cam) { _activeCam = cam; };
+	Camera* GetActiveCam() { return _activeCam; };
 	Camera* GetCam(int index) { return _cameras[index]; };
 
 private:

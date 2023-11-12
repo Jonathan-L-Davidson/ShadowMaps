@@ -79,6 +79,15 @@ void InputManager::HandleMovementKeys() {
 }
 
 void InputManager::HandleSceneKeys() {
+	if (KeyDown('1')) {
+		_sceneManager->SetActiveCam(_sceneManager->GetCam(CAM_DEFAULT_WASD));
+	}
+	if (KeyDown('2')) {
+		_sceneManager->SetActiveCam(_sceneManager->GetCam(CAM_LOOKAT));
+	}
+	if (KeyDown('3')) {
+		_sceneManager->SetActiveCam(_sceneManager->GetCam(CAM_LOOKDOWN));
+	}
 }
 
 void InputManager::HandleMiscKeys() {
