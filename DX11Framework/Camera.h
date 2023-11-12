@@ -32,7 +32,10 @@ public:
     XMFLOAT4X4 GetProjection() { return _projection; };
 
     void SetAspect(float aspect) { _aspect = aspect; };
+    float GetAspect() { return _aspect; };
     void SetDepth(float dNear, float dFar) { _depthNear = dNear; _depthFar = dFar; };
+    float GetDepthNear() { return _depthNear; };
+    float GetDepthFar() { return _depthFar; };
 
 
     Transform transform;

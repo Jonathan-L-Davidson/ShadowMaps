@@ -91,5 +91,19 @@ void InputManager::HandleSceneKeys() {
 }
 
 void InputManager::HandleMiscKeys() {
+	Camera* cam = _sceneManager->GetActiveCam();
+
+	if (KeyDown(keyAdjustDepthNearIncrease)) {
+		cam->SetDepth(cam->GetDepthNear() + 0.01f, 0);
+	}
+	if (KeyDown(keyAdjustDepthNearDecrease)) {
+		cam->SetDepth(cam->GetDepthNear() - 0.01f, 0);
+	}
+	if (KeyDown(keyAdjustDepthFarIncrease)) {
+		cam->SetDepth(0, cam->GetDepthFar() + 0.5f);
+	}
+	if (KeyDown(keyAdjustDepthFarDecrease)) {
+		cam->SetDepth(0, cam->GetDepthFar() - 0.5f);
+	}
 }
 
