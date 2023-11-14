@@ -11,10 +11,13 @@
 using namespace DirectX;
 
 struct SimpleLight {
-	XMFLOAT4 Position;
-	XMFLOAT3 Rotation;
-	int Type;
-	float FallOff;
+	XMFLOAT4 Position;		// 16
+	XMFLOAT3 Rotation;		// 12
+	int Type;				// 4 - 16
+	float FallOff;			// 4
+
+	XMFLOAT3 Color; // Diffuse mat
+	
 };
 
 struct SimpleVertex
