@@ -9,7 +9,7 @@ Model::Model(ID3D11Device* device) {
     transform = new Transform();
 }
 
-Model::Model(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<WORD> indices) {
+Model::Model(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<DWORD> indices) {
     _modelBuffer = new ModelBuffer(device, verts, indices);
     transform = new Transform();
 
@@ -83,7 +83,7 @@ void Model::Render(ID3D11DeviceContext* context) {
     ID3D11Buffer* vBuffer = _modelBuffer->GetVertBuffer()->GetBuffer();
     context->IASetVertexBuffers(0, 1, &vBuffer, &stride, &offset);
     ID3D11Buffer* iBuffer = _modelBuffer->GetIndBuffer()->GetBuffer();
-    context->IASetIndexBuffer(iBuffer, DXGI_FORMAT_R16_UINT, 0);
+    context->IASetIndexBuffer(iBuffer, DXGI_FORMAT_R32_UINT, 0);
 
     context->VSSetShader(_shader->GetVertexShader(), nullptr, 0);
     context->PSSetShader(_shader->GetPixelShader(), nullptr, 0);

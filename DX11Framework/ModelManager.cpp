@@ -73,7 +73,7 @@ void ModelManager::CreateCube() {
         { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f),     XMFLOAT2(0.0f, 1.0f)}, // 7
     };
 
-    std::vector<WORD> IndexData = {
+    std::vector<DWORD> IndexData = {
         //Indices
         0,1,2,
         2,1,3,
@@ -106,7 +106,7 @@ void ModelManager::CreatePyramid() {
         { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f),     XMFLOAT2(1.0f, 1.0f)},
     };                                                                          
 
-    std::vector<WORD> IndexData = {
+    std::vector<DWORD> IndexData = {
         //Indices
         2,1,0,
         2,0,4,
@@ -132,7 +132,7 @@ void ModelManager::CreatePlane() {
         { XMFLOAT3(-50.00f, 0.00f, 50.00f),  XMFLOAT3(-50.00f, 0.0f, 50.00f),  XMFLOAT2(1.0f, 1.0f)},
     };
 
-    std::vector<WORD> IndexData = {
+    std::vector<DWORD> IndexData = {
         //Indices
         3,0,1,
         2,1,0,
@@ -158,7 +158,7 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
     std::vector<XMFLOAT3> Vertices;
     std::vector<XMFLOAT3> Normals;
     std::vector<XMFLOAT2> Textures;
-    std::vector<WORD> Indices;
+    std::vector<DWORD> Indices;
 
     if (!modelFile) {
         // throw an error!!!

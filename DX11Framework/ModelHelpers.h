@@ -49,24 +49,24 @@ public:
 	IndexBuffer(ID3D11Device* device);
 	~IndexBuffer();
 
-	void SetBuffer(std::vector<WORD> indices);
+	void SetBuffer(std::vector<DWORD> indices);
 
 	ID3D11Buffer* GetBuffer() { return _buffer; };
 	int GetCount() { return _indices->size(); };
-	std::vector<WORD>* GetIndices() { return _indices; };
+	std::vector<DWORD>* GetIndices() { return _indices; };
 
 	void RefreshBuffer();
 private:
 	ID3D11Device* _device;
 	ID3D11Buffer* _buffer; // DirectX buffer
 
-	std::vector<WORD>* _indices;
+	std::vector<DWORD>* _indices;
 };
 
 class ModelBuffer {
 public:
 	ModelBuffer(ID3D11Device* device);
-	ModelBuffer(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<WORD> indices);
+	ModelBuffer(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<DWORD> indices);
 	~ModelBuffer();
 
 	VertexBuffer* GetVertBuffer()	{ return _vBuffer; };
