@@ -5,6 +5,7 @@
 
 class Renderer;
 class SceneManager;
+class DX11Framework;
 
 class InputManager
 {
@@ -13,6 +14,7 @@ public:
 
 	void SetRenderManager(Renderer* renderer) { _renderManager = renderer; };
 	void SetSceneManager(SceneManager* sceneManager) { _sceneManager = sceneManager; };
+	void SetFramework(DX11Framework* framework) { _framework = framework; };
 
 	void Update();
 
@@ -24,6 +26,7 @@ private:
 
 	Renderer* _renderManager;
 	SceneManager* _sceneManager;
+	DX11Framework* _framework;
 
 	char keyMoveForward = 'W';
 	char keyMoveLeft = 'A';

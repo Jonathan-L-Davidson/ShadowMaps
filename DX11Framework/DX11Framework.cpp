@@ -28,6 +28,7 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
     _inputManager = new InputManager();
     _inputManager->SetRenderManager(_renderManager);
     _inputManager->SetSceneManager(_activeScene);
+    _inputManager->SetFramework(this);
 
     _activeScene->LoadScene("Test");
 
@@ -44,6 +45,22 @@ DX11Framework::~DX11Framework()
 
 }
 
+void DX11Framework::RefreshScene() {
+    delete _activeScene;
+
+    HRESULT hr = S_OK;
+
+    _activeScene = new SceneManager();
+    hr = _activeScene->Initialise(_renderManager);
+    if (FAILED(hr)) {
+        throw new std::exception("Scene failed to load!");
+        return;
+    };
+
+    _inputManager->SetSceneManager(_activeScene);
+
+    _activeScene->LoadScene("Test");
+}
 
 void DX11Framework::Update()
 {

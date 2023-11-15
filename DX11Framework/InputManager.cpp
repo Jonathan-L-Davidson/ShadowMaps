@@ -1,4 +1,5 @@
 #include "InputManager.h"
+#include "DX11Framework.h"
 #include "Renderer.h"
 #include "SceneManager.h"
 #include "Camera.h"
@@ -91,6 +92,11 @@ void InputManager::HandleSceneKeys() {
 }
 
 void InputManager::HandleMiscKeys() {
+
+	if (KeyDown(VK_F5)) {
+		_framework->RefreshScene();
+	}
+
 	/* // DX11 doesn't like me changing the depth values, woops!
 	Camera* cam = _sceneManager->GetActiveCam();
 

@@ -22,6 +22,8 @@ public:
 	HRESULT Initialise(HINSTANCE hInstance, int nCmdShow);
 	~DX11Framework();
 	void Update();
+
+	void RefreshScene();
 private:
 	int _windW = 1280;
 	int _windH = 768;
