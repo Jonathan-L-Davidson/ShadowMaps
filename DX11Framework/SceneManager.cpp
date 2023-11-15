@@ -158,27 +158,11 @@ void SceneManager::SetupCameras() {
 Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugliness so I actually written it into a seperate function now.
     Transform* transform = new Transform();
 
-    const YAML::Node nPosition = node["position"];
-    const YAML::Node nRotation = node["rotation"];
-    const YAML::Node nScale = node["scale"];
+    transform->position = Vector2Float3(node["position"].as<std::vector<float>>());
 
-    transform->position = XMFLOAT3(
-        nPosition["x"].as<float>(),
-        nPosition["y"].as<float>(),
-        nPosition["z"].as<float>()
-    );
+    transform->rotation = Vector2Float3(node["rotation"].as<std::vector<float>>());
 
-    transform->rotation = XMFLOAT3(
-        nRotation["x"].as<float>(),
-        nRotation["y"].as<float>(),
-        nRotation["z"].as<float>()
-    );
-
-    transform->scale = XMFLOAT3(
-        nScale["x"].as<float>(),
-        nScale["y"].as<float>(),
-        nScale["z"].as<float>()
-    );
+    transform->scale = Vector2Float3(node["scale"].as<std::vector<float>>());
 
     return transform;
 }

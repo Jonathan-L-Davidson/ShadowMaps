@@ -10,18 +10,9 @@
       Shader: "Default"
       Texture: "Crate"
       Transform:
-        position:
-          x: 0.0
-          y: 0.0
-          z: 0.0
-        rotation:
-          x: 0.0
-          y: 0.0
-          z: 0.0
-        scale:
-          x: 1.0
-          y: 1.0
-          z: 1.0
+        position: [0.0, 0.0, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        scale: [1.0, 1.0, 1.0]
   Lights:
     - Light:
       Position: [5.0, 5.0, -7.0, 1.0]
@@ -49,15 +40,6 @@
       Name: "Test Monkeyy"
       ModelName: "Cubee"
       Transform:
-        position:
-          x: 0.0
-          y: 0.0
-          z: 0.0
-        rotation:
-          x: 0.0
-          y: 0.0
-          z: 0.0
-        scale:
-          x: 1.0
-          y: 1.0
-          z: 1.0
+        position: [0.0, 0.0, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        scale: [1.0, 1.0, 1.0]
