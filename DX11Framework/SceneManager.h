@@ -3,6 +3,7 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 #include "Dxgidebug.h"
+#include <vector>
 
 #define CAMERA_AMOUNT		3
 
@@ -10,6 +11,8 @@
 #define CAM_LOOKAT			1
 #define CAM_LOOKDOWN		2
 
+class ConstantBuffer;
+class SimpleLight;
 class ObjectManager;
 class ModelManager;
 class Renderer;
@@ -32,6 +35,8 @@ public:
 
 	bool LoadScene(const char* path);
 
+	void LoadLights(ConstantBuffer* cbData);
+
 	ObjectManager* GetObjManager() { return _objectManager; };
 
 	void SetActiveCam(Camera* cam) { _activeCam = cam; };
@@ -48,7 +53,8 @@ private:
 	Camera* _cameras[CAMERA_AMOUNT];
 	Transform* _selectedObj;
 
-	// LightManager
+	std::vector<SimpleLight>* _lights;
+
 	// CameraHandler;
 
 	void InitHardcodedObjects();

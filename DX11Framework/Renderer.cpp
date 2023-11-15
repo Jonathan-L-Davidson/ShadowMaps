@@ -209,6 +209,7 @@ void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
             model->SetupTextures(_immediateContext);
 
             _cbData.AmbientLight = obj->GetColor();
+            sceneManager->LoadLights(&_cbData);
             model->UpdateCBData(&_cbData);
             
             _cbData.World = XMMatrixTranspose(obj->transform->GetWorldMatrix());

@@ -38,17 +38,8 @@ public:
 private:
 
 	ModelBuffer* _modelBuffer;
-	XMFLOAT4 _diffuseLight = XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f);
 	XMFLOAT4 _diffuseMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	
-	SimpleLight _light = {
-		XMFLOAT4(10.0f, 0.0f, 0.0f, 1.0f), // Position
-		XMFLOAT3(0.0f, 0.5f, -0.5f), // Rotation
-		int(0), // Type
-		float(0.5f) }; // falloff -- NOTE: 1.0f can reach end of either plane. Less means less distance.
-	XMFLOAT4 _specularLight = XMFLOAT4(0.8f, 0.8f, 0.8f, 1.0f);
 	XMFLOAT4 _specularMaterial = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	float _specPower = 15.0f;
 
 	unsigned int _useTexture = 0;
 

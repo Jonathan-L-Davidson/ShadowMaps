@@ -23,6 +23,26 @@
           y: 1.0
           z: 1.0
   Lights:
+    - Light:
+      Position: [5.0, 5.0, -7.0, 1.0]
+      Rotation: [0.5, 0.0, 0.0]
+      Type: 1
+      DiffuseColor: [0.3, 0.6, 0.3]
+      SpecColor: [0.6, 0.6, 0.6]
+      SpecPower: 15.0
+      FalloffDistance: 10.0
+      FalloffDropDistance: 5.0
+      FalloffGradientCoefficiency: 5.0
+    - Light2:
+      Position: [5.0, 5.0, -7.0, 1.0]
+      Rotation: [0.5, 0.0, 0.0]
+      Type: 1
+      DiffuseColor: [0.6, 0.3, 0.3]
+      SpecColor: [0.6, 0.6, 0.6]
+      SpecPower: 15.0
+      FalloffDistance: 10.0
+      FalloffDropDistance: 5.0
+      FalloffGradientCoefficiency: 5.0
   Objects:
     - TestMonkey:
       Type: "Monkey"

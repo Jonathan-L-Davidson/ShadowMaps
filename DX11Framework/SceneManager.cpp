@@ -8,6 +8,23 @@
 #include "Monkey.h"
 #include <string>
 
+XMFLOAT3 Vector2Float3(std::vector<float> vec) {
+    float x, y, z;
+    x = vec[0];
+    y = vec[1];
+    z = vec[2];
+    return XMFLOAT3(x, y, z);
+}
+
+XMFLOAT4 Vector2Float4(std::vector<float> vec) {
+    float x, y, z, w;
+    x = vec[0];
+    y = vec[1];
+    z = vec[2];
+    w = vec[3];
+    return XMFLOAT4(x, y, z, w);
+}
+
 //Tells  yaml it is a .lib with no .dll
 #define YAML_CPP_STATIC_DEFINE
 #include "yaml-cpp/yaml.h"
@@ -16,7 +33,7 @@
 
 
 SceneManager::SceneManager() {
-
+    _lights = new std::vector<SimpleLight>();
 }
 
 SceneManager::~SceneManager() {
@@ -24,6 +41,8 @@ SceneManager::~SceneManager() {
     delete _modelManager;
 
     delete _activeCam;
+    _lights->clear();
+    delete _lights;
 }
 
 HRESULT SceneManager::Initialise(Renderer* renderer) {
@@ -215,11 +234,15 @@ bool SceneManager::LoadScene(const char* path) {
     ///          Scale
     /// Lights:
     ///    - Light:
-    ///      position:
-    ///      rotation:
-    ///      Type:
-    ///      Falloff:
-    ///      
+    ///        Position
+    ///        Rotation
+    ///        Type
+    ///        DiffuseColor
+    ///        SpecColor
+    ///        SpecPower
+    ///        FalloffDistance
+    ///        FalloffDropDistance
+    ///        FalloffGradientCoefficiency      
     /// Objects:
     ///    - Object:
     ///      Type:
@@ -229,8 +252,7 @@ bool SceneManager::LoadScene(const char* path) {
     ///          Position:
     ///          Rotation:
     ///          Scale:
-    ///      
-    ///      
+
 
     // SHADER
     {
@@ -288,7 +310,26 @@ bool SceneManager::LoadScene(const char* path) {
 
     // TODO: LIGHT
     {
+        const YAML::Node lights = levelFile["Lights"];
 
+        for (YAML::const_iterator it = lights.begin(); it != lights.end(); it++) {
+            const YAML::Node& light = *it;
+            SimpleLight simpleLight;
+
+            // Experimenting with yaml node reading using a heads up from https://stackoverflow.com/questions/34757198/how-to-read-a-yaml-node-array-into-stdvector
+            simpleLight.Position = Vector2Float4(light["Position"].as<std::vector<float>>());
+            simpleLight.Rotation = Vector2Float3(light["Rotation"].as<std::vector<float>>());
+
+            simpleLight.Type = light["Type"].as<int>();
+            simpleLight.DiffuseColor = Vector2Float3(light["DiffuseColor"].as<std::vector<float>>());
+            simpleLight.SpecColor = Vector2Float3(light["SpecColor"].as<std::vector<float>>());
+            simpleLight.SpecPower = light["SpecPower"].as<float>();
+
+            simpleLight.FalloffDistance = light["FalloffDistance"].as<float>();
+            simpleLight.FalloffDropDistance = light["FalloffDropDistance"].as<float>();
+            simpleLight.FalloffGradientCoefficiency = light["FalloffGradientCoefficiency"].as<float>();
+            _lights->push_back(simpleLight);
+        }
     }
 
     // OBJECT
@@ -313,4 +354,18 @@ bool SceneManager::LoadScene(const char* path) {
     }
 
     return true;
+}
+
+void SceneManager::LoadLights(ConstantBuffer* cbData) {
+    for (int i = 0; i < MAX_LIGHTS; i++) {
+        SimpleLight light; // reset it back to generic disabled lights.
+        cbData->Lights[i] = light;
+    }
+
+    if (_lights->size() > MAX_LIGHTS) {
+        throw new std::exception("Too many lights!!");
+        return;
+    }
+
+    std::copy(_lights->begin(), _lights->end(), cbData->Lights);
 }

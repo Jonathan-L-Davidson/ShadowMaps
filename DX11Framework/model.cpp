@@ -92,17 +92,8 @@ void Model::Render(ID3D11DeviceContext* context) {
 }
 
 void Model::UpdateCBData(ConstantBuffer* cbData) {
-    cbData->DiffuseLight = _diffuseLight;
     cbData->DiffuseMaterial = _diffuseMaterial;
-    
-    cbData->LightPosition = _light.Position;
-    cbData->LightRotation = _light.Rotation;
-    cbData->LightFallOff = _light.FallOff;
-
-    cbData->SpecularLight = _specularLight;
     cbData->SpecularMaterial = _specularMaterial;
-    
-    cbData->SpecPower = _specPower;
 
     cbData->UseTexture = _useTexture;
     

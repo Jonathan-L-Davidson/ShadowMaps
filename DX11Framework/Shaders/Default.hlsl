@@ -4,6 +4,25 @@ Texture2D normalTex : register(t2);
 Texture2D specularTex : register(t3);
 SamplerState bilinearSampler : register(s0);
 
+#define MAX_LIGHTS 240
+
+struct SimpleLight
+{
+    float4 Position;
+	
+    float3 Rotation;
+    int Type;
+
+    float3 DiffuseColor;
+    int padding;
+
+    float3 SpecColor;
+    float SpecPower;
+    float FalloffDistance;
+    float FalloffDropDistance;
+    float FalloffGradientCoefficiency;
+    int padding2;
+};
 
 cbuffer ConstantBuffer : register(b0)
 {
@@ -12,20 +31,14 @@ cbuffer ConstantBuffer : register(b0)
     float4x4 World;
     
     float4 AmbientLight;
-    float4 DiffuseLight;
     float4 DiffuseMaterial;
-    
-    float4 LightPosition;
-    float3 LightRotation;
-    float  LightFalloff;
-    
-    float4 SpecularLight;
     float4 SpecularMaterial;
-    float  SpecPower;
+
+    SimpleLight lights[MAX_LIGHTS];
     
     float3 CameraPos;
-    
     uint UseTexture;
+    
     uint UseDiffuse;
     uint UseDisplacement;
     uint UseNormal;
@@ -38,7 +51,6 @@ struct VS_Out
     float4 positionW : POSITION;
     float4 normW : NORMAL;
     float2 texCoord : TEXCOORDS;
-    float4 lightPositionW : LIGHT_POSITION;
 };
 
 VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL, float2 TexCoord : TEXCOORDS)
@@ -57,7 +69,6 @@ VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL, float2 TexCoo
     output.position = mul(output.position, View);
     output.position = mul(output.position, Projection);
     
-    output.lightPositionW = LightPosition;
     output.texCoord = TexCoord;
     return output;
 }
