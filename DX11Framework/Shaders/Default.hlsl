@@ -78,69 +78,74 @@ float4 PS_main(VS_Out input) : SV_TARGET
     float4 posW = input.positionW; // Vertex position in worldspace.
     float4 normW = normalize(input.normW);
     
-    // Worldspace light calculations.
-    float4 lightPos = input.lightPositionW;
-    float3 lightDir = normalize(posW - lightPos); // From light to model position.
-  
-    
     //////////////// TEXTURE ////////////////
     float4 texColor = DiffuseMaterial;
     if (UseTexture > 0 && UseDiffuse > 0)
     {
         texColor = diffuseTex.Sample(bilinearSampler, input.texCoord);
     }
-    
-    // Distance from light to object.
-    float lightDistance = distance(posW, lightPos);
 
-    
     //////////////// AMBIENT ////////////////
     float4 ambient = AmbientLight * texColor;
 
-    //////////////// DIFFUSE ////////////////
-    // Calculate potential diffused amount:
-    float4 potentialDiffuse = DiffuseLight * texColor;
-
-    // Get intensity from normal and lightdir.
-    // Dot product compares the vector's rotation to the other vector, 1 is when they're the same, -1 is the inverse.
-    float diffuseAmount = saturate(dot(-lightDir, normW.xyz));
-
-    //// DIFFUSE COLOUR ////
-    float4 diffuse = potentialDiffuse * diffuseAmount;
     
-    
-    
-    
-    //////////////// SPECULAR ////////////////
-    // 1. Get dir from light to surface.
-    float3 dirFromLight = normalize(lightPos.xyz - posW.xyz);
-    
-    // 2. reflection off of that.
-    float3 reflection = reflect(lightDir, normW.xyz);
-    
-    // 3. dir towards camera.
-    float3 dirToCamera = normalize(CameraPos - posW.xyz);
-    
-    // Check the specular intensity based off of the texture, if it doesnt have that, just use the base specpower.
-    float specTextureReflect = 1;
-    if (UseTexture > 0 && UseSpecular > 0)
+    float4 diffuse;
+    float4 specular;
+    float4 previousDiffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    float4 previousSpecular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+    for (int i = 0; i < MAX_LIGHTS; i++)
     {
-        specTextureReflect = specularTex.Sample(bilinearSampler, input.texCoord);
+        SimpleLight currentLight = lights[i];
+        if (currentLight.Type != 1)
+        {
+            continue;
+        }
+        
+        // Distance from light to object.
+        float lightDistance = distance(posW, currentLight.Position);
+        float3 lightDir = normalize(posW - currentLight.Position); // From light to model position.
+
+        // Create a gredient based off of the distance & falloff (https://www.ths-concepts.co.uk/how-to-calculate-gradients/)
+        float falloffGradient = saturate(currentLight.FalloffDistance / ((lightDistance + currentLight.FalloffDropDistance) * currentLight.FalloffGradientCoefficiency));
+        
+        //////////////// DIFFUSE ////////////////
+        // Calculate potential diffused amount:
+        float4 potentialDiffuse = float4(currentLight.DiffuseColor, 1.0f) * texColor;
+
+        // Get intensity from normal and lightdir.
+        // Dot product compares the vector's rotation to the other vector, 1 is when they're the same, -1 is the inverse.
+        float diffuseAmount = saturate(dot(-lightDir, normW.xyz));
+
+        
+        //// DIFFUSE COLOUR ////
+        diffuse += ((potentialDiffuse * diffuseAmount) * falloffGradient);
+        
+        //////////////// SPECULAR ////////////////
+        // 1. Get dir from light to surface.
+        float3 dirFromLight = normalize(currentLight.Position.xyz - posW.xyz);
+    
+        // 2. reflection off of that.
+        float3 reflection = reflect(lightDir, normW.xyz);
+    
+        // 3. dir towards camera.
+        float3 dirToCamera = normalize(CameraPos - posW.xyz);
+    
+        // Check the specular intensity based off of the texture, if it doesnt have that, just use the base specpower.
+        float specTextureReflect = 1;
+        if (UseTexture > 0 && UseSpecular > 0)
+        {
+            specTextureReflect = specularTex.Sample(bilinearSampler, input.texCoord);
+        }
+    
+        // Get the dot product from the reflection.
+        float reflectionIntensity = saturate(dot(reflection, dirToCamera));
+        reflectionIntensity = pow((reflectionIntensity * specTextureReflect), currentLight.SpecPower);
+    
+        //// SPECULAR COLOUR ////
+        specular += ((float4(currentLight.SpecColor, 1.0f) * SpecularMaterial) * reflectionIntensity);
     }
-    
-    // Get the dot product from the reflection.
-    float reflectionIntensity = saturate(dot(reflection, dirToCamera));    
-    reflectionIntensity = pow((reflectionIntensity * specTextureReflect), SpecPower);
-    
-    //// SPECULAR COLOUR ////
-    float4 specular = (SpecularLight * SpecularMaterial) * reflectionIntensity;
-    
-    //////////////// Lighting Compilation ////////////////
-    // Create a gredient based off of the distance & falloff (https://www.ths-concepts.co.uk/how-to-calculate-gradients/)
-    float falloffGradient = saturate(LightFalloff / lightDistance);
-    
-    
+   
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
-    float4 output = ambient + ((diffuse + specular) * falloffGradient);
+    float4 output = ambient + diffuse + specular;
     return output;
 }
