@@ -142,7 +142,7 @@ float4 PS_main(VS_Out input) : SV_TARGET
         reflectionIntensity = pow((reflectionIntensity * specTextureReflect), currentLight.SpecPower);
     
         //// SPECULAR COLOUR ////
-        specular += ((float4(currentLight.SpecColor, 1.0f) * SpecularMaterial) * reflectionIntensity);
+        specular += ((float4(currentLight.SpecColor, 1.0f) * SpecularMaterial) * reflectionIntensity) / (distance(posW, currentLight.Position) / 3);
     }
    
     // I compiled all of the lighting types into this one line so it's easier for me to understand.
