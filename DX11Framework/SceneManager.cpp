@@ -232,6 +232,7 @@ bool SceneManager::LoadScene(const char* path) {
     ///      Type:
     ///      Name:
     ///      ModelName:
+    ///      Color:
     ///      Transform:
     ///          Position:
     ///          Rotation:
@@ -332,8 +333,9 @@ bool SceneManager::LoadScene(const char* path) {
             Transform* transform = YAMLReadTransform(object["Transform"]);
             delete obj->transform;
             obj->transform = transform;
-
+            obj->SetColor(Vector2Float4(object["Color"].as<std::vector<float>>()));
             _objectManager->AddObject(obj, transform->GetPosition());
+
         }
     }
 

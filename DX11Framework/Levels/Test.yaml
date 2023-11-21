@@ -19,11 +19,11 @@
       Rotation: [0.5, 0.0, 0.0]
       Type: 1
       DiffuseColor: [0.3, 0.6, 0.3]
-      SpecColor: [0.6, 0.6, 0.6]
+      SpecColor: [0.4, 0.6, 0.4]
       SpecPower: 15.0
-      FalloffDistance: 10.0
+      FalloffDistance: 15.0
       FalloffDropDistance: 5.0
-      FalloffGradientCoefficiency: 5.0
+      FalloffGradientCoefficiency: 2.0
     - Light2:
       Position: [-15.0, 5.0, -7.0, 1.0]
       Rotation: [0.5, 0.0, 0.0]
@@ -31,14 +31,15 @@
       DiffuseColor: [0.1, 0.1, 0.6]
       SpecColor: [0.2, 0.2, 0.6]
       SpecPower: 10.0
-      FalloffDistance: 10.0
+      FalloffDistance: 15.0
       FalloffDropDistance: 5.0
-      FalloffGradientCoefficiency: 5.0
+      FalloffGradientCoefficiency: 2.0
   Objects:
     - TestMonkey:
       Type: "Monkey"
       Name: "Test Monkeyy"
       ModelName: "Cubee"
+      Color: [0.02, 0.02, 0.02, 1.0]
       Transform:
         position: [0.0, 0.0, 0.0]
         rotation: [0.0, 0.0, 0.0]
