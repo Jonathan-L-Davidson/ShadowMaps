@@ -8,11 +8,12 @@
 #define KeyDown(x) (GetAsyncKeyState(x) & 0x8000)
 
 void InputManager::Update() {
-
-	HandleRenderKeys();
-	HandleMovementKeys();
-	HandleSceneKeys();
-	HandleMiscKeys();
+	if (_renderManager->GetWindowInstance() == GetFocus()) {
+		HandleRenderKeys();
+		HandleMovementKeys();
+		HandleSceneKeys();
+		HandleMiscKeys();
+	}
 }
 
 void InputManager::HandleRenderKeys() {

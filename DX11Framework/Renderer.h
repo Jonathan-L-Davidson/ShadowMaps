@@ -24,6 +24,7 @@ public:
 	void SetWindowRect(Rect* rect) { _windowRect = rect; };
 	Rect* GetWindowRect() { return _windowRect; };
 	void SetWindowInstance(HWND hwnd) { _windowHandle = hwnd; };
+	HWND GetWindowInstance() { return _windowHandle; };
 	void SetCamera(Camera* cam) { _activeCam = cam; };
 
 	D3D11_VIEWPORT GetViewPort() { return _viewport; };
