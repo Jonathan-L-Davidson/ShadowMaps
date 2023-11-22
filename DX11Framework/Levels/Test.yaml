@@ -1,28 +1,28 @@
 ---
   Shaders:
   Textures:
-    - ExampleTexture:
-      Name: "Crate"
+    - Plastic:
+      Name: "plastic"
   Models:
     - ExampleModel:
-      Name: "Cubee"
-      ObjPath: "cube.obj"
+      Name: "PrintedSpeaker"
+      ObjPath: "3DPrintBeanieHeadphones.obj"
       Shader: "Default"
-      Texture: "Crate"
+      Texture: "plastic"
       Transform:
         position: [0.0, 0.0, 0.0]
         rotation: [0.0, 0.0, 0.0]
         scale: [1.0, 1.0, 1.0]
   Lights:
     - Light:
-      Position: [5.0, 5.0, -7.0, 1.0]
+      Position: [30.0, 0.0, -50.0, 1.0]
       Rotation: [0.5, 0.0, 0.0]
       Type: 1
       DiffuseColor: [0.3, 0.6, 0.3]
       SpecColor: [0.4, 0.6, 0.4]
       SpecPower: 15.0
-      FalloffDistance: 15.0
-      FalloffDropDistance: 5.0
+      FalloffDistance: 5.0
+      FalloffDropDistance: 2.0
       FalloffGradientCoefficiency: 2.0
     - Light2:
       Position: [-15.0, 5.0, -7.0, 1.0]
@@ -31,16 +31,27 @@
       DiffuseColor: [0.1, 0.1, 0.6]
       SpecColor: [0.2, 0.2, 0.6]
       SpecPower: 10.0
-      FalloffDistance: 15.0
-      FalloffDropDistance: 5.0
-      FalloffGradientCoefficiency: 2.0
+      FalloffDistance: 5.0
+      FalloffDropDistance: 3.0
+      FalloffGradientCoefficiency: 1.0
+    - Light3:
+      Position: [35.0, 5.0, 30.0, 1.0]
+      Rotation: [0.5, 0.0, 0.0]
+      Type: 1
+      DiffuseColor: [0.4, 0.4, 0.4]
+      SpecColor: [0.6, 0.6, 0.6]
+      SpecPower: 5.0
+      FalloffDistance: 3
+      FalloffDropDistance: 1.5
+      FalloffGradientCoefficiency: 1.0
+
   Objects:
-    - TestMonkey:
-      Type: "Monkey"
-      Name: "Test Monkeyy"
-      ModelName: "Cubee"
-      Color: [0.02, 0.02, 0.02, 1.0]
+    - StaticObject:
+      Type: "Static"
+      Name: "Test 3D model"
+      ModelName: "PrintedSpeaker"
+      Color: [0.001, 0.001, 0.001, 1.0]
       Transform:
-        position: [0.0, 0.0, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        scale: [1.0, 1.0, 1.0]
+        position: [30.0, -5.0, 30.0]
+        rotation: [0.0, 1.5, 0.0]
+        scale: [0.1, 0.1, 0.1]
