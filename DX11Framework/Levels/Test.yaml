@@ -1,9 +1,24 @@
 ---
   Shaders:
+    - Skybox:
+      Name: "Skybox"
   Textures:
     - Plastic:
       Name: "plastic"
+    - Skybox:
+      Name: "Skybox"
+  
   Models:
+    - Skybox:
+      Name: "Skybox"
+      ObjPath: "InvertedCube.obj"
+      Shader: "Skybox"
+      Texture: "Skybox"
+      Transform:
+        position: [0.0, 0.0, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        scale: [1.0, 1.0, 1.0]
+    
     - ExampleModel:
       Name: "PrintedSpeaker"
       ObjPath: "3DPrintBeanieHeadphones.obj"
@@ -13,6 +28,7 @@
         position: [0.0, 0.0, 0.0]
         rotation: [0.0, 0.0, 0.0]
         scale: [1.0, 1.0, 1.0]
+
   Lights:
     - Light:
       Position: [30.0, 0.0, -50.0, 1.0]
@@ -46,6 +62,15 @@
       FalloffGradientCoefficiency: 1.0
 
   Objects:
+    - Skybox:
+      Type: "Skybox"
+      Name: "Skybox"
+      ModelName: "Skybox"
+      Color: [0.001, 0.001, 0.001, 1.0]
+      Transform:
+        position: [0.0, 0.0, 0.0]
+        rotation: [0.0, 0.0, 0.0]
+        scale: [500.0, 500.0, 500.0]
     - StaticObject:
       Type: "Static"
       Name: "Test 3D model"
