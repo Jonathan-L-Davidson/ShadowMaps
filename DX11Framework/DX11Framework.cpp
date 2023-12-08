@@ -74,17 +74,6 @@ void DX11Framework::Update()
     static float simpleCount = 0.0f;
     simpleCount += deltaTime;
 
-    /* // Just some code experimenting with camera coordinates.
-    // Camera update thing.
-    XMFLOAT3 eye = _cam->GetPosition();
-    eye.x += 4 * deltaTime;
-    XMFLOAT3 at = _cam->GetAt();
-    at.x = eye.x + 1;
-    _cam->SetAt(at);
-    _cam->SetPosition(eye);
-    */
-
-    //_cam->LookAt(_pyramid->GetPosition());
     
     // Normal standard loop.
     if (delay > maxDelay) {

@@ -226,6 +226,7 @@ void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
     _swapChain->Present(0, 0);
 }
 
+// Basic system to swap between the rasteriser states for now. Could be improved on later.
 void Renderer::SwapRS(const char input) {
     switch (input) {
         case 'D':

@@ -22,18 +22,22 @@ ModelManager::~ModelManager() {
 }
 
 void ModelManager::Initialise() {
+    // Initialise the shader manager
     _shaderManager = new ShaderManager();
     _shaderManager->SetDevice(_renderManager->GetDevice());
     _shaderManager->Initialise();
 
+    // Initialise the texture manager
     _textureManager = new TextureManager();
     _textureManager->SetDevice(_renderManager->GetDevice());
     _textureManager->Initialise();
 
+    // Create the hardcoded models
     CreateCube();
     CreatePyramid();
     CreatePlane();
 
+    // Load some base .obj files
     LoadModelFromFile("monkey.obj", "Monkey");
     LoadModelFromFile("cube.obj", "Cube");
 }
@@ -146,7 +150,6 @@ void ModelManager::CreatePlane() {
     AddModel(model, "Floor Plane");
 }
 
-// Author: Jonathan Davidson (2023)
 Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     std::ifstream modelFile;
 
@@ -171,13 +174,14 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
     std::uniform_real_distribution<float> distribution(0.0, 1.0);
 
     int indiceCount = 0;
-    // The spaghetti!! Plan on redoing this later, I can't remember how to read files.
+    // This part took a while to recreate, requiring me to understand how to make use of stringstreams instead of using a single filestream.
     while (getline(modelFile, line)) {
         std::istringstream stringStream(line);
 
-        std::string type{}, x{}, y{}, z{};
+        std::string type{}, x{}, y{}, z{}; 
 
-        stringStream >> type >> x >> y >> z;
+        stringStream >> type >> x >> y >> z; // This splits each line into 4 elements.
+
         if (type[0] == 'v') { // Are we dealing with a vertex?
             
             if (type == "v") { // Vertices!

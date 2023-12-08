@@ -76,7 +76,6 @@ void Model::SetupTextures(ID3D11DeviceContext* context) {
 }
 
 void Model::Render(ID3D11DeviceContext* context) {
-
     //Set object variables and draw
     UINT stride = { sizeof(SimpleVertex) };
     UINT offset = 0;

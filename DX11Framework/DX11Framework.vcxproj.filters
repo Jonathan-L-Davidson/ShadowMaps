@@ -192,5 +192,6 @@
     <None Include="Levels\Test.yaml">
       <Filter>Resource Files\Levels</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

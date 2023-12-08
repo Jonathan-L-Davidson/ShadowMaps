@@ -293,7 +293,7 @@ bool SceneManager::LoadScene(const char* path) {
         }
     }
 
-    // TODO: LIGHT
+    // LIGHT
     {
         const YAML::Node lights = levelFile["Lights"];
 

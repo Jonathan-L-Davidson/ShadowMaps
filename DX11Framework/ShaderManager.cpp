@@ -63,22 +63,6 @@ ShaderManager::~ShaderManager() {
 }
 
 void ShaderManager::Initialise() {
-
-    //HRESULT hr = S_OK;
-    //ID3DBlob* vsBlob;
-
-
-    //D3D11_INPUT_ELEMENT_DESC inputElementDesc[] =
-    //{
-    //    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA,   0 },
-    //    { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA,   0 },
-    //};
-
-    //hr = _device->CreateInputLayout(inputElementDesc, ARRAYSIZE(inputElementDesc), vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &_inputLayout);
-    //if (FAILED(hr)) return;
-    //vsBlob->Release();
-
-
 	CreateDefaultShader();
 }
 
@@ -145,8 +129,7 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
         throw std::invalid_argument(error);
         return;
     }
-    // TODO Check if vertex shader exists.
-    //shader.SetVertexShader(GetDefaultShader()->GetVertexShader());    
+
     ID3D11VertexShader* vs;
     hr = _device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vs);
 
@@ -198,10 +181,6 @@ void ShaderManager::CreateShaderFromFile(std::string id) {
     }
 
     shader->SetPixelShader(ps);
-
-    // TODO Check if pixel shader exists.
-    //shader.SetPixelShader(GetDefaultShader()->GetPixelShader());
-    
     
     vsBlob->Release();
     psBlob->Release();

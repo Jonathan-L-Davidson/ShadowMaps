@@ -102,6 +102,7 @@ void TextureManager::LoadTextureFromPath(std::string path, Texture* texture, Tex
 		return;
 	}
 
+	// Set the texture to the model and enable the correct texture type.
 	texture->SetResourceTexture(texturePath, type);
 
 	switch (type) {
