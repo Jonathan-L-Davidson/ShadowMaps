@@ -24,9 +24,9 @@ public:
 	void SetParent(Object* parent) { transform->parent = parent->transform; };
 	Transform* GetParent() { return transform->parent ? transform->parent : nullptr; };
 
-	void SetPosition(XMFLOAT3 pos) { transform->SetPosition(pos); };
-	void AddPosition(XMFLOAT3 pos) { transform->AddPosition(pos); };
-	void SetRotation(XMFLOAT3 rad) { transform->SetRotation(rad); };
+	void SetPosition(Physics::Vector3 pos) { transform->position = pos; };
+	void AddPosition(Physics::Vector3 pos) { transform->position += pos; };
+	void SetRotation(Physics::Vector3 rad) { transform->rotation = rad; };
 	void GetPosition() { transform->GetPosition(); };
 	void GetRotation() { transform->GetRotation(); };
 	
