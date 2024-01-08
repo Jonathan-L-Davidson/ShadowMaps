@@ -7,6 +7,8 @@
 
 #define KeyDown(x) (GetAsyncKeyState(x) & 0x8000)
 
+using namespace Physics;
+
 void InputManager::Update() {
 	if (_renderManager->GetWindowInstance() == GetFocus()) {
 		HandleRenderKeys();
@@ -37,16 +39,16 @@ void InputManager::HandleMovementKeys() {
 	// WASD.
 	{
 		if (KeyDown(keyMoveForward)) {
-			cam->transform.AddPosition(XMFLOAT3(0, 0, _sceneManager->moveSpeed));
+			cam->transform.AddPosition(Vector3(0, 0, _sceneManager->moveSpeed));
 		}
 		if (KeyDown(keyMoveLeft)) {
-			cam->transform.AddPosition(XMFLOAT3(-_sceneManager->moveSpeed, 0, 0));
+			cam->transform.AddPosition(Vector3(-_sceneManager->moveSpeed, 0, 0));
 		}
 		if (KeyDown(keyMoveBackwards)) {
-			cam->transform.AddPosition(XMFLOAT3(0, 0, -_sceneManager->moveSpeed));
+			cam->transform.AddPosition(Vector3(0, 0, -_sceneManager->moveSpeed));
 		}
 		if (KeyDown(keyMoveRight)) {
-			cam->transform.AddPosition(XMFLOAT3(_sceneManager->moveSpeed, 0, 0));
+			cam->transform.AddPosition(Vector3(_sceneManager->moveSpeed, 0, 0));
 		}
 	}
 
@@ -57,24 +59,24 @@ void InputManager::HandleMovementKeys() {
 		// Y - looks up/down
 		// Z - rolls left/right -- this doesn't, it's some odd value I don't want to learn at the moment.
 		if (KeyDown(keyYawCamLeft)) {
-			cam->transform.AddRotation(XMFLOAT3(-_sceneManager->rotSpeed, 0, 0));
+			cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
 		}
 		if (KeyDown(keyYawCamRight)) {
-			cam->transform.AddRotation(XMFLOAT3(_sceneManager->rotSpeed, 0, 0));
+			cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
 		}
 
 		if (KeyDown(keyRollCamLeft)) {
-			cam->transform.AddRotation(XMFLOAT3(0, 0, _sceneManager->rotSpeed));
+			cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
 		}
 		if (KeyDown(keyRollCamRight)) {
-			cam->transform.AddRotation(XMFLOAT3(0, 0, -_sceneManager->rotSpeed));
+			cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
 		}
 		
 		if (KeyDown(keyPitchCamUp)) {
-			cam->transform.AddRotation(XMFLOAT3(0, _sceneManager->rotSpeed, 0));
+			cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
 		}
 		if (KeyDown(keyPitchCamDown)) {
-			cam->transform.AddRotation(XMFLOAT3(0, -_sceneManager->rotSpeed, 0));
+			cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
 		}
 
 	}

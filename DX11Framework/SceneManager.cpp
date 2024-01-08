@@ -8,12 +8,12 @@
 #include "Monkey.h"
 #include <string>
 
-XMFLOAT3 Vector2Float3(std::vector<float> vec) {
+Vector3 Vector2Float3(std::vector<float> vec) {
     float x, y, z;
     x = vec[0];
     y = vec[1];
     z = vec[2];
-    return XMFLOAT3(x, y, z);
+    return Vector3(x, y, z);
 }
 
 XMFLOAT4 Vector2Float4(std::vector<float> vec) {
@@ -30,7 +30,6 @@ XMFLOAT4 Vector2Float4(std::vector<float> vec) {
 #include "yaml-cpp/yaml.h"
 //Functionally equivalent to adding dependency in project
 #pragma comment(lib, "lib\\x64\\yaml-cppd.lib")
-
 
 SceneManager::SceneManager() {
     _lights = new std::vector<SimpleLight>();
@@ -89,30 +88,30 @@ void SceneManager::InitHardcodedObjects() {
 
     Object* cube = new Cube();
     cube->SetName("Test Cube");
-    _objectManager->AddObject(cube, XMFLOAT3(5.0f, 0.0f, 0.0f));
+    _objectManager->AddObject(cube, Vector3(5.0f, 0.0f, 0.0f));
     Texture* tex = _modelManager->GetTexture("Crate");
     cube->SetTexture(tex);
 
     Pyramid* _pyramid = new Pyramid();
     _pyramid->SetName("Test Pyramid");
-    _objectManager->AddObject(_pyramid, XMFLOAT3(-3.0f, 0.0f, 5.0f));
+    _objectManager->AddObject(_pyramid, Vector3(-3.0f, 0.0f, 5.0f));
 
     cube->SetParent(_pyramid);
 
     Monkey* monkey = new Monkey();
     monkey->SetName("Monkey");
-    _objectManager->AddObject(monkey, XMFLOAT3(-5, 0.0f, 5.0f));
+    _objectManager->AddObject(monkey, Vector3(-5, 0.0f, 5.0f));
     monkey->GetModel()->SetShader("VertexShading");
 
     Monkey* monkey2 = new Monkey();
     monkey2->SetName("Monkey2");
     _modelManager->LoadModelFromFile("monkey.obj", "Monkey2");
-    _objectManager->AddObject(monkey2, XMFLOAT3(5, 0.0f, 5.0f));
+    _objectManager->AddObject(monkey2, Vector3(5, 0.0f, 5.0f));
 
     //Object* photogrammetry = new Object();
     //photogrammetry->SetName("Photogrammetry");
     //_modelManager->LoadModelFromFile("photogrammetry.obj", "Photogrammetry");
-    //_objectManager->AddObject(photogrammetry, XMFLOAT3(0.0f, -80.0f, 0.0f));
+    //_objectManager->AddObject(photogrammetry, Vector3(0.0f, -80.0f, 0.0f));
     //Texture* photoTex = _modelManager->GetTexture("photogrammetry");
     //photogrammetry->SetTexture(photoTex);
 
@@ -121,7 +120,7 @@ void SceneManager::InitHardcodedObjects() {
     plane->SetColor(XMFLOAT4(0.05f, 0.1f, 0.1f, 1.0f));
 
     _modelManager->LoadModelFromFile("plane.obj", "Plane");
-    _objectManager->AddObject(plane, XMFLOAT3(0.0f, -5.0f, 0.0f));
+    _objectManager->AddObject(plane, Vector3(0.0f, -5.0f, 0.0f));
 
     cube->transform->parent = _pyramid->transform;
 }
@@ -129,8 +128,8 @@ void SceneManager::InitHardcodedObjects() {
 void SceneManager::SetupCameras() {
     //Camera
     Transform camPos;
-    camPos.position = XMFLOAT3(0.0f, 0.0f, -10.0f);
-    camPos.rotation = XMFLOAT3(0.0f, 0.0f, 50.0f);
+    camPos.position = Vector3(0.0f, 0.0f, -10.0f);
+    camPos.rotation = Vector3(0.0f, 0.0f, 50.0f);
 
     D3D11_VIEWPORT view = _renderManager->GetViewPort();
 
@@ -143,12 +142,12 @@ void SceneManager::SetupCameras() {
         _cameras[i] = cam;
     }
 
-    _cameras[CAM_DEFAULT_WASD]->SetPosition(XMFLOAT3(0.0f, 0.0f, -10.0f));
+    _cameras[CAM_DEFAULT_WASD]->SetPosition(Vector3(0.0f, 0.0f, -10.0f));
 
-    _cameras[CAM_LOOKDOWN]->SetPosition(XMFLOAT3(0.0f, 10.0f, 0.0f));
-    _cameras[CAM_LOOKDOWN]->SetRotation(XMFLOAT3(0.0f, -1.0f, 0.5f));
+    _cameras[CAM_LOOKDOWN]->SetPosition(Vector3(0.0f, 10.0f, 0.0f));
+    _cameras[CAM_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
 
-    _cameras[CAM_LOOKAT]->SetPosition(XMFLOAT3(0.0f, 5.0f, -10.0f));
+    _cameras[CAM_LOOKAT]->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
     _selectedObj = _objectManager->GetObjects().at(2)->transform;
 
 
@@ -303,11 +302,15 @@ bool SceneManager::LoadScene(const char* path) {
 
             // Experimenting with yaml node reading using a heads up from https://stackoverflow.com/questions/34757198/how-to-read-a-yaml-node-array-into-stdvector
             simpleLight.Position = Vector2Float4(light["Position"].as<std::vector<float>>());
-            simpleLight.Rotation = Vector2Float3(light["Rotation"].as<std::vector<float>>());
+            Vector3 rotation = Vector2Float3(light["Rotation"].as<std::vector<float>>());
+            simpleLight.Rotation = XMFLOAT3(rotation.x, rotation.y, rotation.z);
 
             simpleLight.Type = light["Type"].as<int>();
-            simpleLight.DiffuseColor = Vector2Float3(light["DiffuseColor"].as<std::vector<float>>());
-            simpleLight.SpecColor = Vector2Float3(light["SpecColor"].as<std::vector<float>>());
+
+            Vector3 diffColor = Vector2Float3(light["DiffuseColor"].as<std::vector<float>>());
+            simpleLight.DiffuseColor = XMFLOAT3(diffColor.x, diffColor.y, diffColor.z);
+            Vector3 specColor = Vector2Float3(light["SpecColor"].as<std::vector<float>>());
+            simpleLight.SpecColor = XMFLOAT3(specColor.x, specColor.y, specColor.z);
             simpleLight.SpecPower = light["SpecPower"].as<float>();
 
             simpleLight.FalloffDistance = light["FalloffDistance"].as<float>();
