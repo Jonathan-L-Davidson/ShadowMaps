@@ -6,7 +6,7 @@
 #include <DirectXMath.h>
 #include "Transform.h"
 
-using namespace Physics;
+using namespace DirectX;
 
 class Camera
 {
@@ -18,18 +18,18 @@ public:
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();
 
-    void SetPosition(Vector3 pos);
-    Vector3 GetPosition() { return transform.position; };
-    void SetRotation(Vector3 rotation);
-    Vector3 GetRotation() { return transform.rotation; };
+    void SetPosition(XMFLOAT3 pos);
+    XMFLOAT3 GetPosition() { return transform.position; };
+    void SetRotation(XMFLOAT3 rotation);
+    XMFLOAT3 GetRotation() { return transform.rotation; };
 
 
-    void LookTo(Vector3 rotation);
+    void LookTo(XMFLOAT3 rotation);
     void LookAt(Transform trans);
     void LookFromTrans();
 
-    DirectX::XMFLOAT4X4 GetView() { return _view; };
-    DirectX::XMFLOAT4X4 GetProjection() { return _projection; };
+    XMFLOAT4X4 GetView() { return _view; };
+    XMFLOAT4X4 GetProjection() { return _projection; };
 
     void SetAspect(float aspect) { _aspect = aspect; };
     float GetAspect() { return _aspect; };
@@ -40,9 +40,9 @@ public:
 
     Transform transform;
 private:
-    Vector3 _upDir = Vector3(0.0f, 1.0f, 0.0f);
-    DirectX::XMFLOAT4X4 _view;
-    DirectX::XMFLOAT4X4 _projection;
+    XMFLOAT3 _upDir = XMFLOAT3(0.0f, 1.0f, 0.0f);
+    XMFLOAT4X4 _view;
+    XMFLOAT4X4 _projection;
 
     float _aspect = 1.6f;
 

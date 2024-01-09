@@ -18,7 +18,7 @@ void Pyramid::Update(float deltaTime) {
     Object::Update(deltaTime);
 
     // Hovering effect.
-    SetPosition(Vector3(transform->position.x, (transform->position.y + sin(_currentTime * _hoverOffset) * deltaTime), transform->position.z));
+    SetPosition(XMFLOAT3(transform->position.x, (transform->position.y + sin(_currentTime * _hoverOffset) * deltaTime), transform->position.z));
 
     _currentTime += deltaTime;
 }

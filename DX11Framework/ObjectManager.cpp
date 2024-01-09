@@ -26,7 +26,7 @@ void ObjectManager::Update(float deltaTime) {
 	}
 }
 
-void ObjectManager::AddObject(Object* obj, Vector3 pos) {
+void ObjectManager::AddObject(Object* obj, XMFLOAT3 pos) {
 	if(obj->GetName().size() <= 0) { // If the name string is empty, do not add.
 		throw std::invalid_argument("Object name is empty!");
 		return;

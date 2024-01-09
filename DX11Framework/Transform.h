@@ -4,9 +4,7 @@
 #define TRANSFORM_H
 #include <DirectXMath.h>
 
-#include "Physics/Vector3.h"
-
-using namespace Physics;
+using namespace DirectX;
 
 class Object;
 
@@ -19,29 +17,29 @@ public:
 	~Transform();
 
 	// Position helpers!
-	void SetPosition(Vector3 pos) { position = pos; };
-	Vector3 GetPosition() { return position; };
-	void AddPosition(Vector3 pos);
+	void SetPosition(XMFLOAT3 pos) { position = pos; };
+	XMFLOAT3 GetPosition() { return position; };
+	void AddPosition(XMFLOAT3 pos);
 
-	void SetRotation(Vector3 rad) { rotation = rad; };
-	Vector3 GetRotation() { return rotation; };
-	void AddRotation(Vector3 rad);
-	Vector3 GetDirection();
+	void SetRotation(XMFLOAT3 rad) { rotation = rad; };
+	XMFLOAT3 GetRotation() { return rotation; };
+	void AddRotation(XMFLOAT3 rad);
+	XMFLOAT3 GetDirection();
 
 
 	void UpdateWorldMatrix();
 
-	DirectX::XMFLOAT4X4 GetTransform() { return _worldTransform; };
-	DirectX::XMMATRIX GetWorldMatrix() { return DirectX::XMLoadFloat4x4(&_worldTransform); };
+	XMFLOAT4X4 GetTransform() { return _worldTransform; };
+	XMMATRIX GetWorldMatrix() { return XMLoadFloat4x4(&_worldTransform); };
 
 	Transform* parent;
 	Transform* local;
 
-	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-	Vector3 rotation = Vector3(0.0f, 0.0f, 0.0f);
-	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+	XMFLOAT3 position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 rotation = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	XMFLOAT3 scale =	XMFLOAT3(1.0f, 1.0f, 1.0f);
 private:
-	DirectX::XMFLOAT4X4 _worldTransform;
+	XMFLOAT4X4 _worldTransform;
 };
 
 #endif

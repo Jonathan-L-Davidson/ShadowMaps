@@ -2,6 +2,15 @@
 #include "Object.h"
 #include "model.h"
 
+// This shouldnt be here, but it makes my life easier so screw it.
+XMFLOAT3 ADD(XMFLOAT3 a, XMFLOAT3 b) {
+	return XMFLOAT3(
+		a.x + b.x,
+		a.y + b.y,
+		a.z + b.z
+	);
+}
+
 Transform::Transform() {
 
 }
@@ -19,9 +28,17 @@ Transform::~Transform() {
 	local = nullptr;
 }
 
+void Transform::AddPosition(XMFLOAT3 pos) {
+	position = ADD(position, pos);
+}
+
+void Transform::AddRotation(XMFLOAT3 rad) {
+	rotation = ADD(rotation, rad);
+}
+
 // This is the part where I lose my sanity to stupid complex math. I need to convert an eular angle into a direction.
-Physics::Vector3 Transform::GetDirection() {
-	Physics::Vector3 dir = Physics::Vector3(
+XMFLOAT3 Transform::GetDirection() {
+	XMFLOAT3 dir = XMFLOAT3(
 		sinf(rotation.z) * sinf(rotation.y),
 		sinf(rotation.z) * sinf(rotation.y),
 		sinf(rotation.x)
