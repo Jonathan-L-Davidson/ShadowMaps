@@ -55,6 +55,8 @@ public:
 	Transform* transform;
 
 	template <typename T> T AddComponent(T component, bool awake = true);
+	template <typename T> inline T* GetComponent();
+
 	bool AttachComponent(Component* component);
 	void DetachComponent(Component& component);
 protected:

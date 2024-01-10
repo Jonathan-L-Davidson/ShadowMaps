@@ -19,6 +19,12 @@ void Object::Initialise() {
 
 void Object::Update(float deltaTime) {
 	UpdatePosition();
+
+	Component* comp = GetComponent<Component>();
+	if (comp != nullptr) {
+		comp->Update();
+	}
+
 	return;
 }
 
@@ -40,6 +46,17 @@ template <typename T> T Object::AddComponent(T component, bool awake) {
 
 	return component;
 }
+
+template <typename T> inline T* Object::GetComponent() {
+	for (int i = 0; i < _components.size(); i++) {
+		if (static_cast<T*>(_components.at(i)) != nullptr) {
+			return static_cast<T*>(_components.at(i));
+		}
+	}
+
+	return nullptr;
+}
+
 bool Object::AttachComponent(Component* component) {
 	_components.push_back(component);
 	return true;
