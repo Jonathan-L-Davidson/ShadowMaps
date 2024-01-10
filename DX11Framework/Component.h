@@ -13,7 +13,7 @@ class Component
 
 		virtual void Awake(Object* owner);
 		virtual void Start();
-		virtual void Update();
+		virtual void Update(float deltaTime);
 		virtual void Destroy();
 
 		virtual void Attach(Object* obj);

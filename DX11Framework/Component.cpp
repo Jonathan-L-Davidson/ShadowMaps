@@ -21,7 +21,7 @@ void Component::Start() {
 	return;
 }
 
-void Component::Update() {
+void Component::Update(float deltaTime) {
 	return;
 }
 
