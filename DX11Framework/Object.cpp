@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "Component.h"
 
 Object::Object() {
 	_color = XMFLOAT4(0.01f, 0.00675f, 0.01f, 1.0f);
@@ -26,3 +27,28 @@ void Object::UpdatePosition() {
 	transform->UpdateWorldMatrix();
 }
 
+template <typename T> T Object::AddComponent(T component, bool awake) {
+	
+	Component* component = new T();
+	if (!AttachComponent(component)) {
+		throw new std::exception("Failed to create component!");	
+	}
+
+	if (awake) {
+		component->Awake();
+	}
+
+	return component;
+}
+bool Object::AttachComponent(Component& component) {
+	_components.push_back(&component);
+	return true;
+}
+
+void Object::DetachComponent(Component& component) {
+	for (int i = 0; i = _components.size(); i++) {
+		if (&component == _components.at(i)) {
+			_components.erase(_components.begin() + i);
+		}
+	}
+}

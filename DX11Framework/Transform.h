@@ -21,11 +21,11 @@ public:
 	// Position helpers!
 	void SetPosition(Vector3 pos) { position = pos; };
 	Vector3 GetPosition() { return position; };
-	void AddPosition(Vector3 pos);
+	void AddPosition(Vector3 pos) { position += pos; };
 
 	void SetRotation(Vector3 rad) { rotation = rad; };
 	Vector3 GetRotation() { return rotation; };
-	void AddRotation(Vector3 rad);
+	void AddRotation(Vector3 rad) { rotation += rad; };
 	Vector3 GetDirection();
 
 

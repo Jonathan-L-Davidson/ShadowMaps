@@ -11,6 +11,7 @@ using namespace DirectX;
 
 class ObjectManager;
 class Renderer;
+class Component;
 
 class Object
 {
@@ -53,6 +54,9 @@ public:
 
 	Transform* transform;
 
+	template <typename T> T AddComponent(T component, bool awake = true);
+	bool AttachComponent(Component& component);
+	void DetachComponent(Component& component);
 protected:
 	std::string _name;
 	std::string _modelName;
@@ -64,6 +68,7 @@ protected:
 	ObjectManager* _objManager;
 	Renderer* _renderManager;
 
+	std::vector<Component*> _components;
 };
 
 #endif
