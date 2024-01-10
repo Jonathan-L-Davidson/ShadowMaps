@@ -40,8 +40,8 @@ template <typename T> T Object::AddComponent(T component, bool awake) {
 
 	return component;
 }
-bool Object::AttachComponent(Component& component) {
-	_components.push_back(&component);
+bool Object::AttachComponent(Component* component) {
+	_components.push_back(component);
 	return true;
 }
 

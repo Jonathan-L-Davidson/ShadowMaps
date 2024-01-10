@@ -35,7 +35,7 @@ void Component::Attach(Object* obj) {
 		Detach(_owner);
 	}
 
-	if (obj->AttachComponent(*this)) {
+	if (obj->AttachComponent(this)) {
 		_owner = obj;
 	}
 	else {

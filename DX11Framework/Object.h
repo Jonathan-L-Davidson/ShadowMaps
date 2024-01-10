@@ -55,7 +55,7 @@ public:
 	Transform* transform;
 
 	template <typename T> T AddComponent(T component, bool awake = true);
-	bool AttachComponent(Component& component);
+	bool AttachComponent(Component* component);
 	void DetachComponent(Component& component);
 protected:
 	std::string _name;

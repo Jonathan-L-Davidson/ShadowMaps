@@ -1,5 +1,6 @@
 #include "sceneManager.h"
 #include "ModelManager.h"
+#include "Component.h"
 #include "ObjectManager.h"
 #include "Renderer.h"
 #include "Camera.h"
@@ -7,6 +8,20 @@
 #include "Pyramid.h"
 #include "Monkey.h"
 #include <string>
+
+/// <summary>
+/// Returns a pointer to a newly constructed component based on the id given.
+/// </summary>
+/// <param name="id">Typename of the component</param>
+/// <returns></returns>
+Component* ParseComponent(const char* id) {
+    std::string idCheck = id;
+    if (idCheck == "Component") {
+        return new Component();
+    }
+
+    return nullptr;
+}
 
 Vector3 Vector2Float3(std::vector<float> vec) {
     float x, y, z;
@@ -236,6 +251,10 @@ bool SceneManager::LoadScene(const char* path) {
     ///          Position:
     ///          Rotation:
     ///          Scale:
+    ///      Components:
+    ///         Component:
+    ///          ID:
+    ///          Parameters:
 
 
     // SHADER
@@ -337,8 +356,21 @@ bool SceneManager::LoadScene(const char* path) {
             delete obj->transform;
             obj->transform = transform;
             obj->SetColor(Vector2Float4(object["Color"].as<std::vector<float>>()));
-            _objectManager->AddObject(obj, transform->GetPosition());
 
+            const YAML::Node components = object["Components"];
+            for (YAML::const_iterator ot = components.begin(); ot != components.end(); ot++) {
+                const YAML::Node component = *ot;
+                const YAML::Node id = component["ID"];
+                Component* comp = ParseComponent(id.as<std::string>().c_str());
+                
+                if (!comp) {
+                    continue;
+                }
+
+                comp->Attach(obj);
+            }
+
+            _objectManager->AddObject(obj, transform->GetPosition());
         }
     }
 
