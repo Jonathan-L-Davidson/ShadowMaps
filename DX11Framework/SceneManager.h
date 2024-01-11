@@ -23,7 +23,7 @@ class Transform;
 class SceneManager
 {
 public:
-	float moveSpeed = 1.2f;
+	float moveSpeed = 0.6f;
 	float rotSpeed = 1.0f;
 
 	SceneManager();

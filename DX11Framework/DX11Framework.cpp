@@ -32,6 +32,8 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
 
     _activeScene->LoadScene("Test");
 
+    _gameTimer = new Timer();
+
     return hr;
 }
 
@@ -64,24 +66,19 @@ void DX11Framework::RefreshScene() {
 
 void DX11Framework::Update()
 {
-    //Static initializes this value only once    
-    static ULONGLONG frameStart = GetTickCount64();
+    float deltaTime = _gameTimer->GetDelta();
+    _gameTimer->Tick();
 
-    ULONGLONG frameNow = GetTickCount64();
-    float deltaTime = (frameNow - frameStart) / 1000.0f;
-    frameStart = frameNow;
-
-    static float simpleCount = 0.0f;
-    simpleCount += deltaTime;
-
-    
-    // Normal standard loop.
-    if (delay > maxDelay) {
+    while (accumilator >= FPS60) {
+        std::string debug = std::to_string(accumilator) + "\n";
+        OutputDebugStringA(debug.c_str());
+        
         _inputManager->Update();
-        delay = 0;
+        _activeScene->Update(deltaTime);
+        accumilator = 0;
     }
-    _activeScene->Update(deltaTime);
-    _renderManager->Render(simpleCount, _activeScene);
 
-    delay += deltaTime;
+    _renderManager->Render(deltaTime, _activeScene);
+
+    accumilator += deltaTime;
 }

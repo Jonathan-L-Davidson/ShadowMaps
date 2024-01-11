@@ -1,5 +1,7 @@
 #pragma once
 
+#define FPS60 1.0f/60.0f
+
 #include <windows.h>
 #include <d3d11_4.h>
 #include <d3dcompiler.h>
@@ -9,7 +11,7 @@
 #include "WindowManager.h"
 #include "sceneManager.h"
 #include "InputManager.h"
-
+#include "Timer.h"
 //#include <wrl.h>
 
 using namespace DirectX;
@@ -37,6 +39,9 @@ private:
 
 	InputManager* _inputManager;
 
+	Timer* _gameTimer;
+
+	float accumilator;
 	float delay = 0.0f;
 	float maxDelay = 0.05f;
 };

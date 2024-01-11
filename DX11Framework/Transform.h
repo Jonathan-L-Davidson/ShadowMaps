@@ -32,7 +32,7 @@ public:
 	void UpdateWorldMatrix();
 
 	DirectX::XMFLOAT4X4 GetTransform() { return _worldTransform; };
-	DirectX::XMMATRIX GetWorldMatrix() { return DirectX::XMLoadFloat4x4(&_worldTransform); };
+	DirectX::XMMATRIX GetWorldMatrix() { UpdateWorldMatrix(); return DirectX::XMLoadFloat4x4(&_worldTransform); };
 
 	Transform* parent;
 	Transform* local;
