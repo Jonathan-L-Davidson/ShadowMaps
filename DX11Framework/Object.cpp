@@ -22,7 +22,7 @@ void Object::Update(float deltaTime) {
 
 	Component* comp = GetComponent<Component>();
 	if (comp != nullptr) {
-		comp->Update();
+		comp->Update(deltaTime);
 	}
 
 	return;

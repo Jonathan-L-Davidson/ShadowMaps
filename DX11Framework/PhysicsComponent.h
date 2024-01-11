@@ -20,7 +20,9 @@ class PhysicsComponent : Component
 		Vector3 m_forces;
 		Vector3 m_acceleration;
 
-		Vector3 m_maxSpeed = 10.0f
+		Vector3 m_oldPos;
+
+		float m_maxSpeed = 10.0f;
 };
 
 #endif // !PHYSICS_COMP_H

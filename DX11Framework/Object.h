@@ -28,8 +28,8 @@ public:
 	void SetPosition(Physics::Vector3 pos) { transform->position = pos; };
 	void AddPosition(Physics::Vector3 pos) { transform->position += pos; };
 	void SetRotation(Physics::Vector3 rad) { transform->rotation = rad; };
-	void GetPosition() { transform->GetPosition(); };
-	void GetRotation() { transform->GetRotation(); };
+	Vector3 GetPosition() { return transform->GetPosition(); };
+	Vector3 GetRotation() { return transform->GetRotation(); };
 	
 
 	// Manager references.

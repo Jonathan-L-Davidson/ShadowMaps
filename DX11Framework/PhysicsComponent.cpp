@@ -1,4 +1,5 @@
 #include "PhysicsComponent.h"
+#include "Object.h"
 
 void PhysicsComponent::Start() {
 
@@ -13,5 +14,5 @@ void PhysicsComponent::Destroy() {
 }
 
 void PhysicsComponent::UpdatePhysics(float deltaTime) {
-
+	
 }

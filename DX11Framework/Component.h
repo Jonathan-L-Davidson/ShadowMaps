@@ -18,7 +18,7 @@ class Component
 
 		virtual void Attach(Object* obj);
 		virtual void Detach(Object* obj);
-	private:
+	protected:
 		Object* _owner; // Object it's attached to.
 };
 
