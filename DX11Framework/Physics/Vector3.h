@@ -22,6 +22,7 @@ namespace Physics {
 		// Typical C++ ... - Mike Acton (2008)
 
 	public:
+		Vector3() = default;
 		Vector3(const real x, const real y, const real z) : x(x), y(y), z(z) {}
 
 		void Invert() {

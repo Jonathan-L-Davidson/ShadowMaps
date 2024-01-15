@@ -14,6 +14,9 @@ Object::~Object() {
 }
 
 void Object::Initialise() {
+	for (Component* component : _components) {
+		component->Start();
+	}
 	return;
 }
 

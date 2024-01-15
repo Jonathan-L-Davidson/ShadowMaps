@@ -8,20 +8,7 @@
 #include "Pyramid.h"
 #include "Monkey.h"
 #include <string>
-
-/// <summary>
-/// Returns a pointer to a newly constructed component based on the id given.
-/// </summary>
-/// <param name="id">Typename of the component</param>
-/// <returns></returns>
-Component* ParseComponent(const char* id) {
-    std::string idCheck = id;
-    if (idCheck == "Component") {
-        return new Component();
-    }
-
-    return nullptr;
-}
+#include "PhysicsComponent.h"
 
 Vector3 Vector2Float3(std::vector<float> vec) {
     float x, y, z;
@@ -181,6 +168,27 @@ Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugli
     return transform;
 }
 
+/// <summary>
+/// Returns a pointer to a newly constructed component based on the id given.
+/// </summary>
+/// <param name="id">Typename of the component</param>
+/// <returns></returns>
+Component* ParseComponent(const char* id, const YAML::Node& params) {
+    std::string idCheck = id;
+    if (idCheck == "Component") {
+        return new Component();
+    }
+
+    if (idCheck == "Physics") {
+        return (Component*)(new PhysicsComponent(
+            params["mass"].as<float>(),
+            params["dragCoef"].as<float>()
+        ));
+    }
+
+    return nullptr;
+}
+
 Object* SceneManager::ParseObjType(const char* type) {
     
     if (type == "Object")   return (Object*)(new Object());
@@ -252,9 +260,10 @@ bool SceneManager::LoadScene(const char* path) {
     ///          Rotation:
     ///          Scale:
     ///      Components:
-    ///         Component:
+    ///         - Component:
     ///          ID:
     ///          Parameters:
+    ///           - Parameter:
 
 
     // SHADER
@@ -361,7 +370,7 @@ bool SceneManager::LoadScene(const char* path) {
             for (YAML::const_iterator ot = components.begin(); ot != components.end(); ot++) {
                 const YAML::Node component = *ot;
                 const YAML::Node id = component["ID"];
-                Component* comp = ParseComponent(id.as<std::string>().c_str());
+                Component* comp = ParseComponent(id.as<std::string>().c_str(), component["Parameters"]);
                 
                 if (!comp) {
                     continue;
