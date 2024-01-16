@@ -2,6 +2,7 @@
 
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
+#include <winuser.h>
 
 class Renderer;
 class SceneManager;
@@ -23,6 +24,8 @@ public:
 	void HandleSceneKeys();
 	void HandleMiscKeys();
 private:
+
+	bool _keyDown[255];
 
 	Renderer* _renderManager;
 	SceneManager* _sceneManager;
@@ -49,6 +52,21 @@ private:
 	char keyWireframeToggle = 'X';
 
 
+	float moveSpeed = 5.0f;
+	char keyPhysMoveForward = VK_UP;
+	char keyPhysMoveBackwards = VK_DOWN;
+	char keyPhysMoveLeft = VK_LEFT;
+	char keyPhysMoveRight = VK_RIGHT;
+
+	char keyCycleObjUp = VK_PRIOR; // page up
+	char keyCycleObjDown = VK_NEXT; // page down
+	char keyOutputDelta = VK_END;
+
+
+	bool HandleKeyDown(const char input);
+	bool HandleKeyUp(const char input);
+	bool HandleKeyPressed(const char input);
+	void OutputCurrentObject();
 };
 
 #endif // !INPUTMANAGER_H

@@ -136,6 +136,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DDSTextureLoader.cpp" />
+    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DX11Framework.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DDSTextureLoader.h" />
+    <ClInclude Include="Debug.h" />
     <ClInclude Include="DX11Framework.h" />
     <ClInclude Include="FileHelpers.h" />
     <ClInclude Include="GlobalDefines.h" />

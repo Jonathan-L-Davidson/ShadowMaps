@@ -1,15 +1,51 @@
+#include "Debug.h"
 #include "InputManager.h"
 #include "DX11Framework.h"
 #include "Renderer.h"
 #include "SceneManager.h"
+#include "ObjectManager.h"
 #include "Camera.h"
 #include "PhysicsComponent.h"
 #include "Object.h"
-#include <winuser.h>
 
-#define KeyDown(x) (GetAsyncKeyState(x) & 0x8000)
+#define KeyDown(x) ((GetAsyncKeyState(x) & 0x8000))
 
 using namespace Physics;
+
+bool InputManager::HandleKeyDown(const char input) {
+
+	bool state = KeyDown(input);
+
+	_keyDown[input] = state;
+
+	return state;
+}
+
+bool InputManager::HandleKeyUp(const char input) {
+	bool prevFrameInput = _keyDown[input];
+	bool state = HandleKeyDown(input);
+	if (!state && prevFrameInput) { // if we are not pressing the button, and the keydown in the previous frame was true.
+		return true;
+	}
+	return false;
+}
+
+bool InputManager::HandleKeyPressed(const char input) {
+	bool prevFrameInput = _keyDown[input];
+	bool state = HandleKeyDown(input);
+	if (!prevFrameInput && state) { // The inverse of HandleKeyUp
+		return true;
+	}
+	return false;
+}
+
+
+void InputManager::OutputCurrentObject() {
+	int index = _sceneManager->GetActiveObjectIndex();
+	Object* currentObj = _sceneManager->GetActiveObject();
+	DebugPrintF("\nINPUT MANAGER: Selected Object is now: %i | %s\n", index, currentObj->GetName().c_str());
+
+}
 
 void InputManager::Update() {
 	if (_renderManager->GetWindowInstance() == GetFocus()) {
@@ -21,7 +57,7 @@ void InputManager::Update() {
 }
 
 void InputManager::HandleRenderKeys() {
-	if (KeyDown(keyWireframeToggle)) {
+	if (HandleKeyUp(keyWireframeToggle)) {
 		if (!wireframeToggle) {
 			_renderManager->SwapRS('W');
 			wireframeToggle = true;
@@ -42,34 +78,35 @@ void InputManager::HandleMovementKeys() {
 
 	// WASD.
 	{
-		if (KeyDown(keyMoveForward)) {
+		if (HandleKeyDown(keyMoveForward)) {
 			cam->transform.AddPosition(Vector3(0, 0, _sceneManager->moveSpeed));
 		}
-		if (KeyDown(keyMoveLeft)) {
+		if (HandleKeyDown(keyMoveLeft)) {
 			cam->transform.AddPosition(Vector3(-_sceneManager->moveSpeed, 0, 0));
 		}
-		if (KeyDown(keyMoveBackwards)) {
+		if (HandleKeyDown(keyMoveBackwards)) {
 			cam->transform.AddPosition(Vector3(0, 0, -_sceneManager->moveSpeed));
 		}
-		if (KeyDown(keyMoveRight)) {
+		if (HandleKeyDown(keyMoveRight)) {
 			cam->transform.AddPosition(Vector3(_sceneManager->moveSpeed, 0, 0));
 		}
-
-		if (physicsObj != nullptr) {
-			if (KeyDown(VK_UP)) {
-				physicsObj->AddForce(Vector3(0, 0, 1));
-			}
-			if (KeyDown(VK_DOWN)) {
-				physicsObj->AddForce(Vector3(0, 0, -1));
-			}
-			if (KeyDown(VK_LEFT)) {
-				physicsObj->AddForce(Vector3(-1, 0, 0));
-			}
-			if (KeyDown(VK_RIGHT)) {
-				physicsObj->AddForce(Vector3(1, 0, 0));
-			}
+	}
+	
+	if (physicsObj != nullptr) {
+		if (HandleKeyDown(VK_UP)) {
+			physicsObj->AddForce(Vector3(0, 0, moveSpeed));
+		}
+		if (HandleKeyDown(VK_DOWN)) {
+			physicsObj->AddForce(Vector3(0, 0, -moveSpeed));
+		}
+		if (HandleKeyDown(VK_LEFT)) {
+			physicsObj->AddForce(Vector3(-moveSpeed, 0, 0));
+		}
+		if (HandleKeyDown(VK_RIGHT)) {
+			physicsObj->AddForce(Vector3(moveSpeed, 0, 0));
 		}
 	}
+	
 
 	// Rotationals. I personally don't like my implementation of it, I really dislike it, even.
 	{
@@ -77,24 +114,24 @@ void InputManager::HandleMovementKeys() {
 		// X - looks left/right
 		// Y - looks up/down
 		// Z - rolls left/right -- this doesn't, it's some odd value I don't want to learn at the moment.
-		if (KeyDown(keyYawCamLeft)) {
+		if (HandleKeyDown(keyYawCamLeft)) {
 			cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
 		}
-		if (KeyDown(keyYawCamRight)) {
+		if (HandleKeyDown(keyYawCamRight)) {
 			cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
 		}
 
-		if (KeyDown(keyRollCamLeft)) {
+		if (HandleKeyDown(keyRollCamLeft)) {
 			cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
 		}
-		if (KeyDown(keyRollCamRight)) {
+		if (HandleKeyDown(keyRollCamRight)) {
 			cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
 		}
 		
-		if (KeyDown(keyPitchCamUp)) {
+		if (HandleKeyDown(keyPitchCamUp)) {
 			cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
 		}
-		if (KeyDown(keyPitchCamDown)) {
+		if (HandleKeyDown(keyPitchCamDown)) {
 			cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
 		}
 
@@ -102,21 +139,35 @@ void InputManager::HandleMovementKeys() {
 }
 
 void InputManager::HandleSceneKeys() {
-	if (KeyDown('1')) {
+	if (HandleKeyPressed('1')) {
 		_sceneManager->SetActiveCam(_sceneManager->GetCam(CAM_DEFAULT_WASD));
 	}
-	if (KeyDown('2')) {
+	if (HandleKeyPressed('2')) {
 		_sceneManager->SetActiveCam(_sceneManager->GetCam(CAM_LOOKAT));
 	}
-	if (KeyDown('3')) {
+	if (HandleKeyPressed('3')) {
 		_sceneManager->SetActiveCam(_sceneManager->GetCam(CAM_LOOKDOWN));
+	}
+
+	if (HandleKeyPressed(keyCycleObjUp)) {
+		_sceneManager->CycleObjects(1);
+		OutputCurrentObject();
+	}
+
+	if (HandleKeyPressed(keyCycleObjDown)) {
+		_sceneManager->CycleObjects(-1);
+		OutputCurrentObject();
 	}
 }
 
 void InputManager::HandleMiscKeys() {
 
-	if (KeyDown(VK_F5)) {
+	if (HandleKeyPressed(VK_F5)) {
 		_framework->RefreshScene();
+	}
+
+	if (HandleKeyPressed(keyOutputDelta)) {
+		_sceneManager->outputTime = !_sceneManager->outputTime;
 	}
 
 	/* // DX11 doesn't like me changing the depth values, woops!

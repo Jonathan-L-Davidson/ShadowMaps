@@ -23,8 +23,6 @@ void ObjectManager::Update(float deltaTime) {
 		if (obj) {
 			obj->Update(deltaTime);
 		}
-
-		Component* test = obj->GetComponent<Component>();
 	}
 }
 

@@ -69,10 +69,7 @@ void DX11Framework::Update()
     float deltaTime = _gameTimer->GetDelta();
     _gameTimer->Tick();
 
-    while (accumilator >= FPS60) {
-        std::string debug = std::to_string(accumilator) + "\n";
-        OutputDebugStringA(debug.c_str());
-        
+    while (accumilator >= FPS60) {        
         _inputManager->Update();
         _activeScene->Update(deltaTime);
         accumilator = 0;

@@ -43,8 +43,15 @@ public:
 	Camera* GetActiveCam() { return _activeCam; };
 	Camera* GetCam(int index) { return _cameras[index]; };
 
-	void SetActiveObject(Object* obj) { _selectedObj = obj; };
-	Object* GetActiveObject() { return _selectedObj; };
+	void SetActiveObject(int index);
+	void SetActiveObject(Object* obj, int index);
+	Object* GetActiveObject() { return _selectedObj; }
+	int GetActiveObjectIndex() { return _selectedObjIndex; }
+	void UpdateActiveObject();
+
+	unsigned int CycleObjects(int increment);
+	
+	bool outputTime = false;
 
 private:
 	ObjectManager* _objectManager;
@@ -55,6 +62,7 @@ private:
 
 	Camera* _cameras[CAMERA_AMOUNT];
 	Object* _selectedObj;
+	unsigned int _selectedObjIndex;
 
 	std::vector<SimpleLight>* _lights;
 

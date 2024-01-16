@@ -84,7 +84,9 @@ public:
 
 		if (awake) {
 			component->Awake();
+			component->Start();
 		}
+
 
 		return component;
 	}

@@ -1,3 +1,4 @@
+#include "Debug.h"
 #include "sceneManager.h"
 #include "ModelManager.h"
 #include "Component.h"
@@ -72,7 +73,11 @@ HRESULT SceneManager::Initialise(Renderer* renderer) {
 void SceneManager::Update(float deltaTime) {
     _objectManager->Update(deltaTime);
     UpdateCameras();
+
     _renderManager->SetCamera(_activeCam);
+
+    if(outputTime)	DebugPrintF("DeltaTime: %f \n", deltaTime);
+
 }
 
 void SceneManager::UpdateCameras() {
@@ -106,6 +111,7 @@ void SceneManager::InitHardcodedObjects() {
     monkey->GetModel()->SetShader("VertexShading");
     PhysicsComponent comp;
     monkey->AddComponent(comp);
+    monkey->GetComponent<PhysicsComponent>()->useConstantVelocity = true;
 
     Monkey* monkey2 = new Monkey();
     monkey2->SetName("Monkey2");
@@ -152,8 +158,8 @@ void SceneManager::SetupCameras() {
     _cameras[CAM_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
 
     _cameras[CAM_LOOKAT]->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
-    _selectedObj = _objectManager->GetObjects().at(2);
-
+    
+    SetActiveObject(2);
 
     _activeCam = _cameras[CAM_DEFAULT_WASD];
 }
@@ -184,7 +190,8 @@ Component* ParseComponent(const char* id, const YAML::Node& params) {
     if (idCheck == "Physics") {
         return (Component*)(new PhysicsComponent(
             params["mass"].as<float>(),
-            params["dragCoef"].as<float>()
+            params["dragCoef"].as<float>(),
+            params["useConstantVel"].as<bool>()
         ));
     }
 
@@ -401,4 +408,33 @@ void SceneManager::LoadLights(ConstantBuffer* cbData) {
     }
 
     std::copy(_lights->begin(), _lights->end(), cbData->Lights);
+}
+
+void SceneManager::SetActiveObject(int index) {
+    _selectedObjIndex = index; UpdateActiveObject();
+}
+
+void SceneManager::SetActiveObject(Object* obj, int index) {
+    _selectedObj = obj; _selectedObjIndex = index;
+}
+
+void SceneManager::UpdateActiveObject() {
+    _selectedObj = _objectManager->GetObjects().at(_selectedObjIndex);
+}
+
+unsigned int SceneManager::CycleObjects(int increment) {
+    if (_selectedObjIndex <= 0 && increment < 0) {
+        _selectedObj = 0;
+        increment = 0;
+    }
+
+    _selectedObjIndex += increment;
+
+    int indexSize = _objectManager->GetObjects().size();
+    if (indexSize <= _selectedObjIndex) {
+        _selectedObjIndex = indexSize - 1;
+    }
+
+    UpdateActiveObject();
+    return _selectedObjIndex;
 }

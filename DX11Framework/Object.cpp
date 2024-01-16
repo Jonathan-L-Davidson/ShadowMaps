@@ -10,6 +10,7 @@ Object::~Object() {
 	_model = nullptr;
 	_objManager = nullptr;
 	_renderManager = nullptr;
+	delete transform;
 }
 
 void Object::Initialise() {
@@ -20,8 +21,8 @@ void Object::Initialise() {
 }
 
 void Object::Update(float deltaTime) {
-	UpdatePosition();
 	UpdateComponents(deltaTime);
+	UpdatePosition();
 	return;
 }
 
