@@ -80,7 +80,7 @@ void SceneManager::UpdateCameras() {
     _cameras[CAM_LOOKDOWN]->LookFromTrans();
     
     if (_selectedObj != nullptr) {
-        _cameras[CAM_LOOKAT]->LookAt(*_selectedObj);
+        _cameras[CAM_LOOKAT]->LookAt(*_selectedObj->transform);
     }
 
 }
@@ -104,6 +104,8 @@ void SceneManager::InitHardcodedObjects() {
     monkey->SetName("Monkey");
     _objectManager->AddObject(monkey, Vector3(-5, 0.0f, 5.0f));
     monkey->GetModel()->SetShader("VertexShading");
+    PhysicsComponent comp;
+    monkey->AddComponent(comp);
 
     Monkey* monkey2 = new Monkey();
     monkey2->SetName("Monkey2");
@@ -150,7 +152,7 @@ void SceneManager::SetupCameras() {
     _cameras[CAM_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
 
     _cameras[CAM_LOOKAT]->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
-    _selectedObj = _objectManager->GetObjects().at(2)->transform;
+    _selectedObj = _objectManager->GetObjects().at(2);
 
 
     _activeCam = _cameras[CAM_DEFAULT_WASD];
@@ -377,6 +379,7 @@ bool SceneManager::LoadScene(const char* path) {
                 }
 
                 comp->Attach(obj);
+                comp->Awake();
             }
 
             _objectManager->AddObject(obj, transform->GetPosition());

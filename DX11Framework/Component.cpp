@@ -10,11 +10,10 @@ Component::~Component() {
 	Destroy();
 }
 
-void Component::Awake(Object* owner) {
-	if (!owner) {
+void Component::Awake() {
+	if (!_owner) {
 		throw new std::exception("No object attached!");
 	}
-	_owner = owner;
 }
 
 void Component::Start() {

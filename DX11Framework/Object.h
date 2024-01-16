@@ -54,9 +54,6 @@ public:
 
 	Transform* transform;
 
-	template <typename T> T AddComponent(T component, bool awake = true);
-	template <typename T> inline T* GetComponent();
-
 	bool AttachComponent(Component* component);
 	void DetachComponent(Component& component);
 protected:
@@ -67,10 +64,40 @@ protected:
 	XMFLOAT4 _color;
 
 	virtual void UpdatePosition();
+	void UpdateComponents(float deltaTime);
+	
 	ObjectManager* _objManager;
 	Renderer* _renderManager;
 
 	std::vector<Component*> _components;
+
+public:
+	template <typename T> Component* AddComponent(T type, bool awake = true) {
+
+		T* tempComp = new T();
+		Component* component = static_cast<Component*>(tempComp);
+		if (!component) {
+			throw new std::exception("Incorrect Component type!");
+		}
+		
+		component->Attach(this);
+
+		if (awake) {
+			component->Awake();
+		}
+
+		return component;
+	}
+
+	template <typename T> inline T* GetComponent() {
+		for (int i = 0; i < _components.size(); i++) {
+			if (static_cast<T*>(_components.at(i))) {
+				return static_cast<T*>(_components.at(i));
+			}
+		}
+
+		return nullptr;
+	}
 };
 
 #endif

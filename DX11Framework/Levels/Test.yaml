@@ -62,21 +62,6 @@
       FalloffGradientCoefficiency: 1.0
 
   Objects:
-    - Skybox:
-      Type: "Skybox"
-      Name: "Skybox"
-      ModelName: "Skybox"
-      Color: [0.001, 0.001, 0.001, 1.0]
-      Transform:
-        position: [0.0, 0.0, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        scale: [500.0, 500.0, 500.0]
-      Components:
-        - Test:
-          ID: "Physics"
-          Parameters:
-            mass: 100.0
-            dragCoef: 2.5
     - StaticObject:
       Type: "Static"
       Name: "Test 3D model"

@@ -4,7 +4,6 @@
 Object::Object() {
 	_color = XMFLOAT4(0.01f, 0.00675f, 0.01f, 1.0f);
 	transform = new Transform(this);
-	Initialise();
 }
 
 Object::~Object() {
@@ -22,12 +21,7 @@ void Object::Initialise() {
 
 void Object::Update(float deltaTime) {
 	UpdatePosition();
-
-	Component* comp = GetComponent<Component>();
-	if (comp != nullptr) {
-		comp->Update(deltaTime);
-	}
-
+	UpdateComponents(deltaTime);
 	return;
 }
 
@@ -36,28 +30,10 @@ void Object::UpdatePosition() {
 	transform->UpdateWorldMatrix();
 }
 
-template <typename T> T Object::AddComponent(T component, bool awake) {
-	
-	Component* component = new T();
-	if (!AttachComponent(component)) {
-		throw new std::exception("Failed to create component!");	
+void Object::UpdateComponents(float deltaTime) {
+	for (Component* comp : _components) {
+		if (comp != nullptr)	comp->Update(deltaTime);
 	}
-
-	if (awake) {
-		component->Awake();
-	}
-
-	return component;
-}
-
-template <typename T> inline T* Object::GetComponent() {
-	for (int i = 0; i < _components.size(); i++) {
-		if (static_cast<T*>(_components.at(i)) != nullptr) {
-			return static_cast<T*>(_components.at(i));
-		}
-	}
-
-	return nullptr;
 }
 
 bool Object::AttachComponent(Component* component) {

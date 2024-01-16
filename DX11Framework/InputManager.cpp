@@ -3,6 +3,8 @@
 #include "Renderer.h"
 #include "SceneManager.h"
 #include "Camera.h"
+#include "PhysicsComponent.h"
+#include "Object.h"
 #include <winuser.h>
 
 #define KeyDown(x) (GetAsyncKeyState(x) & 0x8000)
@@ -36,6 +38,8 @@ void InputManager::HandleRenderKeys() {
 void InputManager::HandleMovementKeys() {
 	Camera* cam = _sceneManager->GetActiveCam();
 	
+	PhysicsComponent* physicsObj = _sceneManager->GetActiveObject()->GetComponent<PhysicsComponent>();
+
 	// WASD.
 	{
 		if (KeyDown(keyMoveForward)) {
@@ -49,6 +53,21 @@ void InputManager::HandleMovementKeys() {
 		}
 		if (KeyDown(keyMoveRight)) {
 			cam->transform.AddPosition(Vector3(_sceneManager->moveSpeed, 0, 0));
+		}
+
+		if (physicsObj != nullptr) {
+			if (KeyDown(VK_UP)) {
+				physicsObj->AddForce(Vector3(0, 0, 1));
+			}
+			if (KeyDown(VK_DOWN)) {
+				physicsObj->AddForce(Vector3(0, 0, -1));
+			}
+			if (KeyDown(VK_LEFT)) {
+				physicsObj->AddForce(Vector3(-1, 0, 0));
+			}
+			if (KeyDown(VK_RIGHT)) {
+				physicsObj->AddForce(Vector3(1, 0, 0));
+			}
 		}
 	}
 

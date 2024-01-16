@@ -43,6 +43,9 @@ public:
 	Camera* GetActiveCam() { return _activeCam; };
 	Camera* GetCam(int index) { return _cameras[index]; };
 
+	void SetActiveObject(Object* obj) { _selectedObj = obj; };
+	Object* GetActiveObject() { return _selectedObj; };
+
 private:
 	ObjectManager* _objectManager;
 	ModelManager* _modelManager;
@@ -51,7 +54,7 @@ private:
 	Camera* _activeCam;
 
 	Camera* _cameras[CAMERA_AMOUNT];
-	Transform* _selectedObj;
+	Object* _selectedObj;
 
 	std::vector<SimpleLight>* _lights;
 

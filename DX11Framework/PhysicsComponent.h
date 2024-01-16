@@ -7,13 +7,16 @@
 #include "Physics/Vector3.h"
 using namespace Physics;
 
-class PhysicsComponent : Component
+class PhysicsComponent : public Component
 {
 	public:
+		PhysicsComponent() {};
 		PhysicsComponent(const float mass, const float dragCoef) : _mass(mass), _dragCoef(dragCoef) { };
 		void Start();
 		void Update(float deltaTime);
 		void Destroy();
+
+		void AddForce(const Vector3 force) { m_forces.push_back(force); };
 
 	private:
 		void UpdatePhysics(float deltaTime);
