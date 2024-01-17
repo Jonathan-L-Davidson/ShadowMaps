@@ -93,16 +93,19 @@ void InputManager::HandleMovementKeys() {
 	}
 	
 	if (physicsObj != nullptr) {
-		if (HandleKeyDown(VK_UP)) {
+		if (HandleKeyPressed(keyPhysConstantToggle)) {
+			physicsObj->useConstantVelocity = !physicsObj->useConstantVelocity;
+		}
+		if (HandleKeyDown(keyPhysMoveForward)) {
 			physicsObj->AddForce(Vector3(0, 0, moveSpeed));
 		}
-		if (HandleKeyDown(VK_DOWN)) {
+		if (HandleKeyDown(keyPhysMoveBackwards)) {
 			physicsObj->AddForce(Vector3(0, 0, -moveSpeed));
 		}
-		if (HandleKeyDown(VK_LEFT)) {
+		if (HandleKeyDown(keyPhysMoveLeft)) {
 			physicsObj->AddForce(Vector3(-moveSpeed, 0, 0));
 		}
-		if (HandleKeyDown(VK_RIGHT)) {
+		if (HandleKeyDown(keyPhysMoveRight)) {
 			physicsObj->AddForce(Vector3(moveSpeed, 0, 0));
 		}
 	}

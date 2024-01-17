@@ -57,6 +57,7 @@ private:
 	char keyPhysMoveBackwards = VK_DOWN;
 	char keyPhysMoveLeft = VK_LEFT;
 	char keyPhysMoveRight = VK_RIGHT;
+	char keyPhysConstantToggle = VK_HOME;
 
 	char keyCycleObjUp = VK_PRIOR; // page up
 	char keyCycleObjDown = VK_NEXT; // page down
