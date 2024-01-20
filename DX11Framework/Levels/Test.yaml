@@ -75,6 +75,7 @@
         - Test: 
           ID: "Physics"
           Parameters:
-            mass: 100.0
+            mass: 1.0
             dragCoef: 2.5
             useConstantVel: false
+            useConstantAcc: false

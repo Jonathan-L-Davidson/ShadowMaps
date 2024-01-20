@@ -93,9 +93,16 @@ void InputManager::HandleMovementKeys() {
 	}
 	
 	if (physicsObj != nullptr) {
-		if (HandleKeyPressed(keyPhysConstantToggle)) {
+		if (HandleKeyPressed(keyPhysConstantVelToggle)) {
 			physicsObj->useConstantVelocity = !physicsObj->useConstantVelocity;
+			DebugPrintF("Object's use constant velocity: %s\n", physicsObj->useConstantVelocity ? "True" : "False");
 		}
+
+		if (HandleKeyPressed(keyPhysConstantAccToggle)) {
+			physicsObj->useConstantAcceleration = !physicsObj->useConstantAcceleration;
+			DebugPrintF("Object's use constant acceleration: %s\n", physicsObj->useConstantAcceleration ? "True" : "False");
+		}
+
 		if (HandleKeyDown(keyPhysMoveForward)) {
 			physicsObj->AddForce(Vector3(0, 0, moveSpeed));
 		}
@@ -107,6 +114,9 @@ void InputManager::HandleMovementKeys() {
 		}
 		if (HandleKeyDown(keyPhysMoveRight)) {
 			physicsObj->AddForce(Vector3(moveSpeed, 0, 0));
+		}
+		if (HandleKeyDown(keyPhysJump)) {
+			physicsObj->AddForce(Vector3(0, jumpForce, 0));
 		}
 	}
 	

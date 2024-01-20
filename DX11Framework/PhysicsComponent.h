@@ -14,10 +14,12 @@ class PhysicsComponent : public Component
 		PhysicsComponent
 		(	const float mass,
 			const float dragCoef,
-			const bool useConstantVel) :
+			const bool useConstantVel,
+			const bool useConstantAcc) :
 			mass(mass),
 			dragCoef(dragCoef),
-			useConstantVelocity(useConstantVel)
+			useConstantVelocity(useConstantVel),
+			useConstantAcceleration(useConstantAcc)
 			{ };
 		void Start();
 		void Update(float deltaTime);
@@ -25,14 +27,21 @@ class PhysicsComponent : public Component
 
 		void AddForce(const Vector3 force) { m_forces.push_back(force); };
 
-		float mass = 10.0f;
+		float mass = 1.0f;
+		float dragAmount = 1.0f;
 		float dragCoef = 1.05f; // cube coeff
+		Vector3 gravity = Vector3(0, -981.0f, 0);
+
+		bool useGravity = true;
+		bool hasFriction = false;
 		bool useConstantVelocity = false;
-	private:
+		bool useConstantAcceleration = false;
+private:
 		void UpdatePhysics(float deltaTime);
 		void CalculateForces(float deltaTime);
 		void CalculateAcceleration(float deltaTime);
 		void CalculateVelocity(float deltaTime);
+		void HandleGravity();
 
 		void UpdatePosition(float deltatime);
 

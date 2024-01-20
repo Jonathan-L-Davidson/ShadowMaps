@@ -111,7 +111,6 @@ void SceneManager::InitHardcodedObjects() {
     monkey->GetModel()->SetShader("VertexShading");
     PhysicsComponent comp;
     monkey->AddComponent(comp);
-    monkey->GetComponent<PhysicsComponent>()->useConstantVelocity = true;
 
     Monkey* monkey2 = new Monkey();
     monkey2->SetName("Monkey2");
@@ -191,7 +190,8 @@ Component* ParseComponent(const char* id, const YAML::Node& params) {
         return (Component*)(new PhysicsComponent(
             params["mass"].as<float>(),
             params["dragCoef"].as<float>(),
-            params["useConstantVel"].as<bool>()
+            params["useConstantVel"].as<bool>(),
+            params["useConstantAcc"].as<bool>()
         ));
     }
 

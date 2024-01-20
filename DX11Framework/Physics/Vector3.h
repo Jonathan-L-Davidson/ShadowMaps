@@ -69,6 +69,14 @@ namespace Physics {
 		}
 
 		/////
+		/// Division
+		/////
+
+		Vector3 operator/(const real value) const {
+			return Vector3(x / value, y / value, z / value);
+		}
+
+		/////
 		/// Addition
 		/////
 

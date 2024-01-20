@@ -52,12 +52,15 @@ private:
 	char keyWireframeToggle = 'X';
 
 
-	float moveSpeed = 5.0f;
+	float moveSpeed = 5000.0f;
+	float jumpForce = 100000.0f;
 	char keyPhysMoveForward = VK_UP;
 	char keyPhysMoveBackwards = VK_DOWN;
 	char keyPhysMoveLeft = VK_LEFT;
 	char keyPhysMoveRight = VK_RIGHT;
-	char keyPhysConstantToggle = VK_HOME;
+	char keyPhysJump = VK_SPACE;
+	char keyPhysConstantVelToggle = VK_HOME;
+	char keyPhysConstantAccToggle = VK_INSERT;
 
 	char keyCycleObjUp = VK_PRIOR; // page up
 	char keyCycleObjDown = VK_NEXT; // page down
