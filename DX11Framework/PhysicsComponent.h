@@ -25,10 +25,10 @@ class PhysicsComponent : public Component
 		void Update(float deltaTime);
 		void Destroy();
 
-		void AddForce(const Vector3 force) { m_forces.push_back(force); };
+		void AddForce(const Vector3 force, bool useMass = true) { m_forces.push_back(force * (useMass ? mass : 1)); };
 
 		float mass = 1.0f;
-		float dragAmount = 1.0f;
+		float dragAmount = 5.0f;
 		float dragCoef = 1.05f; // cube coeff
 		Vector3 gravity = Vector3(0, -981.0f, 0);
 

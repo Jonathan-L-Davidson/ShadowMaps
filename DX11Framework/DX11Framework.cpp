@@ -1,3 +1,4 @@
+#include "Debug.h"
 #include "DX11Framework.h"
 #include <string>
 #include "Dxgidebug.h"
@@ -67,15 +68,15 @@ void DX11Framework::RefreshScene() {
 void DX11Framework::Update()
 {
     float deltaTime = _gameTimer->GetDelta();
-    _gameTimer->Tick();
 
-    while (accumilator >= FPS60) {        
+    while (accumilator > FPS60) {        
         _inputManager->Update();
-        _activeScene->Update(deltaTime);
-        accumilator = 0;
+        _activeScene->Update(accumilator);
+        accumilator -= FPS60;
     }
 
-    _renderManager->Render(deltaTime, _activeScene);
+    _gameTimer->Tick();
 
     accumilator += deltaTime;
+    _renderManager->Render(deltaTime, _activeScene);
 }

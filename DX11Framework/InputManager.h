@@ -52,8 +52,8 @@ private:
 	char keyWireframeToggle = 'X';
 
 
-	float moveSpeed = 5000.0f;
-	float jumpForce = 100000.0f;
+	float moveSpeed = 50.0f;
+	float jumpForce = 100.0f;
 	char keyPhysMoveForward = VK_UP;
 	char keyPhysMoveBackwards = VK_DOWN;
 	char keyPhysMoveLeft = VK_LEFT;

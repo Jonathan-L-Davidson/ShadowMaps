@@ -1,3 +1,4 @@
+#include "Debug.h"
 #include "PhysicsComponent.h"
 #include "Object.h"
 
@@ -19,29 +20,27 @@ void PhysicsComponent::CalculateForces(float deltaTime) {
 	}
 
 	// handle drag:
-	if (m_velocity.Magnitude() != 0) {
-		Vector3 dragForce;
+	float velMagnitude = m_velocity.SquareMagnitude();
+	if (velMagnitude != 0 && hasFriction) {
+		DebugPrintF("Velocity: %f \n", velMagnitude);
+	//	// turbulent
+		float force = (0.5f * (dragAmount * (velMagnitude * velMagnitude) * dragCoef));
+		Vector3 dragForce = m_velocity;
+		dragForce.Normalise();
+		dragForce *= force * -1;
 
-		// turbulent
-		//dragForce = (0.5f * (dragAmount * (m_velocity * m_velocity) * dragCoef)) * -1;
-		dragForce = m_velocity;
-		dragForce *= m_velocity;
-		// I GIVE UP I CANT FIGURE OUT WHY MY OVERRIDES DON'T WORK
-		// AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-
-
-		// laminar
-		dragForce = (0.5f * (m_velocity * dragAmount * dragCoef)) * -1;
+	//	// laminar
+	//	dragForce = (0.5f * (m_velocity * dragAmount * dragCoef)) * -1;
 		m_forceTotal += dragForce;
 	}
 }
 
 void PhysicsComponent::CalculateAcceleration(float deltaTime) {
 	if (!useConstantAcceleration) {
-		m_acceleration += m_forceTotal / mass;
+		m_acceleration += (m_forceTotal / mass) * deltaTime;
 	}
 	else {
-		m_acceleration += m_forceTotal * deltaTime;
+		m_acceleration += m_forceTotal / mass;
 	}
 }
 
@@ -50,7 +49,7 @@ void PhysicsComponent::CalculateVelocity(float deltaTime) {
 		m_velocity += m_acceleration * deltaTime;
 	}
 	else {
-		m_velocity += m_acceleration * deltaTime;
+		m_velocity += m_acceleration;
 	}
 }
 
@@ -83,6 +82,7 @@ void PhysicsComponent::UpdatePhysics(float deltaTime) {
 	m_forceTotal = Vector3(); // Resets it by returning default values.
 	m_forces.clear();
 	m_acceleration = Vector3();
+	// 
 }
 
 void PhysicsComponent::HandleGravity() {
