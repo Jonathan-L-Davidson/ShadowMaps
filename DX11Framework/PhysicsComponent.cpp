@@ -19,19 +19,51 @@ void PhysicsComponent::CalculateForces(float deltaTime) {
 		m_forceTotal += force;
 	}
 
-	// handle drag:
 	float velMagnitude = m_velocity.SquareMagnitude();
-	if (velMagnitude != 0 && hasFriction) {
-		DebugPrintF("Velocity: %f \n", velMagnitude);
-	//	// turbulent
-		float force = (0.5f * (dragAmount * (velMagnitude * velMagnitude) * dragCoef));
-		Vector3 dragForce = m_velocity;
-		dragForce.Normalise();
-		dragForce *= force * -1;
 
-	//	// laminar
-	//	dragForce = (0.5f * (m_velocity * dragAmount * dragCoef)) * -1;
-		m_forceTotal += dragForce;
+	// handle drag:
+	if (velMagnitude != 0) {
+		//DebugPrintF("Velocity: %f \n", velMagnitude);
+		if (useDrag) {
+			Vector3 dragForce = m_velocity;
+			dragForce.Normalise();
+
+			// turbulent
+			if (useTurbulentDrag) {
+				float force = (0.5f * (dragAmount * velMagnitude * dragCoef));
+				dragForce *= force * -1;
+			}
+			// laminar
+			else if (useLaminarDrag) {
+				float force = (0.5f * (dragAmount * velMagnitude * dragCoef));
+				dragForce *= force * -1;
+			}
+		
+			m_forceTotal += dragForce;
+		}
+	}
+
+	// handle friction:
+	if (hasFriction) {
+		Vector3 forceApplication = m_forceTotal;
+		forceApplication.Normalise();
+		// kinetic friction
+		if (velMagnitude > (friction * frictionCoef)) {
+			forceApplication *= (friction * mass) * frictionCoef;
+			forceApplication *= -1;
+
+			m_forceTotal += forceApplication;
+		}
+		// static friction
+		else {
+			if (m_forceTotal.SquareMagnitude() < friction) {
+				m_forceTotal = Vector3(); // we apply no more forces.
+
+				if (velMagnitude != 0) {
+					m_velocity -= m_velocity / ((friction * mass) * frictionCoef); // this is cheating, I know.
+				}
+			}
+		}
 	}
 }
 
@@ -96,8 +128,8 @@ void PhysicsComponent::HandleGravity() {
 		
 		hasFriction = true;
 	}
-	else {
-		AddForce(gravity);
+	else if(_owner->GetPosition().y > 0) {
+		AddForce(gravity * mass);
 		hasFriction = false;
 	}
 }

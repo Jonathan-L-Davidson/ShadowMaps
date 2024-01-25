@@ -30,12 +30,20 @@ class PhysicsComponent : public Component
 		float mass = 1.0f;
 		float dragAmount = 5.0f;
 		float dragCoef = 1.05f; // cube coeff
-		Vector3 gravity = Vector3(0, -981.0f, 0);
+		Vector3 gravity = Vector3(0, -9.81f, 0);
 
 		bool useGravity = true;
 		bool hasFriction = false;
 		bool useConstantVelocity = false;
 		bool useConstantAcceleration = false;
+
+		bool useDrag = true;
+		bool useTurbulentDrag = true;
+		bool useLaminarDrag = false;
+		
+		float friction = 10.0f;
+		float frictionCoef = 1.0f;
+
 private:
 		void UpdatePhysics(float deltaTime);
 		void CalculateForces(float deltaTime);
