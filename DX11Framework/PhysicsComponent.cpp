@@ -30,7 +30,7 @@ void PhysicsComponent::CalculateForces(float deltaTime) {
 
 			// turbulent
 			if (useTurbulentDrag) {
-				float force = (0.5f * (dragAmount * velMagnitude * dragCoef));
+				float force = (0.5f * (dragAmount * velMagnitude * dragCoef)); // TO DO, Figure out how to use the reference area "A" in the equation.
 				dragForce *= force * -1;
 			}
 			// laminar
