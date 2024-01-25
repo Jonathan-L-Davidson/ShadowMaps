@@ -35,7 +35,8 @@ public:
 	// Manager references.
 	void SetManager(ObjectManager* manager) { _objManager = manager; };
 	void SetRenderManager(Renderer* manager) { _renderManager = manager; };
-	
+	ObjectManager* GetObjManager() { return _objManager; };
+
 	// Model related things.
 	Model* GetModel() { return _model; };
 	void SetModel(Model* model) { _model = model; };

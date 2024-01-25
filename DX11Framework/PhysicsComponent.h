@@ -22,7 +22,7 @@ class PhysicsComponent : public Component
 			useConstantAcceleration(useConstantAcc)
 			{ };
 		void Start();
-		void Update(float deltaTime);
+		virtual void Update(float deltaTime);
 		void Destroy();
 
 		void AddForce(const Vector3 force, bool useMass = true) { m_forces.push_back(force * (useMass ? mass : 1)); };
@@ -50,6 +50,7 @@ private:
 		void CalculateAcceleration(float deltaTime);
 		void CalculateVelocity(float deltaTime);
 		void HandleGravity();
+		void HandleMagnitude();
 
 		void UpdatePosition(float deltatime);
 

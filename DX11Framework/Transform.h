@@ -42,6 +42,19 @@ public:
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 private:
 	DirectX::XMFLOAT4X4 _worldTransform;
+public:
+	Transform operator+(const Transform& add) {
+		Transform returnedValue;
+		returnedValue.position = position + add.position;
+		returnedValue.rotation = rotation + add.rotation;
+
+		returnedValue.scale.x = scale.x * add.scale.x;
+		returnedValue.scale.y = scale.y * add.scale.y;
+		returnedValue.scale.z = scale.z * add.scale.z;
+
+		return returnedValue;
+	}
+
 };
 
 #endif

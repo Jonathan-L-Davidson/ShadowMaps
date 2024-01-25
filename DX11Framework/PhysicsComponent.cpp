@@ -110,11 +110,11 @@ void PhysicsComponent::UpdatePhysics(float deltaTime) {
 	CalculateAcceleration(deltaTime);
 	CalculateVelocity(deltaTime);
 	UpdatePosition(deltaTime);
+	HandleMagnitude();
 
 	m_forceTotal = Vector3(); // Resets it by returning default values.
 	m_forces.clear();
 	m_acceleration = Vector3();
-	// 
 }
 
 void PhysicsComponent::HandleGravity() {
@@ -132,4 +132,10 @@ void PhysicsComponent::HandleGravity() {
 		AddForce(gravity * mass);
 		hasFriction = false;
 	}
+}
+
+void PhysicsComponent::HandleMagnitude() {
+	// idk how to calculate the magnitude :(
+	// I need to think of how this works. It might be m_force_total realistically, before acceleration is applied.
+	// no idea.
 }
