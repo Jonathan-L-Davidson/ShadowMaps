@@ -1,4 +1,5 @@
 #include "Debug.h"
+#include "Rigidbody.h"
 #include "PhysicsComponent.h"
 #include "Object.h"
 
@@ -28,17 +29,21 @@ void PhysicsComponent::CalculateForces(float deltaTime) {
 			Vector3 dragForce = m_velocity;
 			dragForce.Normalise();
 
+
 			// turbulent
-			if (useTurbulentDrag) {
-				float force = (0.5f * (dragAmount * velMagnitude * dragCoef)); // TO DO, Figure out how to use the reference area "A" in the equation.
-				dragForce *= force * -1;
+			Rigidbody* rb = _owner->GetComponent<Rigidbody>();
+			if (useTurbulentDrag && rb != nullptr) {
+				float force = (0.5f * (dragAmount * velMagnitude * dragCoef * rb->GetContactArea(dragForce)));
+				dragForce *= force;
 			}
 			// laminar
 			else if (useLaminarDrag) {
 				float force = (0.5f * (dragAmount * velMagnitude * dragCoef));
-				dragForce *= force * -1;
+				dragForce *= force;
 			}
-		
+
+			dragForce *= -1;
+			// DebugPrintF("dragForce = X: %f,Y: %f, Z: %z \n m_velocity = X: %f, Y: %f, Z: %f \n", dragForce.x, dragForce.y, dragForce.z, m_velocity.x, m_velocity.y, m_velocity.z);
 			m_forceTotal += dragForce;
 		}
 	}
@@ -47,10 +52,16 @@ void PhysicsComponent::CalculateForces(float deltaTime) {
 	if (hasFriction) {
 		Vector3 forceApplication = m_forceTotal;
 		forceApplication.Normalise();
+		
+		// Use calculation once
+		// if it's static, then don't apply momentum.
+		// if not, add the friction force.
+
+
 		// kinetic friction
 		if (velMagnitude > (friction * frictionCoef)) {
 			forceApplication *= (friction * mass) * frictionCoef;
-			forceApplication *= -1;
+			//forceApplication *= -1;
 
 			m_forceTotal += forceApplication;
 		}
@@ -126,7 +137,7 @@ void PhysicsComponent::HandleGravity() {
 			m_velocity.y = 0;
 		}
 		
-		hasFriction = true;
+		//hasFriction = true;
 	}
 	else if(_owner->GetPosition().y > 0) {
 		AddForce(gravity * mass);

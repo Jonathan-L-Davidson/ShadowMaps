@@ -76,6 +76,6 @@
           ID: "Physics"
           Parameters:
             mass: 1.0
-            dragCoef: 2.5
+            dragCoef: 10.5
             useConstantVel: false
             useConstantAcc: false

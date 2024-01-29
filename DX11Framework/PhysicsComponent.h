@@ -29,7 +29,7 @@ class PhysicsComponent : public Component
 
 		float mass = 1.0f;
 		float dragAmount = 5.0f;
-		float dragCoef = 1.05f; // cube coeff
+		float dragCoef = 3.05f; // cube coeff
 		Vector3 gravity = Vector3(0, -9.81f, 0);
 
 		bool useGravity = true;

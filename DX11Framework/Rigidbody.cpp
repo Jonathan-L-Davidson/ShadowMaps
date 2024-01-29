@@ -33,3 +33,7 @@ void Rigidbody::UpdateCollision() {
 	//
 	// return
 }
+
+float Rigidbody::GetContactArea(const Vector3& direction) {
+	return 1.0f; 
+}

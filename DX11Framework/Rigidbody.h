@@ -8,23 +8,29 @@ class Collider;
 class Cube;
 
 class Rigidbody : public PhysicsComponent {
-	public:
-		using PhysicsComponent::PhysicsComponent;
+public:
+	using PhysicsComponent::PhysicsComponent;
+	~Rigidbody();
 
-		~Rigidbody();
 
-		void CreateCollider(const float radius);
-		void CreateCollider(const Cube& cube);
+	void CreateCollider(const float radius);
+	void CreateCollider(const Cube& cube);
+
+	void SetOffset(Transform offset) { _offsetTransform = offset; };
 	
-		void SetOffset(Transform offset) { _offsetTransform = offset; };
-		
-		void Update(float deltaTime);
-		void UpdateCollision();
+	void Update(float deltaTime);
+	void UpdateCollision();
 
-	private:
-		Collider* _collider;
-		Transform* _transform;
-		Transform _offsetTransform;
+	/// <summary>
+	/// Returns the area of the face the direction is facing in.
+	/// </summary>
+	/// <param name="direction"></param>
+	/// <returns></returns>
+	float GetContactArea(const Vector3& direction);
+private:
+	Collider* _collider;
+	Transform* _transform;
+	Transform _offsetTransform;
 
 };
 
