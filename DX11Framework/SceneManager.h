@@ -43,9 +43,9 @@ public:
 	Camera* GetActiveCam() { return _activeCam; };
 	Camera* GetCam(int index) { return _cameras[index]; };
 
-	void SetActiveObject(int index);
-	void SetActiveObject(Object* obj, int index);
-	Object* GetActiveObject() { return _selectedObj; }
+	Object* SetActiveObject(int index);
+	Object* SetActiveObject(Object* obj, int index);
+	Object* GetActiveObject() { return _selectedObj ? _selectedObj : SetActiveObject(_selectedObjIndex); }
 	int GetActiveObjectIndex() { return _selectedObjIndex; }
 	void UpdateActiveObject();
 

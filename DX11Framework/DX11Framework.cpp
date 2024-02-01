@@ -5,7 +5,6 @@
 
 //#define RETURNFAIL(x) if(FAILED(x)) return x;
 
-
 HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
 {
     HRESULT hr = S_OK;

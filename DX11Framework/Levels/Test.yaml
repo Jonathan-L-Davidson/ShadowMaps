@@ -1,81 +1,129 @@
 ---
-  Shaders:
-    - Skybox:
-      Name: "Skybox"
-  Textures:
-    - Plastic:
-      Name: "plastic"
-    - Skybox:
-      Name: "Skybox"
-  
-  Models:
-    - Skybox:
-      Name: "Skybox"
-      ObjPath: "InvertedCube.obj"
-      Shader: "Skybox"
-      Texture: "Skybox"
-      Transform:
-        position: [0.0, 0.0, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        scale: [1.0, 1.0, 1.0]
-    
-    - ExampleModel:
-      Name: "PrintedSpeaker"
-      ObjPath: "3DPrintBeanieHeadphones.obj"
-      Shader: "Default"
-      Texture: "plastic"
-      Transform:
-        position: [0.0, 0.0, 0.0]
-        rotation: [0.0, 0.0, 0.0]
-        scale: [1.0, 1.0, 1.0]
-
-  Lights:
-    - Light:
-      Position: [30.0, 0.0, -50.0, 1.0]
-      Rotation: [0.5, 0.0, 0.0]
-      Type: 1
-      DiffuseColor: [0.3, 0.6, 0.3]
-      SpecColor: [0.4, 0.6, 0.4]
-      SpecPower: 15.0
-      FalloffDistance: 5.0
-      FalloffDropDistance: 2.0
-      FalloffGradientCoefficiency: 2.0
-    - Light2:
-      Position: [-15.0, 5.0, -7.0, 1.0]
-      Rotation: [0.5, 0.0, 0.0]
-      Type: 1
-      DiffuseColor: [0.1, 0.1, 0.6]
-      SpecColor: [0.2, 0.2, 0.6]
-      SpecPower: 10.0
-      FalloffDistance: 5.0
-      FalloffDropDistance: 3.0
-      FalloffGradientCoefficiency: 1.0
-    - Light3:
-      Position: [35.0, 5.0, 30.0, 1.0]
-      Rotation: [0.5, 0.0, 0.0]
-      Type: 1
-      DiffuseColor: [0.4, 0.4, 0.4]
-      SpecColor: [0.6, 0.6, 0.6]
-      SpecPower: 5.0
-      FalloffDistance: 3
-      FalloffDropDistance: 1.5
-      FalloffGradientCoefficiency: 1.0
-
-  Objects:
-    - StaticObject:
-      Type: "Static"
-      Name: "Test 3D model"
-      ModelName: "PrintedSpeaker"
-      Color: [0.001, 0.001, 0.001, 1.0]
-      Transform:
-        position: [30.0, -5.0, 30.0]
-        rotation: [0.0, 1.5, 0.0]
-        scale: [0.1, 0.1, 0.1]
-      Components:
-        - Test: 
-          ID: "Physics"
-          Parameters:
-            mass: 1.0
-            dragCoef: 10.5
-            useConstantVel: false
-            useConstantAcc: false
+UseHardcodedModels: false
+Shaders:
+  - Skybox:
+    Name: Skybox
+Textures:
+  - Plastic:
+    Name: plastic
+  - Skybox:
+    Name: Skybox
+  - Ball:
+    Name: Ball
+Models:
+  - Skybox:
+    Name: Skybox
+    ObjPath: InvertedCube.obj
+    Shader: Skybox
+    Texture: Skybox
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
+  - ExampleModel:
+    Name: PrintedSpeaker
+    ObjPath: 3DPrintBeanieHeadphones.obj
+    Shader: Default
+    Texture: plastic
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
+  - Ball:
+    Name: Ball
+    ObjPath: ball.obj
+    Shader: Default
+    Texture: Ball
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
+Lights:
+  - Light:
+    Position: [30.0, 0.0, -50.0, 1.0]
+    Rotation: [0.5, 0.0, 0.0]
+    Type: 1
+    DiffuseColor: [0.3, 0.6, 0.3]
+    SpecColor: [0.4, 0.6, 0.4]
+    SpecPower: 15
+    FalloffDistance: 5
+    FalloffDropDistance: 2
+    FalloffGradientCoefficiency: 2
+  - Light2:
+    Position: [-15.0, 5.0, -7.0, 1.0]
+    Rotation: [0.5, 0.0, 0.0]
+    Type: 1
+    DiffuseColor: [0.1, 0.1, 0.6]
+    SpecColor: [0.2, 0.2, 0.6]
+    SpecPower: 10
+    FalloffDistance: 5
+    FalloffDropDistance: 3
+    FalloffGradientCoefficiency: 1
+  - Light3:
+    Position: [35.0, 5.0, 30.0, 1.0]
+    Rotation: [0.5, 0.0, 0.0]
+    Type: 1
+    DiffuseColor: [0.4, 0.4, 0.4]
+    SpecColor: [0.6, 0.6, 0.6]
+    SpecPower: 5
+    FalloffDistance: 3
+    FalloffDropDistance: 1.5
+    FalloffGradientCoefficiency: 1
+Objects:
+  - StaticObject:
+    Type: Static
+    Name: Test 3D model
+    ModelName: PrintedSpeaker
+    Color: [0.001, 0.001, 0.001, 1.0]
+    Transform:
+      position: [30.0, 0.0, 30.0]
+      rotation: [0.0, 1.5, 0.0]
+      scale: [0.1, 0.1, 0.1]
+    Components:
+      - Test:
+        ID: Physics
+        Parameters:
+          mass: 1
+          dragCoef: 10.5
+          useConstantVel: false
+          useConstantAcc: false
+  - Ball1:
+    Type: Static
+    Name: Ball_1
+    ModelName: Ball
+    Color: [0.03, 0.02, 0.02, 1.0]
+    Transform:
+      position: [5.0, 0.0, 10.0]
+      rotation: [0.0, 1.5, 0.0]
+      scale: [1, 1, 1]
+    Components:
+      - Test:
+        ID: Rigidbody
+        Parameters:
+          RigidBody:
+            Type: Sphere
+            Radius: 1
+          mass: 1
+          dragCoef: 10.5
+          useConstantVel: false
+          useConstantAcc: false
+  - Ball2:
+    Type: Static
+    Name: Ball_2
+    ModelName: Ball
+    Color: [0.04, 0.05, 0.03, 1.0]
+    Transform:
+      position: [-5.0, 0.0, 10.0]
+      rotation: [0.0, 1.5, 0.0]
+      scale: [1, 1, 1]
+    Components:
+      - Test:
+        ID: Rigidbody
+        Parameters:
+          RigidBody:
+            Type: Sphere
+            Radius: 1
+          mass: 1
+          dragCoef: 10.5
+          useConstantVel: false
+          useConstantAcc: false

@@ -10,6 +10,7 @@
 #include "Monkey.h"
 #include <string>
 #include "PhysicsComponent.h"
+#include "Rigidbody.h"
 
 Vector3 Vector2Float3(std::vector<float> vec) {
     float x, y, z;
@@ -61,10 +62,9 @@ HRESULT SceneManager::Initialise(Renderer* renderer) {
     _objectManager = new ObjectManager();
     _objectManager->SetRenderManager(renderer);
     _objectManager->SetModelManager(_modelManager);
-    InitHardcodedObjects(); // Renderer Class
 
+    // Renderer Class
     SetupCameras();
-    
     _renderManager->SetCamera(_activeCam);
 
     return hr;
@@ -137,7 +137,7 @@ void SceneManager::InitHardcodedObjects() {
 void SceneManager::SetupCameras() {
     //Camera
     Transform camPos;
-    camPos.position = Vector3(0.0f, 0.0f, -10.0f);
+    camPos.position = Vector3(0.0f, 5.0f, -5.0f);
     camPos.rotation = Vector3(0.0f, 0.0f, 50.0f);
 
     D3D11_VIEWPORT view = _renderManager->GetViewPort();
@@ -151,15 +151,13 @@ void SceneManager::SetupCameras() {
         _cameras[i] = cam;
     }
 
-    _cameras[CAM_DEFAULT_WASD]->SetPosition(Vector3(0.0f, 0.0f, -10.0f));
+    _cameras[CAM_DEFAULT_WASD]->SetPosition(Vector3(0.0f, 0.8f, -5.0f));
 
     _cameras[CAM_LOOKDOWN]->SetPosition(Vector3(0.0f, 10.0f, 0.0f));
     _cameras[CAM_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
 
     _cameras[CAM_LOOKAT]->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
     
-    SetActiveObject(2);
-
     _activeCam = _cameras[CAM_DEFAULT_WASD];
 }
 
@@ -188,6 +186,15 @@ Component* ParseComponent(const char* id, const YAML::Node& params) {
 
     if (idCheck == "Physics") {
         return (Component*)(new PhysicsComponent(
+            params["mass"].as<float>(),
+            params["dragCoef"].as<float>(),
+            params["useConstantVel"].as<bool>(),
+            params["useConstantAcc"].as<bool>()
+        ));
+    }
+
+    if (idCheck == "Rigidbody") {
+        return (Component*)(new Rigidbody(
             params["mass"].as<float>(),
             params["dragCoef"].as<float>(),
             params["useConstantVel"].as<bool>(),
@@ -273,7 +280,10 @@ bool SceneManager::LoadScene(const char* path) {
     ///          ID:
     ///          Parameters:
     ///           - Parameter:
-
+    
+    if (levelFile["UseHardcodedModels"].as<bool>()) {
+        InitHardcodedObjects();
+    }
 
     // SHADER
     {
@@ -410,12 +420,14 @@ void SceneManager::LoadLights(ConstantBuffer* cbData) {
     std::copy(_lights->begin(), _lights->end(), cbData->Lights);
 }
 
-void SceneManager::SetActiveObject(int index) {
+Object* SceneManager::SetActiveObject(int index) {
     _selectedObjIndex = index; UpdateActiveObject();
+    return _selectedObj;
 }
 
-void SceneManager::SetActiveObject(Object* obj, int index) {
+Object* SceneManager::SetActiveObject(Object* obj, int index) {
     _selectedObj = obj; _selectedObjIndex = index;
+    return _selectedObj;
 }
 
 void SceneManager::UpdateActiveObject() {
