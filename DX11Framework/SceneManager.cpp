@@ -194,12 +194,23 @@ Component* ParseComponent(const char* id, const YAML::Node& params) {
     }
 
     if (idCheck == "Rigidbody") {
-        return (Component*)(new Rigidbody(
+        Rigidbody* rb = new Rigidbody(
             params["mass"].as<float>(),
             params["dragCoef"].as<float>(),
             params["useConstantVel"].as<bool>(),
             params["useConstantAcc"].as<bool>()
-        ));
+        );
+        
+        const YAML::Node rbParams = params["RigidBody"];
+        std::string type = rbParams["Type"].as<std::string>();
+        if (type == "Box") {
+            // create box
+        }
+        else if(type == "Sphere") {
+            rb->CreateCollider(rbParams["Radius"].as<float>());
+        }
+
+        return (Component*)rb;
     }
 
     return nullptr;

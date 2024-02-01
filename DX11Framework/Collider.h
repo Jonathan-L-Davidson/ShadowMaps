@@ -11,6 +11,7 @@ public:
 	Transform _offsetTransform;
 
 	Collider(Transform* transform, Transform offsetTransform) { _tf = transform; _offsetTransform = offsetTransform; };
+	Collider() { };
 
 	virtual bool CollidesWith(Collider& other);
 	virtual bool CollidesWith(SphereCollider& other);

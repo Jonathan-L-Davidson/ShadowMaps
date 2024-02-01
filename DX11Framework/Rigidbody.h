@@ -15,9 +15,11 @@ public:
 
 	void CreateCollider(const float radius);
 	void CreateCollider(const Cube& cube);
+	Collider* GetCollider() { return _collider; };
 
 	void SetOffset(Transform offset) { _offsetTransform = offset; };
 	
+	void Start();
 	void Update(float deltaTime);
 	void UpdateCollision();
 

@@ -7,6 +7,7 @@ class SphereCollider : public Collider {
 	public:
 
 		SphereCollider(Transform* transform, Transform offsetTransform, float radius) : Collider(transform, offsetTransform) { _radius = radius; };
+		SphereCollider(float radius) : Collider() { _radius = radius; };
 
 		float GetRadius() const { return _radius; };
 

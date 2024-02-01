@@ -93,7 +93,7 @@ Objects:
     ModelName: Ball
     Color: [0.03, 0.02, 0.02, 1.0]
     Transform:
-      position: [5.0, 0.0, 10.0]
+      position: [2.0, 0.0, 10.0]
       rotation: [0.0, 1.5, 0.0]
       scale: [1, 1, 1]
     Components:
@@ -102,7 +102,7 @@ Objects:
         Parameters:
           RigidBody:
             Type: Sphere
-            Radius: 1
+            Radius: 4.0
           mass: 1
           dragCoef: 10.5
           useConstantVel: false
@@ -113,7 +113,7 @@ Objects:
     ModelName: Ball
     Color: [0.04, 0.05, 0.03, 1.0]
     Transform:
-      position: [-5.0, 0.0, 10.0]
+      position: [-2.0, 0.0, 10.0]
       rotation: [0.0, 1.5, 0.0]
       scale: [1, 1, 1]
     Components:
@@ -122,7 +122,7 @@ Objects:
         Parameters:
           RigidBody:
             Type: Sphere
-            Radius: 1
+            Radius: 4.0
           mass: 1
           dragCoef: 10.5
           useConstantVel: false

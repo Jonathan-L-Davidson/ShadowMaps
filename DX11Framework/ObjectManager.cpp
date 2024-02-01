@@ -12,6 +12,7 @@ ObjectManager::~ObjectManager() {
 		delete obj;
 	}
 	_objects.clear();
+	_bodies.clear();
 
 	_renderManager = nullptr;
 	_modelManager = nullptr;
@@ -45,3 +46,12 @@ void ObjectManager::AddObject(Object* obj, Vector3 pos) {
 		obj->Initialise(); // Todo: Figure out proper OOP practices again.
 	}
 }
+
+void ObjectManager::AddCollisionBody(Rigidbody* body) { 
+	if (body == nullptr) {
+		throw new std::exception("Rigidbody is null!");
+		return;
+	}
+
+	_bodies.push_back(body);
+};
