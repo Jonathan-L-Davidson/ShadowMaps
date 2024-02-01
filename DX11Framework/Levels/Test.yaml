@@ -1,17 +1,17 @@
 ---
 UseHardcodedModels: false
 Shaders:
-  - Skybox:
+  - Skybox: null
     Name: Skybox
 Textures:
-  - Plastic:
+  - Plastic: null
     Name: plastic
-  - Skybox:
+  - Skybox: null
     Name: Skybox
-  - Ball:
+  - Ball: null
     Name: Ball
 Models:
-  - Skybox:
+  - Skybox: null
     Name: Skybox
     ObjPath: InvertedCube.obj
     Shader: Skybox
@@ -20,7 +20,7 @@ Models:
       position: [0.0, 0.0, 0.0]
       rotation: [0.0, 0.0, 0.0]
       scale: [1.0, 1.0, 1.0]
-  - ExampleModel:
+  - ExampleModel: null
     Name: PrintedSpeaker
     ObjPath: 3DPrintBeanieHeadphones.obj
     Shader: Default
@@ -29,7 +29,7 @@ Models:
       position: [0.0, 0.0, 0.0]
       rotation: [0.0, 0.0, 0.0]
       scale: [1.0, 1.0, 1.0]
-  - Ball:
+  - Ball: null
     Name: Ball
     ObjPath: ball.obj
     Shader: Default
@@ -39,7 +39,7 @@ Models:
       rotation: [0.0, 0.0, 0.0]
       scale: [1.0, 1.0, 1.0]
 Lights:
-  - Light:
+  - Light: null
     Position: [30.0, 0.0, -50.0, 1.0]
     Rotation: [0.5, 0.0, 0.0]
     Type: 1
@@ -49,7 +49,7 @@ Lights:
     FalloffDistance: 5
     FalloffDropDistance: 2
     FalloffGradientCoefficiency: 2
-  - Light2:
+  - Light2: null
     Position: [-15.0, 5.0, -7.0, 1.0]
     Rotation: [0.5, 0.0, 0.0]
     Type: 1
@@ -59,7 +59,7 @@ Lights:
     FalloffDistance: 5
     FalloffDropDistance: 3
     FalloffGradientCoefficiency: 1
-  - Light3:
+  - Light3: null
     Position: [35.0, 5.0, 30.0, 1.0]
     Rotation: [0.5, 0.0, 0.0]
     Type: 1
@@ -70,7 +70,7 @@ Lights:
     FalloffDropDistance: 1.5
     FalloffGradientCoefficiency: 1
 Objects:
-  - StaticObject:
+  - StaticObject: null
     Type: Static
     Name: Test 3D model
     ModelName: PrintedSpeaker
@@ -80,14 +80,14 @@ Objects:
       rotation: [0.0, 1.5, 0.0]
       scale: [0.1, 0.1, 0.1]
     Components:
-      - Test:
+      - Test: null
         ID: Physics
         Parameters:
           mass: 1
           dragCoef: 10.5
           useConstantVel: false
           useConstantAcc: false
-  - Ball1:
+  - Ball1: null
     Type: Static
     Name: Ball_1
     ModelName: Ball
@@ -97,7 +97,7 @@ Objects:
       rotation: [0.0, 1.5, 0.0]
       scale: [1, 1, 1]
     Components:
-      - Test:
+      - Test: null
         ID: Rigidbody
         Parameters:
           RigidBody:
@@ -107,7 +107,7 @@ Objects:
           dragCoef: 10.5
           useConstantVel: false
           useConstantAcc: false
-  - Ball2:
+  - Ball2: null
     Type: Static
     Name: Ball_2
     ModelName: Ball
@@ -117,7 +117,7 @@ Objects:
       rotation: [0.0, 1.5, 0.0]
       scale: [1, 1, 1]
     Components:
-      - Test:
+      - Test: null
         ID: Rigidbody
         Parameters:
           RigidBody:
