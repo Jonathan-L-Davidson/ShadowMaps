@@ -1,10 +1,10 @@
-#pragma once
-#include "Core.h"
 
 /// IM AT PAGE 35 GO TO PAGE 35 DO NOT CONTINUE THIS UNTIL I COMPLETE CHAPTER 2
 
 #ifndef VECTOR3_H
 #define VECTOR3_H
+#include "Core.h"
+#include "math.h"
 
 namespace Physics {
 
@@ -34,11 +34,7 @@ namespace Physics {
 		real Magnitude() {
 			// this is a square root function merged into the magnitude as I'm having header file problems.
 			real val = (x * x + y * y + z * z);
-			real root = val / 2; // divide value in half.
-			for (int i = 0; i < 10; i++) {
-				root = (root + val / root) / 2;
-			}
-			return root;
+			return (real)sqrtf(val);
 		}
 
 		real SquareMagnitude() const {

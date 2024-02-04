@@ -245,6 +245,9 @@
     <ClInclude Include="SphereCollider.h">
       <Filter>Header Files\Physics\Collision</Filter>
     </ClInclude>
+    <ClInclude Include="Physics\Quaternion.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\VertexShading.hlsl">

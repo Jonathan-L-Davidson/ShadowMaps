@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 
 #include "Physics/Vector3.h"
+#include "Physics/Quaternion.h"
 
 using namespace Physics;
 
@@ -26,7 +27,7 @@ public:
 	void SetRotation(Vector3 rad) { rotation = rad; };
 	Vector3 GetRotation() { return rotation; };
 	void AddRotation(Vector3 rad) { rotation += rad; };
-	Vector3 GetDirection();
+	Quaternion GetOrientation();
 
 
 	void UpdateWorldMatrix();
@@ -38,7 +39,7 @@ public:
 	Transform* local;
 
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-	Vector3 rotation = Vector3(0.0f, 0.0f, 0.0f);
+	Quaternion rotation = Quaternion();
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 private:
 	DirectX::XMFLOAT4X4 _worldTransform;

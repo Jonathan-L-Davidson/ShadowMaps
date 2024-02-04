@@ -180,6 +180,7 @@
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="Physics\Core.h" />
     <ClInclude Include="Physics\Matrix.h" />
+    <ClInclude Include="Physics\Quaternion.h" />
     <ClInclude Include="Physics\Vector3.h" />
     <ClInclude Include="Pyramid.h" />
     <ClInclude Include="Renderer.h" />
