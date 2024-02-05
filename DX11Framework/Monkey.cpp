@@ -17,5 +17,5 @@ void Monkey::Initialise() {
 void Monkey::Update(float deltaTime) {
     Object::Update(deltaTime);
     
-    transform->AddRotation(Vector3(0.5f * deltaTime, 0.0f, 1.0f * deltaTime));
+    //transform->AddRotation(Vector3(0.5f * deltaTime, 0.0f, 1.0f * deltaTime));
 }

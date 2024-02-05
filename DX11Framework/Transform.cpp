@@ -19,16 +19,6 @@ Transform::~Transform() {
 	local = nullptr;
 }
 
-// This is the part where I lose my sanity to stupid complex math. I need to convert an eular angle into a direction.
-Physics::Vector3 Transform::GetDirection() {
-	Physics::Vector3 dir = Physics::Vector3(
-		sinf(rotation.z) * sinf(rotation.y),
-		sinf(rotation.z) * sinf(rotation.y),
-		sinf(rotation.x)
-	);
-	return dir;
-}
-
 void Transform::UpdateWorldMatrix() {
 
 
@@ -42,7 +32,7 @@ void Transform::UpdateWorldMatrix() {
 		parentM = parent->GetWorldMatrix();
 	}
 
-	XMMATRIX worldTransform = (XMMatrixIdentity() * XMMatrixScaling(scale.x, scale.y, scale.z) * XMMatrixRotationRollPitchYaw(rotation.x, rotation.y, rotation.z)) * (XMMatrixIdentity() * XMMatrixTranslation(position.x, position.y, position.z));
+	XMMATRIX worldTransform = (XMMatrixIdentity() * XMMatrixScaling(scale.x, scale.y, scale.z) * XMMatrixRotationRollPitchYaw(0.0f, 1.0f, 0.0f)) * (XMMatrixIdentity() * XMMatrixTranslation(position.x, position.y, position.z));
 
 	XMStoreFloat4x4(&_worldTransform, localM * worldTransform * parentM);
 

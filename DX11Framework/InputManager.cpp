@@ -127,26 +127,26 @@ void InputManager::HandleMovementKeys() {
 		// X - looks left/right
 		// Y - looks up/down
 		// Z - rolls left/right -- this doesn't, it's some odd value I don't want to learn at the moment.
-		if (HandleKeyDown(keyYawCamLeft)) {
-			cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
-		}
-		if (HandleKeyDown(keyYawCamRight)) {
-			cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
-		}
+		//if (HandleKeyDown(keyYawCamLeft)) {
+		//	cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
+		//}
+		//if (HandleKeyDown(keyYawCamRight)) {
+		//	cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
+		//}
 
-		if (HandleKeyDown(keyRollCamLeft)) {
-			cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
-		}
-		if (HandleKeyDown(keyRollCamRight)) {
-			cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
-		}
-		
-		if (HandleKeyDown(keyPitchCamUp)) {
-			cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
-		}
-		if (HandleKeyDown(keyPitchCamDown)) {
-			cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
-		}
+		//if (HandleKeyDown(keyRollCamLeft)) {
+		//	cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
+		//}
+		//if (HandleKeyDown(keyRollCamRight)) {
+		//	cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
+		//}
+		//
+		//if (HandleKeyDown(keyPitchCamUp)) {
+		//	cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
+		//}
+		//if (HandleKeyDown(keyPitchCamDown)) {
+		//	cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
+		//}
 
 	}
 }

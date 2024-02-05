@@ -15,5 +15,5 @@ void Cube::Initialise() {
 
 void Cube::Update(float deltaTime) {
     Object::Update(deltaTime);
-    transform->AddRotation(Vector3(0.0f, 0.5f * deltaTime, 0.5f * deltaTime));
+    //transform->AddRotation(Vector3(0.0f, 0.5f * deltaTime, 0.5f * deltaTime));
 }

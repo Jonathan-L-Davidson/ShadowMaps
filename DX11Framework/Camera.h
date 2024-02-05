@@ -20,9 +20,6 @@ public:
 
     void SetPosition(Vector3 pos);
     Vector3 GetPosition() { return transform.position; };
-    void SetRotation(Vector3 rotation);
-    Vector3 GetRotation() { return transform.rotation; };
-
 
     void LookTo(Vector3 rotation);
     void LookAt(Transform trans);

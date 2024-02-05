@@ -138,7 +138,7 @@ void SceneManager::SetupCameras() {
     //Camera
     Transform camPos;
     camPos.position = Vector3(0.0f, 5.0f, -5.0f);
-    camPos.rotation = Vector3(0.0f, 0.0f, 50.0f);
+    //camPos.rotation = Vector3(0.0f, 0.0f, 50.0f);
 
     D3D11_VIEWPORT view = _renderManager->GetViewPort();
 
@@ -154,7 +154,7 @@ void SceneManager::SetupCameras() {
     _cameras[CAM_DEFAULT_WASD]->SetPosition(Vector3(0.0f, 0.8f, -5.0f));
 
     _cameras[CAM_LOOKDOWN]->SetPosition(Vector3(0.0f, 10.0f, 0.0f));
-    _cameras[CAM_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
+    //_cameras[CAM_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
 
     _cameras[CAM_LOOKAT]->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
     
@@ -166,7 +166,7 @@ Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugli
 
     transform->position = Vector2Float3(node["position"].as<std::vector<float>>());
 
-    transform->rotation = Vector2Float3(node["rotation"].as<std::vector<float>>());
+    //transform->rotation = Quaternion(Vector2Float4(node["rotation"].as<std::vector<float>>()));
 
     transform->scale = Vector2Float3(node["scale"].as<std::vector<float>>());
 
