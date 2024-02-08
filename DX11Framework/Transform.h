@@ -5,11 +5,11 @@
 #include <DirectXMath.h>
 
 #include "Physics/Vector3.h"
+#include "Physics/Quaternion.h"
 
 using namespace Physics;
 
 class Object;
-class Quaternion;
 
 class Transform
 {
@@ -24,6 +24,12 @@ public:
 	Vector3 GetPosition() { return position; };
 	void AddPosition(Vector3 pos) { position += pos; };
 
+
+	// Rotation helpers!
+	void SetPosition(Quaternion rot) { rotation = rot; };
+	Quaternion GetRotation() { return rotation; };
+	void AddPosition(Quaternion rot) { rotation += rot; };
+
 	void UpdateWorldMatrix();
 
 	DirectX::XMFLOAT4X4 GetTransform() { return _worldTransform; };
@@ -34,6 +40,7 @@ public:
 
 	Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
+	Quaternion rotation = Quaternion();
 private:
 	DirectX::XMFLOAT4X4 _worldTransform;
 public:
