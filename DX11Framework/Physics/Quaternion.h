@@ -17,6 +17,7 @@ namespace Physics {
 		Quaternion() : r(1), i(0), j(0), k(0) { };
 		Quaternion(const real r, const real i, const real j, const real k) : r(r), i(i), j(j), k(k) { };
 		Quaternion(const DirectX::XMFLOAT4 xmFloat) : r(xmFloat.x), i(xmFloat.y), j(xmFloat.z), k(xmFloat.w) { };
+		Quaternion(const Vector3 vec3) : r(vec3.x), i(vec3.y), j(vec3.z), k(1) { };
 
 		void normalise() {
 			real d = r * r + i * i + k * k; // squared magnitude of a quaternion
@@ -71,7 +72,7 @@ namespace Physics {
 
 
 
-		void AddScaledVector(const Vector3& vec, float scale) {
+		void AddScaledVector(const Vector3& vec, float scale = 1.0f) {
 			Quaternion q(0, vec.x * scale, vec.y * scale, vec.z * scale);
 			q *= *this;
 			r += q.r * static_cast<real>(0.5);

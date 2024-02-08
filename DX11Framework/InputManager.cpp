@@ -118,6 +118,14 @@ void InputManager::HandleMovementKeys() {
 		if (HandleKeyDown(keyPhysJump)) {
 			physicsObj->AddForce(Vector3(0, jumpForce, 0));
 		}
+
+		if (HandleKeyDown('H')) {
+			_sceneManager->GetActiveObject()->transform->rotation.AddScaledVector(Vector3(0,1,0), 0.5f);
+		}
+		if (HandleKeyDown('J')) {
+			_sceneManager->GetActiveObject()->transform->rotation.AddScaledVector(Vector3(0, -1, 0), 0.5f);
+		}
+
 	}
 	
 

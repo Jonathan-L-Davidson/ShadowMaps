@@ -33,7 +33,6 @@ void Transform::UpdateWorldMatrix() {
 	}
 
 	XMMATRIX rotationMatrix;
-	
 	CalculateTransformMatrixRowMajor(rotationMatrix, Vector3(0,0,0), rotation);
 
 	XMMATRIX worldTransform = (XMMatrixIdentity() * XMMatrixScaling(scale.x, scale.y, scale.z) * rotationMatrix) * (XMMatrixIdentity() * XMMatrixTranslation(position.x, position.y, position.z));

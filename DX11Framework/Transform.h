@@ -26,9 +26,12 @@ public:
 
 
 	// Rotation helpers!
-	void SetPosition(Quaternion rot) { rotation = rot; };
+	void SetRotation(Quaternion rot) { rotation = rot; };
+	void SetRotation(Vector3 rot) { rotation = Quaternion(); rotation.rotateByVector(rot); rotation.normalise(); };
 	Quaternion GetRotation() { return rotation; };
-	void AddPosition(Quaternion rot) { rotation += rot; };
+	void AddRotation(Quaternion rot) { rotation += rot; };
+	void AddRotation(Vector3 rot) { rotation.AddScaledVector(rot); rotation.normalise(); };
+
 
 	void UpdateWorldMatrix();
 
