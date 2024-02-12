@@ -17,10 +17,10 @@ public:
 	void SetSceneManager(SceneManager* sceneManager) { _sceneManager = sceneManager; };
 	void SetFramework(DX11Framework* framework) { _framework = framework; };
 
-	void Update();
+	void Update(float deltaTime);
 
 	void HandleRenderKeys();
-	void HandleMovementKeys();
+	void HandleMovementKeys(float deltaTime);
 	void HandleSceneKeys();
 	void HandleMiscKeys();
 private:

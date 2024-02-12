@@ -36,6 +36,7 @@ void Transform::UpdateWorldMatrix() {
 	CalculateTransformMatrixRowMajor(rotationMatrix, Vector3(0,0,0), rotation);
 
 	XMMATRIX worldTransform = (XMMatrixIdentity() * XMMatrixScaling(scale.x, scale.y, scale.z) * rotationMatrix) * (XMMatrixIdentity() * XMMatrixTranslation(position.x, position.y, position.z));
+	//XMMATRIX worldTransform = (XMMatrixIdentity() * rotationMatrix);
 
 	XMStoreFloat4x4(&_worldTransform, localM * worldTransform * parentM);
 

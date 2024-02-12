@@ -16,8 +16,8 @@ namespace Physics {
 
 		Quaternion() : r(1), i(0), j(0), k(0) { };
 		Quaternion(const real r, const real i, const real j, const real k) : r(r), i(i), j(j), k(k) { };
-		Quaternion(const DirectX::XMFLOAT4 xmFloat) : r(xmFloat.x), i(xmFloat.y), j(xmFloat.z), k(xmFloat.w) { };
-		Quaternion(const Vector3 vec3) : r(vec3.x), i(vec3.y), j(vec3.z), k(1) { };
+		Quaternion(const DirectX::XMFLOAT4 xmFloat) : r(xmFloat.w), i(xmFloat.x), j(xmFloat.y), k(xmFloat.z) { };
+		Quaternion(const Vector3 vec3) : r(1), i(vec3.x), j(vec3.y), k(vec3.z) { };
 
 		void normalise() {
 			real d = r * r + i * i + k * k; // squared magnitude of a quaternion
@@ -92,13 +92,14 @@ namespace Physics {
 	
 	// I'm just copying this from our provided sample as this looks insane
 
-	/**
-	* Inline function that creates a transform matrix from a
-	* position and orientation.
-	*/
+/**
+* Inline function that creates a transform matrix from a
+* position and orientation.
+*/
 	static inline void CalculateTransformMatrixColumnMajor(DirectX::XMMATRIX& transformMatrix,
 		const Vector3& position,
-		const Quaternion& orientation) {
+		const Quaternion& orientation)
+	{
 		transformMatrix.r[0] = DirectX::XMVectorSetX(transformMatrix.r[0], 1 - 2 * orientation.j * orientation.j - 2 * orientation.k * orientation.k);
 		transformMatrix.r[0] = DirectX::XMVectorSetY(transformMatrix.r[0], 2 * orientation.i * orientation.j -
 			2 * orientation.r * orientation.k);
@@ -117,9 +118,9 @@ namespace Physics {
 		transformMatrix.r[2] = DirectX::XMVectorSetX(transformMatrix.r[2], 2 * orientation.i * orientation.k -
 			2 * orientation.r * orientation.j);
 		transformMatrix.r[2] = DirectX::XMVectorSetY(transformMatrix.r[2], 2 * orientation.j * orientation.k +
-		2 * orientation.r * orientation.i);
+			2 * orientation.r * orientation.i);
 		transformMatrix.r[2] = DirectX::XMVectorSetZ(transformMatrix.r[2], 1 - 2 * orientation.i * orientation.i -
-		2 * orientation.j * orientation.j);
+			2 * orientation.j * orientation.j);
 		transformMatrix.r[2] = DirectX::XMVectorSetW(transformMatrix.r[2], 0.0f);
 
 		transformMatrix.r[3] = DirectX::XMVectorSetX(transformMatrix.r[3], position.x);
@@ -130,17 +131,18 @@ namespace Physics {
 
 	static inline void CalculateTransformMatrixRowMajor(DirectX::XMMATRIX& transformMatrix,
 		const Vector3& position,
-		const Quaternion& orientation) {
+		const Quaternion& orientation)
+	{
 		transformMatrix.r[0] = DirectX::XMVectorSetX(transformMatrix.r[0], 1 - 2 * orientation.j * orientation.j - 2 * orientation.k * orientation.k);
 		transformMatrix.r[0] = DirectX::XMVectorSetY(transformMatrix.r[0], 2 * orientation.i * orientation.j - 2 * orientation.r * orientation.k);
 		transformMatrix.r[0] = DirectX::XMVectorSetZ(transformMatrix.r[0], 2 * orientation.i * orientation.k + 2 * orientation.r * orientation.j);
 		transformMatrix.r[0] = DirectX::XMVectorSetW(transformMatrix.r[0], 0.0f);
-	
+
 		transformMatrix.r[1] = DirectX::XMVectorSetX(transformMatrix.r[1], 2 * orientation.i * orientation.j + 2 * orientation.r * orientation.k);
 		transformMatrix.r[1] = DirectX::XMVectorSetY(transformMatrix.r[1], 1 - 2 * orientation.i * orientation.i - 2 * orientation.k * orientation.k);
 		transformMatrix.r[1] = DirectX::XMVectorSetZ(transformMatrix.r[1], 2 * orientation.j * orientation.k - 2 * orientation.r * orientation.i);
 		transformMatrix.r[1] = DirectX::XMVectorSetW(transformMatrix.r[1], 0.0f);
-	
+
 		transformMatrix.r[2] = DirectX::XMVectorSetX(transformMatrix.r[2], 2 * orientation.i * orientation.k - 2 * orientation.r * orientation.j);
 		transformMatrix.r[2] = DirectX::XMVectorSetY(transformMatrix.r[2], 2 * orientation.j * orientation.k + 2 * orientation.r * orientation.i);
 		transformMatrix.r[2] = DirectX::XMVectorSetZ(transformMatrix.r[2], 1 - 2 * orientation.i * orientation.i - 2 * orientation.j * orientation.j);
@@ -150,7 +152,7 @@ namespace Physics {
 		transformMatrix.r[3] = DirectX::XMVectorSetY(transformMatrix.r[3], position.y);
 		transformMatrix.r[3] = DirectX::XMVectorSetZ(transformMatrix.r[3], position.z);
 		transformMatrix.r[3] = DirectX::XMVectorSetW(transformMatrix.r[3], 1.0f);
-	
+
 		transformMatrix = XMMatrixTranspose(transformMatrix);
 	}
 }

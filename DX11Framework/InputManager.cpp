@@ -47,10 +47,10 @@ void InputManager::OutputCurrentObject() {
 
 }
 
-void InputManager::Update() {
+void InputManager::Update(float deltaTime) {
 	if (_renderManager->GetWindowInstance() == GetFocus()) {
 		HandleRenderKeys();
-		HandleMovementKeys();
+		HandleMovementKeys(deltaTime);
 		HandleSceneKeys();
 		HandleMiscKeys();
 	}
@@ -71,7 +71,7 @@ void InputManager::HandleRenderKeys() {
 
 }
 
-void InputManager::HandleMovementKeys() {
+void InputManager::HandleMovementKeys(float deltaTime) {
 	Camera* cam = _sceneManager->GetActiveCam();
 	
 	PhysicsComponent* physicsObj = _sceneManager->GetActiveObject()->GetComponent<PhysicsComponent>();
@@ -120,10 +120,10 @@ void InputManager::HandleMovementKeys() {
 		}
 
 		if (HandleKeyDown('H')) {
-			_sceneManager->GetActiveObject()->transform->rotation.AddScaledVector(Vector3(0,1,0), 0.5f);
+			_sceneManager->GetActiveObject()->transform->rotation.AddScaledVector(Vector3(0,1,0), deltaTime);
 		}
 		if (HandleKeyDown('J')) {
-			_sceneManager->GetActiveObject()->transform->rotation.AddScaledVector(Vector3(0, -1, 0), 0.5f);
+			_sceneManager->GetActiveObject()->transform->rotation.AddScaledVector(Vector3(0, -1, 0), deltaTime);
 		}
 
 	}
