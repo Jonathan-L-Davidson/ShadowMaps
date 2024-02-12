@@ -21,4 +21,12 @@ public:
 
 };
 
+
+//bool Intersects(Vector3 pointA, Vector3 pointB, Vector3 plane) {
+//	Vector3 vector = pointB - pointA;
+//
+//	x = 
+//}
+
+
 #endif // !COLLIDER_H
