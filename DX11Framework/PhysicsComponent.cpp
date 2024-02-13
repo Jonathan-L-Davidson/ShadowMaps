@@ -171,8 +171,13 @@ void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 		m_rotationalForce += force;
 	}
 
-	Vector3 torque = _owner->transform->position.CrossProduct(m_rotationalForce);
+	// I don't know what relative position is in terms of how this rigidbody physics works so I'm setting it to be the position of the object.
+	m_relativePosition = _owner->transform->position;
 
+	Vector3 torque = m_relativePosition.CrossProduct(m_rotationalForce);
+
+
+	// Inertia Tensor
 	XMFLOAT3X3 inertia;
 	XMStoreFloat3x3(&inertia, XMMatrixIdentity());
 

@@ -71,6 +71,8 @@ private:
 		Vector3 m_oldPos;
 
 		float m_maxSpeed = 500.0f;
+		Vector3 m_relativePosition;
+
 
 		Vector3 m_rotationalForce;
 		Vector3 m_angularVelocity;
