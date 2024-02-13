@@ -5,6 +5,7 @@
 #define VECTOR3_H
 #include "Core.h"
 #include "math.h"
+#include "DirectXMath.h"
 
 namespace Physics {
 
@@ -24,6 +25,7 @@ namespace Physics {
 	public:
 		Vector3() = default;
 		Vector3(const real x, const real y, const real z) : x(x), y(y), z(z) {}
+		Vector3(const DirectX::XMFLOAT3 f3) : x(f3.x), y(f3.y), z(f3.z) {}
 
 		void Invert() {
 			x = -x;
@@ -196,7 +198,17 @@ namespace Physics {
 		}
 
 	};
+
+	static Vector3 inline TransformToVector3(Vector3 target, DirectX::XMMATRIX matrix) {
+		DirectX::XMFLOAT3 vecF3 = DirectX::XMFLOAT3(target.x, target.y, target.z);
+		DirectX::XMVECTOR vec = DirectX::XMLoadFloat3(&vecF3);
+		DirectX::XMVECTOR vecTransformed = DirectX::XMVector3Transform(vec, matrix);
+
+		DirectX::XMStoreFloat3(&vecF3, vecTransformed);
+		return Vector3(vecF3);
+	}
 }
+
 
 #endif
 

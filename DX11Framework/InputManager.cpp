@@ -104,16 +104,36 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 		}
 
 		if (HandleKeyDown(keyPhysMoveForward)) {
-			physicsObj->AddForce(Vector3(0, 0, moveSpeed));
+			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
+				physicsObj->AddRotationalForce(Vector3(0, rotationalSpeed, 0));
+			}
+			else {
+				physicsObj->AddForce(Vector3(0, 0, moveSpeed));
+			}
 		}
 		if (HandleKeyDown(keyPhysMoveBackwards)) {
-			physicsObj->AddForce(Vector3(0, 0, -moveSpeed));
+			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
+				physicsObj->AddRotationalForce(Vector3(0, -rotationalSpeed, 0));
+			}
+			else {
+				physicsObj->AddForce(Vector3(0, 0, -moveSpeed));
+			}
 		}
 		if (HandleKeyDown(keyPhysMoveLeft)) {
-			physicsObj->AddForce(Vector3(-moveSpeed, 0, 0));
+			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
+				physicsObj->AddRotationalForce(Vector3(0, 0, rotationalSpeed));
+			}
+			else {
+				physicsObj->AddForce(Vector3(-moveSpeed, 0, 0));
+			}
 		}
 		if (HandleKeyDown(keyPhysMoveRight)) {
-			physicsObj->AddForce(Vector3(moveSpeed, 0, 0));
+			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
+				physicsObj->AddRotationalForce(Vector3(0, 0, -rotationalSpeed));
+			}
+			else {
+				physicsObj->AddForce(Vector3(moveSpeed, 0, 0));
+			}
 		}
 		if (HandleKeyDown(keyPhysJump)) {
 			physicsObj->AddForce(Vector3(0, jumpForce, 0));

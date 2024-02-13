@@ -1,5 +1,5 @@
 ---
-UseHardcodedModels: false
+UseHardcodedModels: true
 Shaders:
   - Skybox: null
     Name: Skybox

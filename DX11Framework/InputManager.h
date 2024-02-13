@@ -53,11 +53,13 @@ private:
 
 
 	float moveSpeed = 50.0f;
+	float rotationalSpeed = 5.0f;
 	float jumpForce = 100.0f;
 	char keyPhysMoveForward = VK_UP;
 	char keyPhysMoveBackwards = VK_DOWN;
 	char keyPhysMoveLeft = VK_LEFT;
 	char keyPhysMoveRight = VK_RIGHT;
+	char keyPhysRotation = VK_SHIFT; // When holding down shift up, down, left & right will apply rotational forces instead.
 	char keyPhysJump = VK_SPACE;
 	char keyPhysConstantVelToggle = VK_HOME;
 	char keyPhysConstantAccToggle = VK_INSERT;

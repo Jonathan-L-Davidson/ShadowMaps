@@ -15,6 +15,49 @@ void PhysicsComponent::Update(float deltaTime) {
 	UpdatePhysics(deltaTime);
 }
 
+void PhysicsComponent::Destroy() {
+	
+}
+
+void PhysicsComponent::HandleGravity() {
+	if (_owner->GetPosition().y < 0) {
+		Vector3 pos = _owner->transform->position;
+		pos.y = 0;
+		_owner->SetPosition(pos);
+		if (m_velocity.y < 0) {
+			m_velocity.y = 0;
+		}
+
+		//hasFriction = true;
+	}
+	else if (_owner->GetPosition().y > 0) {
+		AddForce(gravity * mass);
+		hasFriction = false;
+	}
+}
+
+void PhysicsComponent::UpdatePhysics(float deltaTime) {
+	UpdateLinearMotion(deltaTime);
+	UpdateAngularMotion(deltaTime);
+
+	m_forceTotal = Vector3(); // Resets it by returning default values.
+	m_forces.clear();
+	m_acceleration = Vector3();
+
+	m_rotationalForces.clear();
+	m_rotationalForce = Vector3();
+}
+
+#pragma region Linear Motion
+
+void PhysicsComponent::UpdateLinearMotion(float deltaTime) {
+	CalculateForces(deltaTime);
+	CalculateAcceleration(deltaTime);
+	CalculateVelocity(deltaTime);
+	UpdatePosition(deltaTime);
+	HandleMagnitude();
+}
+
 void PhysicsComponent::CalculateForces(float deltaTime) {
 	for (Vector3 force : m_forces) {
 		m_forceTotal += force;
@@ -52,7 +95,7 @@ void PhysicsComponent::CalculateForces(float deltaTime) {
 	if (hasFriction) {
 		Vector3 forceApplication = m_forceTotal;
 		forceApplication.Normalise();
-		
+
 		// Use calculation once
 		// if it's static, then don't apply momentum.
 		// if not, add the friction force.
@@ -112,41 +155,58 @@ void PhysicsComponent::UpdatePosition(float deltaTime) {
 
 }
 
-void PhysicsComponent::Destroy() {
-	
-}
-
-void PhysicsComponent::UpdatePhysics(float deltaTime) {
-	CalculateForces(deltaTime);
-	CalculateAcceleration(deltaTime);
-	CalculateVelocity(deltaTime);
-	UpdatePosition(deltaTime);
-	HandleMagnitude();
-
-	m_forceTotal = Vector3(); // Resets it by returning default values.
-	m_forces.clear();
-	m_acceleration = Vector3();
-}
-
-void PhysicsComponent::HandleGravity() {
-	if (_owner->GetPosition().y < 0) {
-		Vector3 pos = _owner->transform->position;
-		pos.y = 0;
-		_owner->SetPosition(pos);
-		if (m_velocity.y < 0) {
-			m_velocity.y = 0;
-		}
-		
-		//hasFriction = true;
-	}
-	else if(_owner->GetPosition().y > 0) {
-		AddForce(gravity * mass);
-		hasFriction = false;
-	}
-}
-
 void PhysicsComponent::HandleMagnitude() {
 	// idk how to calculate the magnitude :(
 	// I need to think of how this works. It might be m_force_total realistically, before acceleration is applied.
 	// no idea.
 }
+
+#pragma endregion
+
+#pragma region Angular Motion
+void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
+	// Calculate torque
+	
+	for (Vector3 force : m_rotationalForces) {
+		m_rotationalForce += force;
+	}
+
+	Vector3 torque = _owner->transform->position.CrossProduct(m_rotationalForce);
+
+	XMFLOAT3X3 inertia;
+	XMStoreFloat3x3(&inertia, XMMatrixIdentity());
+	// Slide 30 RigidBodies part 1:
+	// (y^2 + z^2) * m * 1/12 for _11
+	// (x^2 + z^2) * m * 1/12 for _22
+	// (x^2 + y^2) * m * 1/12 for _33
+	// unsure if correct
+
+	// Assuming sphere to make calculations easier however, using the implementing quaternions and rotations)
+	// _11, _22, _33 = 2/5 * m * r^2
+	float radius = 2.0f;
+	float inertiaDrag = 0.4f * mass * (radius * radius);
+	inertia._11 = inertiaDrag;
+	inertia._22 = inertiaDrag;
+	inertia._33 = inertiaDrag;
+	
+
+	XMMATRIX inertiaTensor = XMLoadFloat3x3(&inertia); // Loading it into a matrix to be able to invert it.
+	inertiaTensor = XMMatrixInverse(nullptr, inertiaTensor); // Inverting it.
+
+	// Acceleration
+	Vector3 m_angularAcceleration = TransformToVector3(torque, inertiaTensor);
+
+	// Velocity
+	m_angularVelocity += m_angularAcceleration * deltaTime;
+
+	// Dampening
+	m_angularVelocity *= pow(angularDampening, deltaTime);
+	if (m_angularVelocity.SquareMagnitude() != 0) {
+
+		// Applies rotation
+		_owner->transform->rotation.AddScaledVector(m_angularVelocity, deltaTime);
+		DebugPrintF("Angular velocity = %f\n", m_angularVelocity.SquareMagnitude());
+	}
+
+}
+#pragma endregion

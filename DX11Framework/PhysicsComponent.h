@@ -26,6 +26,7 @@ class PhysicsComponent : public Component
 		void Destroy();
 
 		void AddForce(const Vector3 force, bool useMass = true) { m_forces.push_back(force * (useMass ? mass : 1)); };
+		void AddRotationalForce(const Vector3 force, bool useMass = true) { m_rotationalForces.push_back(force * (useMass ? mass : 1)); };
 
 		float mass = 1.0f;
 		float dragAmount = 5.0f;
@@ -43,9 +44,15 @@ class PhysicsComponent : public Component
 		
 		float friction = 10.0f;
 		float frictionCoef = 1.0f;
+		
+
+		float angularDampening = 0.5f;
 
 private:
 		void UpdatePhysics(float deltaTime);
+		void UpdateLinearMotion(float delaTime);
+		void UpdateAngularMotion(float deltaTime);
+		
 		void CalculateForces(float deltaTime);
 		void CalculateAcceleration(float deltaTime);
 		void CalculateVelocity(float deltaTime);
@@ -63,6 +70,10 @@ private:
 		Vector3 m_oldPos;
 
 		float m_maxSpeed = 500.0f;
+
+		Vector3 m_rotationalForce;
+		Vector3 m_angularVelocity;
+		std::vector<Vector3> m_rotationalForces;
 };
 
 #endif // !PHYSICS_COMP_H
