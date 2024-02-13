@@ -175,6 +175,7 @@ void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 
 	XMFLOAT3X3 inertia;
 	XMStoreFloat3x3(&inertia, XMMatrixIdentity());
+
 	// Slide 30 RigidBodies part 1:
 	// (y^2 + z^2) * m * 1/12 for _11
 	// (x^2 + z^2) * m * 1/12 for _22
@@ -183,7 +184,6 @@ void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 
 	// Assuming sphere to make calculations easier however, using the implementing quaternions and rotations)
 	// _11, _22, _33 = 2/5 * m * r^2
-	float radius = 2.0f;
 	float inertiaDrag = 0.4f * mass * (radius * radius);
 	inertia._11 = inertiaDrag;
 	inertia._22 = inertiaDrag;

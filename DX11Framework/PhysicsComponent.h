@@ -29,6 +29,7 @@ class PhysicsComponent : public Component
 		void AddRotationalForce(const Vector3 force, bool useMass = true) { m_rotationalForces.push_back(force * (useMass ? mass : 1)); };
 
 		float mass = 1.0f;
+		float radius = 2.0f;
 		float dragAmount = 5.0f;
 		float dragCoef = 3.05f; // cube coeff
 		Vector3 gravity = Vector3(0, -9.81f, 0);
