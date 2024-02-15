@@ -28,7 +28,7 @@ namespace Physics {
 			}
 
 			// Casts the value into the appropriate datatype it needs to be, e.g: Double or float
-			d = static_cast<real>(1.0) / sqrtf(d);
+			d = static_cast<real>(1.0) / (real)sqrt(d);
 			r *= d;
 			i *= d;
 			j *= d;

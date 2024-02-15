@@ -1,5 +1,5 @@
 ---
-UseHardcodedModels: true
+UseHardcodedModels: false
 Shaders:
   - Skybox: null
     Name: Skybox
@@ -10,6 +10,8 @@ Textures:
     Name: Skybox
   - Ball: null
     Name: Ball
+  - Banana: null
+    Name: banana
 Models:
   - Skybox: null
     Name: Skybox
@@ -18,7 +20,7 @@ Models:
     Texture: Skybox
     Transform:
       position: [0.0, 0.0, 0.0]
-      rotation: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
       scale: [1.0, 1.0, 1.0]
   - ExampleModel: null
     Name: PrintedSpeaker
@@ -27,7 +29,7 @@ Models:
     Texture: plastic
     Transform:
       position: [0.0, 0.0, 0.0]
-      rotation: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
       scale: [1.0, 1.0, 1.0]
   - Ball: null
     Name: Ball
@@ -36,8 +38,17 @@ Models:
     Texture: Ball
     Transform:
       position: [0.0, 0.0, 0.0]
-      rotation: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
       scale: [1.0, 1.0, 1.0]
+  - Banana : null
+    Name: Banana
+    ObjPath: banana.obj
+    Shader: Default
+    Texture: banana
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
+      scale: [0.0, 0.0, 0.0]
 Lights:
   - Light: null
     Position: [30.0, 0.0, -50.0, 1.0]
@@ -72,13 +83,13 @@ Lights:
 Objects:
   - StaticObject: null
     Type: Static
-    Name: Test 3D model
-    ModelName: PrintedSpeaker
-    Color: [0.001, 0.001, 0.001, 1.0]
+    Name: Banana
+    ModelName: Banana
+    Color: [0.001, 0.025, 0.025, 1.0]
     Transform:
       position: [30.0, 0.0, 30.0]
       rotation: [0.0, 1.5, 0.0]
-      scale: [0.1, 0.1, 0.1]
+      scale: [1.0, 1.0, 1.0]
     Components:
       - Test: null
         ID: Physics
@@ -123,6 +134,74 @@ Objects:
           RigidBody:
             Type: Sphere
             Radius: 4.0
+          mass: 1
+          dragCoef: 10.5
+          useConstantVel: false
+          useConstantAcc: false
+  - Banana1: null
+    Type: Static
+    Name: Banana1
+    ModelName: Banana
+    Color: [0.025, 0.01, 0.025, 1.0]
+    Transform:
+      position: [-30.0, 0.0, 30.0]
+      rotation: [0.0, 1.5, 0.0]
+      scale: [1.0, 1.0, 1.0]
+    Components:
+      - Test: null
+        ID: Physics
+        Parameters:
+          mass: 1
+          dragCoef: 10.5
+          useConstantVel: false
+          useConstantAcc: false
+  - Banana2: null
+    Type: Static
+    Name: Banana2
+    ModelName: Banana
+    Color: [0.01, 0.01, 0.025, 1.0]
+    Transform:
+      position: [-30.0, 0.0, -30.0]
+      rotation: [0.0, 1.5, 0.0]
+      scale: [1.0, 1.0, 1.0]
+    Components:
+      - Test: null
+        ID: Physics
+        Parameters:
+          mass: 1
+          dragCoef: 10.5
+          useConstantVel: false
+          useConstantAcc: false
+  - Banana3: null
+    Type: Static
+    Name: Banana3
+    ModelName: Banana
+    Color: [0.01, 0.025, 0.01, 1.0]
+    Transform:
+      position: [30.0, 0.0, -30.0]
+      rotation: [0.0, 1.5, 0.0]
+      scale: [1.0, 1.0, 1.0]
+    Components:
+      - Test: null
+        ID: Physics
+        Parameters:
+          mass: 1
+          dragCoef: 10.5
+          useConstantVel: false
+          useConstantAcc: false
+  - Banana4: null
+    Type: Static
+    Name: Banana4
+    ModelName: Banana
+    Color: [0.025, 0.01, 0.01, 1.0]
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 1.5, 0.0]
+      scale: [1.0, 1.0, 1.0]
+    Components:
+      - Test: null
+        ID: Physics
+        Parameters:
           mass: 1
           dragCoef: 10.5
           useConstantVel: false
