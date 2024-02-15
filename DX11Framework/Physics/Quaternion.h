@@ -39,14 +39,26 @@ namespace Physics {
 			Quaternion q = *this;
 
 			// ...matrix math, yay.
-			r = q.r * multiplier.r - q.i * multiplier.i -
-				q.j * multiplier.j - q.k * multiplier.k;
-			i = q.r * multiplier.i + q.i * multiplier.r +
-				q.j * multiplier.k - q.k * multiplier.j;
-			j = q.r * multiplier.j + q.j * multiplier.r +
-				q.k * multiplier.i - q.i * multiplier.k;
-			k = q.r * multiplier.k + q.k * multiplier.r +
-				q.i * multiplier.j - q.j * multiplier.i;
+			
+			// Following the wikipedia page
+			// i = (r * i) + (i * r) + (j * k) - (k * j);
+			//  
+			// j = (r * j) + (j * r) + (k * i) - (i * k);
+			//
+			// k = (r * k) + (k * r) + (i * j) - (j * i);
+			// 
+			// r = (r * r) - (i * i) - (j * j) - (k * k);
+
+			i = (q.r * multiplier.i) +  (q.i * multiplier.r) + (q.j * multiplier.k) - (q.k * multiplier.j);
+			j = (q.r * multiplier.j) + (q.j * multiplier.r) + (q.k * multiplier.i) - (q.i * multiplier.k);
+			k = (q.r * multiplier.k) + (q.k * multiplier.r) + (q.i * multiplier.j) - (q.j * multiplier.i);
+			r = (q.r * multiplier.r) - (q.i * multiplier.i) - (q.j * multiplier.j) - (q.k * multiplier.k);
+
+			//i = q.i * multiplier.r + q.j * multiplier.k - q.k * multiplier.j + q.r * multiplier.i;
+			//j = -q.i * multiplier.k + q.j * multiplier.r + q.k * multiplier.i + q.r * multiplier.j;
+			//k = q.i * multiplier.j - q.j * multiplier.i + q.k * multiplier.r + q.r * multiplier.k;
+			//r = -q.i * multiplier.i - q.j * multiplier.j - q.k * multiplier.k + q.r * multiplier.r;
+
 		}
 
 		void operator +=(const Quaternion& add) {

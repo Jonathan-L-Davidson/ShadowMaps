@@ -121,7 +121,7 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 		}
 		if (HandleKeyDown(keyPhysMoveLeft)) {
 			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
-				physicsObj->AddRotationalForce(Vector3(0, 0, rotationalSpeed));
+				physicsObj->AddRotationalForce(Vector3(rotationalSpeed, 0, 0));
 			}
 			else {
 				physicsObj->AddForce(Vector3(-moveSpeed, 0, 0));
@@ -129,7 +129,7 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 		}
 		if (HandleKeyDown(keyPhysMoveRight)) {
 			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
-				physicsObj->AddRotationalForce(Vector3(0, 0, -rotationalSpeed));
+				physicsObj->AddRotationalForce(Vector3(-rotationalSpeed, 0, 0));
 			}
 			else {
 				physicsObj->AddForce(Vector3(moveSpeed, 0, 0));
