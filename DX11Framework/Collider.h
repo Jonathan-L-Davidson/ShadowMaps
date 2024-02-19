@@ -13,8 +13,8 @@ public:
 	Collider(Transform* transform, Transform offsetTransform) { _tf = transform; _offsetTransform = offsetTransform; };
 	Collider() { };
 
-	virtual bool CollidesWith(Collider& other);
-	virtual bool CollidesWith(SphereCollider& other);
+	virtual bool CollidesWith(Collider& other) = 0;
+	virtual bool CollidesWith(SphereCollider& other) = 0;
 
 
 	Vector3 GetPosition() const { return (*_tf + _offsetTransform).GetPosition(); };

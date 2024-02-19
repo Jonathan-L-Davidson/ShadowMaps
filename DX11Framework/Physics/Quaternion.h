@@ -167,6 +167,37 @@ namespace Physics {
 
 		transformMatrix = XMMatrixTranspose(transformMatrix);
 	}
+
+	static inline Vector3 QuaternionToEuler(Quaternion& const q) {
+
+		/*
+		Following a guide from https://automaticaddison.com/how-to-convert-a-quaternion-into-euler-angles-in-python/
+		*/
+
+		Vector3 result = Vector3(0,0,0);
+	
+		real tempRoll0 = 2 * (q.r * q.i + q.j * q.k);
+		real tempRoll1 = 1 - 2 * (q.i * q.i + q.j * q.j);
+		
+		if(tempRoll0 != 0 && tempRoll1 != 1) // if we are not 0.
+			result.x = atan2f(tempRoll0, tempRoll1);
+
+		real tempPitch = 2 * (q.r * q.j - q.k * q.i);
+		if (tempPitch > 1.0f)
+			tempPitch = 1.0f;
+		if (tempPitch < -1.0f)
+			tempPitch = -1.0f;
+		if(tempPitch != 0)
+			result.y = asinf(tempPitch);
+
+		real tempYaw0 = 2 * (q.r * q.k + q.i * q.j);
+		real tempYaw1 = 1 - 2 * (q.j * q.j + q.k * q.k);
+		if(tempYaw0 != 0 && tempYaw1 != -1)
+			result.z = atan2f(tempYaw0, tempYaw1);
+
+		return result;
+
+	}
 }
 
 #endif// !H_QUATERNION

@@ -21,7 +21,7 @@ public:
     void SetPosition(Vector3 pos);
     Vector3 GetPosition() { return transform.position; };
 
-    void LookTo(Vector3 rotation);
+    void LookTo(Quaternion rotation);
     void LookAt(Transform trans);
     void LookFromTrans();
 

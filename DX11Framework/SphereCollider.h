@@ -3,16 +3,16 @@
 #include "Collider.h"
 
 class SphereCollider : public Collider {
-		float _radius = 1.0f;
-	public:
+public:
+	SphereCollider(Transform* transform, Transform offsetTransform, float radius) : Collider(transform, offsetTransform) { _radius = radius; };
+	SphereCollider(float radius) : Collider() { _radius = radius; };
 
-		SphereCollider(Transform* transform, Transform offsetTransform, float radius) : Collider(transform, offsetTransform) { _radius = radius; };
-		SphereCollider(float radius) : Collider() { _radius = radius; };
+	float GetRadius() const { return _radius; };
 
-		float GetRadius() const { return _radius; };
-
-		virtual bool CollidesWith(Collider& other) override { return other.CollidesWith(*this); };
-		virtual bool CollidesWith(SphereCollider& other) override;
+	virtual bool CollidesWith(Collider& other) override { return other.CollidesWith(*this); };
+	virtual bool CollidesWith(SphereCollider& other) override;
+private:
+	float _radius = 1.0f;
 };
 
 #endif // !SPHERECOLLIDER_H

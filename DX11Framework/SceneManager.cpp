@@ -138,7 +138,7 @@ void SceneManager::SetupCameras() {
     //Camera
     Transform camPos;
     camPos.position = Vector3(0.0f, 5.0f, -5.0f);
-    //camPos.rotation = Vector3(0.0f, 0.0f, 50.0f);
+    camPos.rotation = Quaternion(1.0f, 1.0f, 0.0f, 1.0f);
 
     D3D11_VIEWPORT view = _renderManager->GetViewPort();
 

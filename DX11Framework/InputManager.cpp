@@ -148,6 +148,30 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 
 	}
 	
+	#pragma region Rotations
+	if (HandleKeyDown(keyYawCamLeft)) {
+		cam->transform.rotation.AddScaledVector(Vector3(-_sceneManager->rotSpeed, 0, 0), deltaTime);
+	}
+	if (HandleKeyDown(keyYawCamRight)) {
+		cam->transform.rotation.AddScaledVector(Vector3(_sceneManager->rotSpeed, 0, 0), deltaTime);
+	}
+
+	if (HandleKeyDown(keyRollCamLeft)) {
+		cam->transform.rotation.AddScaledVector(Vector3(0, 0, _sceneManager->rotSpeed), deltaTime);
+	}
+	if (HandleKeyDown(keyRollCamRight)) {
+		cam->transform.rotation.AddScaledVector(Vector3(0, 0, -_sceneManager->rotSpeed), deltaTime);
+	}
+	
+	if (HandleKeyDown(keyPitchCamUp)) {
+		cam->transform.rotation.AddScaledVector(Vector3(0, _sceneManager->rotSpeed, 0), deltaTime);
+	}
+	if (HandleKeyDown(keyPitchCamDown)) {
+		cam->transform.rotation.AddScaledVector(Vector3(0, -_sceneManager->rotSpeed, 0), deltaTime);
+	}
+
+	#pragma endregion
+
 
 	// Rotationals. I personally don't like my implementation of it, I really dislike it, even.
 	{
