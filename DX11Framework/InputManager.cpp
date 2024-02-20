@@ -140,34 +140,34 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 		}
 
 		if (HandleKeyDown('H')) {
-			_sceneManager->GetActiveObject()->transform->rotation.AddScaledVector(Vector3(0,1,0), deltaTime);
+			_sceneManager->GetActiveObject()->transform->AddRotation(Vector3(0,1,0));
 		}
 		if (HandleKeyDown('J')) {
-			_sceneManager->GetActiveObject()->transform->rotation.AddScaledVector(Vector3(0, -1, 0), deltaTime);
+			_sceneManager->GetActiveObject()->transform->AddRotation(Vector3(0, -1, 0));
 		}
 
 	}
 	
 	#pragma region Rotations
 	if (HandleKeyDown(keyYawCamLeft)) {
-		cam->transform.rotation.AddScaledVector(Vector3(-_sceneManager->rotSpeed, 0, 0), deltaTime);
+		cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
 	}
 	if (HandleKeyDown(keyYawCamRight)) {
-		cam->transform.rotation.AddScaledVector(Vector3(_sceneManager->rotSpeed, 0, 0), deltaTime);
+		cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
 	}
 
 	if (HandleKeyDown(keyRollCamLeft)) {
-		cam->transform.rotation.AddScaledVector(Vector3(0, 0, _sceneManager->rotSpeed), deltaTime);
+		cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
 	}
 	if (HandleKeyDown(keyRollCamRight)) {
-		cam->transform.rotation.AddScaledVector(Vector3(0, 0, -_sceneManager->rotSpeed), deltaTime);
+		cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
 	}
 	
 	if (HandleKeyDown(keyPitchCamUp)) {
-		cam->transform.rotation.AddScaledVector(Vector3(0, _sceneManager->rotSpeed, 0), deltaTime);
+		cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
 	}
 	if (HandleKeyDown(keyPitchCamDown)) {
-		cam->transform.rotation.AddScaledVector(Vector3(0, -_sceneManager->rotSpeed, 0), deltaTime);
+		cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
 	}
 
 	#pragma endregion

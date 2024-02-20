@@ -209,8 +209,8 @@ void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 	if (m_angularVelocity.SquareMagnitude() != 0) {
 
 		// Applies rotation
-		_owner->transform->rotation.AddScaledVector(m_angularVelocity, deltaTime);
-		_owner->transform->rotation.normalise();
+		_owner->transform->AddRotation(m_angularVelocity * deltaTime);
+		_owner->transform->rotation.Normalise();
 		//DebugPrintF("Angular velocity = %f\n", m_angularVelocity.SquareMagnitude());
 	}
 

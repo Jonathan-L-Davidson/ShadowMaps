@@ -1,203 +1,285 @@
 #ifndef H_QUATERNION
 #define H_QUATERNION
 
-#include "DirectXMath.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include "Core.h"
 #include "Vector3.h"
 
 namespace Physics {
+    //------------------------------------------------------------------------
+    // Quaternion Class and Quaternion functions
+    //------------------------------------------------------------------------
 
-	class Quaternion {
-	public:
-		real r; // real component.
-		real i; // first complex component.
-		real j; // second complex component.
-		real k; // third complex component.
+    class Quaternion {
+    public:
+        float      n;     // number (scalar) part
+        Vector3    v;     // vector part: v.x, v.y, v.z
 
-		Quaternion() : r(1), i(0), j(0), k(0) { };
-		Quaternion(const real r, const real i, const real j, const real k) : r(r), i(i), j(j), k(k) { };
-		Quaternion(const DirectX::XMFLOAT4 xmFloat) : r(xmFloat.w), i(xmFloat.x), j(xmFloat.y), k(xmFloat.z) { };
-		Quaternion(const Vector3 vec3) : r(1), i(vec3.x), j(vec3.y), k(vec3.z) { };
+        Quaternion(void);
+        Quaternion(float e0, float e1, float e2, float e3);
 
-		void normalise() {
-			real d = r * r + i * i + k * k; // squared magnitude of a quaternion
+        float      Magnitude(void);
+        Vector3    GetVector(void);
+        float      GetScalar(void);
+        void       Normalise(void);
+        Quaternion operator+=(Quaternion q);
+        Quaternion operator-=(Quaternion q);
+        Quaternion operator*=(float s);
+        Quaternion operator/=(float s);
+        Quaternion operator~(void) const;
+    };
 
-			if (d <= 0) {
-				r = 1;
-				return;
-			}
+    // Default Constructor
+    inline Quaternion::Quaternion(void)
+    {
+        n = 1;
+        v.x = 0;
+        v.y = 0;
+        v.z = 0;
+    }
 
-			// Casts the value into the appropriate datatype it needs to be, e.g: Double or float
-			d = static_cast<real>(1.0) / (real)sqrt(d);
-			r *= d;
-			i *= d;
-			j *= d;
-			k *= d;
-		};
+    // Constructor
+    inline Quaternion::Quaternion(float e0, float e1, float e2, float e3)
+    {
+        n = e0;
+        v.x = e1;
+        v.y = e2;
+        v.z = e3;
+    }
 
-		void operator *=(const Quaternion& multiplier) {
-			Quaternion q = *this;
+    inline float Quaternion::Magnitude(void)
+    {
+        return (float)sqrt(n * n + v.x * v.x + v.y * v.y + v.z * v.z);
+    }
 
-			// ...matrix math, yay.
-			
-			// Following the wikipedia page
-			// i = (r * i) + (i * r) + (j * k) - (k * j);
-			//  
-			// j = (r * j) + (j * r) + (k * i) - (i * k);
-			//
-			// k = (r * k) + (k * r) + (i * j) - (j * i);
-			// 
-			// r = (r * r) - (i * i) - (j * j) - (k * k);
+    inline Vector3 Quaternion::GetVector(void)
+    {
+        return Vector3(v.x, v.y, v.z);
+    }
 
-			i = (q.r * multiplier.i) +  (q.i * multiplier.r) + (q.j * multiplier.k) - (q.k * multiplier.j);
-			j = (q.r * multiplier.j) + (q.j * multiplier.r) + (q.k * multiplier.i) - (q.i * multiplier.k);
-			k = (q.r * multiplier.k) + (q.k * multiplier.r) + (q.i * multiplier.j) - (q.j * multiplier.i);
-			r = (q.r * multiplier.r) - (q.i * multiplier.i) - (q.j * multiplier.j) - (q.k * multiplier.k);
+    inline float Quaternion::GetScalar(void)
+    {
+        return n;
+    }
+   
+    inline void Quaternion::Normalise(void)
+    {
+        //real d = static_cast<float>(1.0) / Magnitude();
+        //n *= d;
+        //v.x *= d;
+        //v.y *= d;
+        //v.z *= d;
+    }
 
-			//i = q.i * multiplier.r + q.j * multiplier.k - q.k * multiplier.j + q.r * multiplier.i;
-			//j = -q.i * multiplier.k + q.j * multiplier.r + q.k * multiplier.i + q.r * multiplier.j;
-			//k = q.i * multiplier.j - q.j * multiplier.i + q.k * multiplier.r + q.r * multiplier.k;
-			//r = -q.i * multiplier.i - q.j * multiplier.j - q.k * multiplier.k + q.r * multiplier.r;
+    inline Quaternion Quaternion::operator+=(Quaternion q)
+    {
+        n += q.n;
+        v.x += q.v.x;
+        v.y += q.v.y;
+        v.z += q.v.z;
+        return *this;
+    }
 
-		}
+    inline Quaternion Quaternion::operator-=(Quaternion q)
+    {
+        n -= q.n;
+        v.x -= q.v.x;
+        v.y -= q.v.y;
+        v.z -= q.v.z;
+        return *this;
+    }
 
-		void operator +=(const Quaternion& add) {
-			r += add.r;
-			i += add.i;
-			j += add.j;
-			k += add.k;
-		}
+    inline Quaternion Quaternion::operator*=(float s)
+    {
+        n *= s;
+        v.x *= s;
+        v.y *= s;
+        v.z *= s;
+        return *this;
+    }
 
-		void operator +=(const Vector3& add) {
-			i += add.x;
-			j += add.y;
-			k += add.z;
-		}
+    inline Quaternion Quaternion::operator/=(float s)
+    {
+        n /= s;
+        v.x /= s;
+        v.y /= s;
+        v.z /= s;
+        return *this;
+    }
 
-		Quaternion operator +(const Quaternion& add) {
-			return Quaternion(r + add.r, i + add.i, j + add.j, k + add.k);
-		}
+    inline Quaternion Quaternion::operator~(void) const
+    {
+        return Quaternion(n,
+            -v.x,
+            -v.y,
+            -v.z);
+    }
 
-		Quaternion operator +(const Vector3& add) {
-			return Quaternion(r, i + add.x, j + add.y, i + add.z);
-		}
+    inline Quaternion operator+(Quaternion q1, Quaternion q2)
+    {
+        return Quaternion(q1.n + q2.n,
+            q1.v.x + q2.v.x,
+            q1.v.y + q2.v.y,
+            q1.v.z + q2.v.z);
+    }
 
+    inline Quaternion operator-(Quaternion q1, Quaternion q2)
+    {
+        return Quaternion(q1.n - q2.n,
+            q1.v.x - q2.v.x,
+            q1.v.y - q2.v.y,
+            q1.v.z - q2.v.z);
+    }
 
+    inline Quaternion operator*(Quaternion q1, Quaternion q2)
+    {
+        return Quaternion(q1.n * q2.n - q1.v.x * q2.v.x
+            - q1.v.y * q2.v.y - q1.v.z * q2.v.z,
+            q1.n * q2.v.x + q1.v.x * q2.n
+            + q1.v.y * q2.v.z - q1.v.z * q2.v.y,
+            q1.n * q2.v.y + q1.v.y * q2.n
+            + q1.v.z * q2.v.x - q1.v.x * q2.v.z,
+            q1.n * q2.v.z + q1.v.z * q2.n
+            + q1.v.x * q2.v.y - q1.v.y * q2.v.x);
+    }
 
-		void AddScaledVector(const Vector3& vec, float scale = 1.0f) {
-			Quaternion q(0, vec.x * scale, vec.y * scale, vec.z * scale);
-			q *= *this;
-			r += q.r * static_cast<real>(0.5);
-			i += q.i * static_cast<real>(0.5);
-			j += q.j * static_cast<real>(0.5);
-			k += q.k * static_cast<real>(0.5);
-		}
+    inline Quaternion operator*(Quaternion q, float s)
+    {
+        return Quaternion(q.n * s, q.v.x * s, q.v.y * s, q.v.z * s);
+    }
 
-		void rotateByVector(const Vector3& vec) {
-			Quaternion q(0, vec.x, vec.y, vec.z);
-			(*this) *= q;
-		}
+    inline Quaternion operator*(float s, Quaternion q)
+    {
+        return Quaternion(q.n * s, q.v.x * s, q.v.y * s, q.v.z * s);
+    }
 
+    inline Quaternion operator*(Quaternion q, Vector3 v)
+    {
+        return Quaternion(-(q.v.x * v.x + q.v.y * v.y + q.v.z * v.z),
+            q.n * v.x + q.v.y * v.z - q.v.z * v.y,
+            q.n * v.y + q.v.z * v.x - q.v.x * v.z,
+            q.n * v.z + q.v.x * v.y - q.v.y * v.x);
+    }
 
-	};
+    inline Quaternion operator*(Vector3 v, Quaternion q)
+    {
+        return Quaternion(-(q.v.x * v.x + q.v.y * v.y + q.v.z * v.z),
+            q.n * v.x + q.v.z * v.y - q.v.y * v.z,
+            q.n * v.y + q.v.x * v.z - q.v.z * v.x,
+            q.n * v.z + q.v.y * v.x - q.v.x * v.y);
+    }
 
-	
-	// I'm just copying this from our provided sample as this looks insane
+    inline Quaternion operator/(Quaternion q, float s)
+    {
+        return Quaternion(q.n / s, q.v.x / s, q.v.y / s, q.v.z / s);
+    }
 
-/**
-* Inline function that creates a transform matrix from a
-* position and orientation.
-*/
-	static inline void CalculateTransformMatrixColumnMajor(DirectX::XMMATRIX& transformMatrix,
-		const Vector3& position,
-		const Quaternion& orientation)
-	{
-		transformMatrix.r[0] = DirectX::XMVectorSetX(transformMatrix.r[0], 1 - 2 * orientation.j * orientation.j - 2 * orientation.k * orientation.k);
-		transformMatrix.r[0] = DirectX::XMVectorSetY(transformMatrix.r[0], 2 * orientation.i * orientation.j -
-			2 * orientation.r * orientation.k);
-		transformMatrix.r[0] = DirectX::XMVectorSetZ(transformMatrix.r[0], 2 * orientation.i * orientation.k +
-			2 * orientation.r * orientation.j);
-		transformMatrix.r[0] = DirectX::XMVectorSetW(transformMatrix.r[0], 0.0f);
+    inline float QGetAngle(Quaternion q)
+    {
+        return (float)(2 * acos(q.n));
+    }
 
-		transformMatrix.r[1] = DirectX::XMVectorSetX(transformMatrix.r[1], 2 * orientation.i * orientation.j +
-			2 * orientation.r * orientation.k);
-		transformMatrix.r[1] = DirectX::XMVectorSetY(transformMatrix.r[1], 1 - 2 * orientation.i * orientation.i -
-			2 * orientation.k * orientation.k);
-		transformMatrix.r[1] = DirectX::XMVectorSetZ(transformMatrix.r[1], 2 * orientation.j * orientation.k -
-			2 * orientation.r * orientation.i);
-		transformMatrix.r[1] = DirectX::XMVectorSetW(transformMatrix.r[1], 0.0f);
+    inline Vector3 QGetAxis(Quaternion q)
+    {
+        Vector3 v;
+        float m;
 
-		transformMatrix.r[2] = DirectX::XMVectorSetX(transformMatrix.r[2], 2 * orientation.i * orientation.k -
-			2 * orientation.r * orientation.j);
-		transformMatrix.r[2] = DirectX::XMVectorSetY(transformMatrix.r[2], 2 * orientation.j * orientation.k +
-			2 * orientation.r * orientation.i);
-		transformMatrix.r[2] = DirectX::XMVectorSetZ(transformMatrix.r[2], 1 - 2 * orientation.i * orientation.i -
-			2 * orientation.j * orientation.j);
-		transformMatrix.r[2] = DirectX::XMVectorSetW(transformMatrix.r[2], 0.0f);
+        v = q.GetVector();
+        m = v.Magnitude();
 
-		transformMatrix.r[3] = DirectX::XMVectorSetX(transformMatrix.r[3], position.x);
-		transformMatrix.r[3] = DirectX::XMVectorSetY(transformMatrix.r[3], position.y);
-		transformMatrix.r[3] = DirectX::XMVectorSetZ(transformMatrix.r[3], position.z);
-		transformMatrix.r[3] = DirectX::XMVectorSetW(transformMatrix.r[3], 1.0f);
-	}
+        if (m <= 0)
+            return Vector3();
+        else
+            return v / m;
+    }
 
-	static inline void CalculateTransformMatrixRowMajor(DirectX::XMMATRIX& transformMatrix,
-		const Vector3& position,
-		const Quaternion& orientation)
-	{
-		transformMatrix.r[0] = DirectX::XMVectorSetX(transformMatrix.r[0], 1 - 2 * orientation.j * orientation.j - 2 * orientation.k * orientation.k);
-		transformMatrix.r[0] = DirectX::XMVectorSetY(transformMatrix.r[0], 2 * orientation.i * orientation.j - 2 * orientation.r * orientation.k);
-		transformMatrix.r[0] = DirectX::XMVectorSetZ(transformMatrix.r[0], 2 * orientation.i * orientation.k + 2 * orientation.r * orientation.j);
-		transformMatrix.r[0] = DirectX::XMVectorSetW(transformMatrix.r[0], 0.0f);
+    inline Quaternion QRotate(Quaternion q1, Quaternion q2)
+    {
+        return q1 * q2 * (~q1);
+    }
 
-		transformMatrix.r[1] = DirectX::XMVectorSetX(transformMatrix.r[1], 2 * orientation.i * orientation.j + 2 * orientation.r * orientation.k);
-		transformMatrix.r[1] = DirectX::XMVectorSetY(transformMatrix.r[1], 1 - 2 * orientation.i * orientation.i - 2 * orientation.k * orientation.k);
-		transformMatrix.r[1] = DirectX::XMVectorSetZ(transformMatrix.r[1], 2 * orientation.j * orientation.k - 2 * orientation.r * orientation.i);
-		transformMatrix.r[1] = DirectX::XMVectorSetW(transformMatrix.r[1], 0.0f);
+    inline Vector3 QVRotate(Quaternion q, Vector3 v)
+    {
+        Quaternion t;
+        t = q * v * (~q);
+        return t.GetVector();
+    }
 
-		transformMatrix.r[2] = DirectX::XMVectorSetX(transformMatrix.r[2], 2 * orientation.i * orientation.k - 2 * orientation.r * orientation.j);
-		transformMatrix.r[2] = DirectX::XMVectorSetY(transformMatrix.r[2], 2 * orientation.j * orientation.k + 2 * orientation.r * orientation.i);
-		transformMatrix.r[2] = DirectX::XMVectorSetZ(transformMatrix.r[2], 1 - 2 * orientation.i * orientation.i - 2 * orientation.j * orientation.j);
-		transformMatrix.r[2] = DirectX::XMVectorSetW(transformMatrix.r[2], 0.0f);
+    inline float DegreesToRadians(float deg)
+    {
+        return deg * M_PI / 180.0f;
+    }
 
-		transformMatrix.r[3] = DirectX::XMVectorSetX(transformMatrix.r[3], position.x);
-		transformMatrix.r[3] = DirectX::XMVectorSetY(transformMatrix.r[3], position.y);
-		transformMatrix.r[3] = DirectX::XMVectorSetZ(transformMatrix.r[3], position.z);
-		transformMatrix.r[3] = DirectX::XMVectorSetW(transformMatrix.r[3], 1.0f);
+    inline float RadiansToDegrees(float rad)
+    {
+        return rad * 180.0f / M_PI;
+    }
 
-		transformMatrix = XMMatrixTranspose(transformMatrix);
-	}
+    inline Quaternion MakeQFromEulerAngles(float x, float y, float z)
+    {
+        Quaternion     q;
+        double     roll = DegreesToRadians(x);
+        double     pitch = DegreesToRadians(y);
+        double     yaw = DegreesToRadians(z);
 
-	static inline Vector3 QuaternionToEuler(Quaternion& const q) {
+        double     cyaw, cpitch, croll, syaw, spitch, sroll;
+        double     cyawcpitch, syawspitch, cyawspitch, syawcpitch;
 
-		/*
-		Following a guide from https://automaticaddison.com/how-to-convert-a-quaternion-into-euler-angles-in-python/
-		*/
+        cyaw = cos(0.5f * yaw);
+        cpitch = cos(0.5f * pitch);
+        croll = cos(0.5f * roll);
+        syaw = sin(0.5f * yaw);
+        spitch = sin(0.5f * pitch);
+        sroll = sin(0.5f * roll);
 
-		Vector3 result = Vector3(0,0,0);
-	
-		real tempRoll0 = 2 * (q.r * q.i + q.j * q.k);
-		real tempRoll1 = 1 - 2 * (q.i * q.i + q.j * q.j);
-		
-		if(tempRoll0 != 0 && tempRoll1 != 1) // if we are not 0.
-			result.x = atan2f(tempRoll0, tempRoll1);
+        cyawcpitch = cyaw * cpitch;
+        syawspitch = syaw * spitch;
+        cyawspitch = cyaw * spitch;
+        syawcpitch = syaw * cpitch;
 
-		real tempPitch = 2 * (q.r * q.j - q.k * q.i);
-		if (tempPitch > 1.0f)
-			tempPitch = 1.0f;
-		if (tempPitch < -1.0f)
-			tempPitch = -1.0f;
-		if(tempPitch != 0)
-			result.y = asinf(tempPitch);
+        q.n = (float)(cyawcpitch * croll + syawspitch * sroll);
+        q.v.x = (float)(cyawcpitch * sroll - syawspitch * croll);
+        q.v.y = (float)(cyawspitch * croll + syawcpitch * sroll);
+        q.v.z = (float)(syawcpitch * croll - cyawspitch * sroll);
 
-		real tempYaw0 = 2 * (q.r * q.k + q.i * q.j);
-		real tempYaw1 = 1 - 2 * (q.j * q.j + q.k * q.k);
-		if(tempYaw0 != 0 && tempYaw1 != -1)
-			result.z = atan2f(tempYaw0, tempYaw1);
+        return q;
+    }
 
-		return result;
+    inline Vector3 MakeEulerAnglesFromQ(Quaternion q)
+    {
+        double     r11, r21, r31, r32, r33, r12, r13;
+        double     q00, q11, q22, q33;
+        double     tmp;
+        Vector3     u;
 
-	}
+        q00 = q.n * q.n;
+        q11 = q.v.x * q.v.x;
+        q22 = q.v.y * q.v.y;
+        q33 = q.v.z * q.v.z;
+
+        r11 = q00 + q11 - q22 - q33;
+        r21 = 2 * (q.v.x * q.v.y + q.n * q.v.z);
+        r31 = 2 * (q.v.x * q.v.z - q.n * q.v.y);
+        r32 = 2 * (q.v.y * q.v.z + q.n * q.v.x);
+        r33 = q00 - q11 - q22 + q33;
+
+        tmp = fabs(r31);
+        if (tmp > 0.999999)
+        {
+            r12 = 2 * (q.v.x * q.v.y - q.n * q.v.z);
+            r13 = 2 * (q.v.x * q.v.z + q.n * q.v.y);
+
+            u.x = RadiansToDegrees(0.0f); //roll
+            u.y = RadiansToDegrees((float)(-(M_PI / 2) * r31 / tmp));   // pitch
+            u.z = RadiansToDegrees((float)atan2(-r12, -r31 * r13)); // yaw
+            return u;
+        }
+
+        u.x = RadiansToDegrees((float)atan2(r32, r33)); // roll
+        u.y = RadiansToDegrees((float)asin(-r31));      // pitch
+        u.z = RadiansToDegrees((float)atan2(r21, r11)); // yaw
+        return u;
+    }
 }
-
 #endif// !H_QUATERNION

@@ -27,10 +27,10 @@ public:
 
 	// Rotation helpers!
 	void SetRotation(Quaternion rot) { rotation = rot; };
-	void SetRotation(Vector3 rot) { rotation = Quaternion(); rotation.rotateByVector(rot); rotation.normalise(); };
+	void SetRotation(Vector3 rot) { rotation = Quaternion(); rotation = MakeQFromEulerAngles(rot.x, rot.y, rot.z); rotation.Normalise(); };
 	Quaternion GetRotation() { return rotation; };
 	void AddRotation(Quaternion rot) { rotation += rot; };
-	void AddRotation(Vector3 rot) { rotation.AddScaledVector(rot); rotation.normalise(); };
+	void AddRotation(Vector3 rot) { rotation = rotation * MakeQFromEulerAngles(rot.x, rot.y, rot.z); rotation.Normalise(); };
 
 
 	void UpdateWorldMatrix();

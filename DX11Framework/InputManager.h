@@ -53,7 +53,7 @@ private:
 
 
 	float moveSpeed = 50.0f;
-	float rotationalSpeed = 5.0f;
+	float rotationalSpeed = 50.0f;
 	float jumpForce = 100.0f;
 	char keyPhysMoveForward = VK_UP;
 	char keyPhysMoveBackwards = VK_DOWN;

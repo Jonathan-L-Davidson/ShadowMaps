@@ -32,8 +32,11 @@ void Transform::UpdateWorldMatrix() {
 		parentM = parent->GetWorldMatrix();
 	}
 
-	XMMATRIX rotationMatrix;
-	CalculateTransformMatrixColumnMajor(rotationMatrix, Vector3(0,0,0), rotation);
+	XMMATRIX rotationMatrix = XMMatrixIdentity();
+
+	XMFLOAT4 rotationValue = XMFLOAT4(rotation.v.x, rotation.v.y, rotation.v.x, rotation.n);
+	XMVECTOR rotationVector = XMLoadFloat4(&rotationValue);
+	rotationMatrix = XMMatrixRotationQuaternion(rotationVector);
 
 	XMMATRIX worldTransform = (XMMatrixIdentity() * XMMatrixScaling(scale.x, scale.y, scale.z) * rotationMatrix) * (XMMatrixIdentity() * XMMatrixTranslation(position.x, position.y, position.z));
 	//XMMATRIX worldTransform = (XMMatrixIdentity() * rotationMatrix);
