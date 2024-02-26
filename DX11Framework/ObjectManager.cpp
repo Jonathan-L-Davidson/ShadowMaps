@@ -12,6 +12,10 @@ ObjectManager::~ObjectManager() {
 		delete obj;
 	}
 	_objects.clear();
+	
+	for (auto obj : _bodies) {
+		delete obj;
+	}
 	_bodies.clear();
 
 	_renderManager = nullptr;

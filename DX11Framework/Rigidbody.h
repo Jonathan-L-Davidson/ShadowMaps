@@ -5,7 +5,7 @@
 #include "Transform.h"
 
 class Collider;
-class Cube;
+struct BoundingBox;
 
 class Rigidbody : public PhysicsComponent {
 public:
@@ -14,7 +14,7 @@ public:
 
 
 	void CreateCollider(const float radius);
-	void CreateCollider(const Cube& cube);
+	void CreateCollider(const BoundingBox box);
 	Collider* GetCollider() { return _collider; };
 
 	void SetOffset(Transform offset) { _offsetTransform = offset; };

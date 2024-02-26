@@ -10,6 +10,7 @@
 #include "Monkey.h"
 #include <string>
 #include "PhysicsComponent.h"
+#include "BoxCollider.h"
 #include "Rigidbody.h"
 
 Vector3 Vector2Float3(std::vector<float> vec) {
@@ -165,8 +166,8 @@ Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugli
     Transform* transform = new Transform();
 
     transform->position = Vector2Float3(node["position"].as<std::vector<float>>());
-
-    //transform->rotation = Quaternion(Vector2Float4(node["rotation"].as<std::vector<float>>()));
+    //XMFLOAT4 rot = Vector2Float4(node["rotation"].as<std::vector<float>>());
+    //transform->rotation = Quaternion(rot.x, rot.y, rot.z, rot.w);
 
     transform->scale = Vector2Float3(node["scale"].as<std::vector<float>>());
 
@@ -204,7 +205,15 @@ Component* ParseComponent(const char* id, const YAML::Node& params) {
         const YAML::Node rbParams = params["RigidBody"];
         std::string type = rbParams["Type"].as<std::string>();
         if (type == "Box") {
-            // create box
+            Vector3 origin = Vector2Float3(rbParams["origin"].as<std::vector<float>>());
+            float width = rbParams["width"].as<float>();
+            float length = rbParams["length"].as<float>();
+            float height = rbParams["height"].as<float>();
+
+            BoundingBox box = BoundingBox();
+            rb->CreateCollider(box);
+            BoxCollider* boxCollider = (BoxCollider*)rb->GetCollider();
+            boxCollider->GenerateBoundingBox(origin, width, length, height);
         }
         else if(type == "Sphere") {
             rb->CreateCollider(rbParams["Radius"].as<float>());

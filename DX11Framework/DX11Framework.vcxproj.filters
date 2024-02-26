@@ -151,7 +151,7 @@
       <Filter>Source Files\Physics\Collision</Filter>
     </ClCompile>
     <ClCompile Include="BoxCollider.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Physics\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

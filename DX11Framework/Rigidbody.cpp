@@ -2,6 +2,7 @@
 #include "Rigidbody.h"
 #include "Object.h"
 #include "Collider.h"
+#include "BoxCollider.h"
 #include "SphereCollider.h"
 #include "ObjectManager.h"
 
@@ -15,8 +16,8 @@ void Rigidbody::CreateCollider(const float radius) {
 	_collider = new SphereCollider(radius);
 }
 
-void Rigidbody::CreateCollider(const Cube& cube) {
-	//_collider = new CubeCollider(_transform, _offsetTransform, cube);
+void Rigidbody::CreateCollider(const BoundingBox box) {
+	_collider = new BoxCollider(_transform, _offsetTransform, box);
 }
 
 void Rigidbody::Start() {

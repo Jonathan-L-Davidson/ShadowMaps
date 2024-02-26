@@ -149,8 +149,14 @@ Objects:
       scale: [1.0, 1.0, 1.0]
     Components:
       - Test: null
-        ID: Physics
+        ID: Rigidbody
         Parameters:
+          RigidBody:
+            Type: Box
+            origin: [0.0, 0.0, 0.0]
+            width: 1.0
+            length: 1.0
+            height: 1.0
           mass: 1
           dragCoef: 10.5
           useConstantVel: false
@@ -166,8 +172,14 @@ Objects:
       scale: [1.0, 1.0, 1.0]
     Components:
       - Test: null
-        ID: Physics
+        ID: Rigidbody
         Parameters:
+          RigidBody:
+            Type: Box
+            origin: [0.0, 0.0, 0.0]
+            width: 1.0
+            length: 1.0
+            height: 1.0
           mass: 1
           dragCoef: 10.5
           useConstantVel: false
