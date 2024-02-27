@@ -58,12 +58,12 @@ public:
 
 	void GenerateBoundingBox(Vector3 origin, float width, float length, float height);
 
-	virtual bool CollidesWith(Collider& other) { return other.CollidesWith(*this); };
-	virtual bool CollidesWith(SphereCollider& other);
-	virtual bool CollidesWith(BoxCollider& other);
+	virtual bool CollidesWith(Collider& other) { return other.CollidesWith(*(BoxCollider*)this); };
+	virtual bool CollidesWith(SphereCollider& other) override;
+	virtual bool CollidesWith(BoxCollider& other) override;
 	
-	BoundingBox GetBox() { return _rotatedBox; }
-	void RotateBox(Quaternion rotation);
+	BoundingBox GetBox() { TranslateBox(); return _translatedBox; }
+	void TranslateBox();
 
 
 private:
@@ -71,7 +71,7 @@ private:
 	void GetMinMax(float& min, float& max, BoundingBox box, Vector3 axis);
 
 	BoundingBox _boxShape;
-	BoundingBox _rotatedBox;
+	BoundingBox _translatedBox;
 
 };
 

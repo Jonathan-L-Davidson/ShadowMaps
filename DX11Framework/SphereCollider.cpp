@@ -1,4 +1,5 @@
 #include "SphereCollider.h"
+#include "BoxCollider.h"
 
 bool SphereCollider::CollidesWith(SphereCollider& other) {
 	float dist = Vector3(other.GetPosition() - GetPosition()).SquareMagnitude();
@@ -7,4 +8,8 @@ bool SphereCollider::CollidesWith(SphereCollider& other) {
 	}
 
 	return false;
+}
+
+bool SphereCollider::CollidesWith(BoxCollider& other) {
+	return other.CollidesWith(*this);
 }

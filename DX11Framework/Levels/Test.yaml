@@ -6,6 +6,8 @@ Shaders:
 Textures:
   - Plastic: null
     Name: plastic
+  - Crate: null
+    Name: Crate
   - Skybox: null
     Name: Skybox
   - Ball: null
@@ -18,6 +20,15 @@ Models:
     ObjPath: InvertedCube.obj
     Shader: Skybox
     Texture: Skybox
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
+  - Cube: null
+    Name: Cube
+    ObjPath: InvertedCube.obj
+    Shader: Default
+    Texture: Crate
     Transform:
       position: [0.0, 0.0, 0.0]
       rotation: [0.0, 0.0, 0.0, 0.0]
@@ -81,23 +92,6 @@ Lights:
     FalloffDropDistance: 1.5
     FalloffGradientCoefficiency: 1
 Objects:
-  - StaticObject: null
-    Type: Static
-    Name: Banana
-    ModelName: Banana
-    Color: [0.001, 0.025, 0.025, 1.0]
-    Transform:
-      position: [30.0, 0.0, 30.0]
-      rotation: [0.0, 1.5, 0.0]
-      scale: [1.0, 1.0, 1.0]
-    Components:
-      - Test: null
-        ID: Physics
-        Parameters:
-          mass: 1
-          dragCoef: 10.5
-          useConstantVel: false
-          useConstantAcc: false
   - Ball1: null
     Type: Static
     Name: Ball_1
@@ -108,16 +102,6 @@ Objects:
       rotation: [0.0, 1.5, 0.0]
       scale: [1, 1, 1]
     Components:
-      - Test: null
-        ID: Rigidbody
-        Parameters:
-          RigidBody:
-            Type: Sphere
-            Radius: 4.0
-          mass: 1
-          dragCoef: 10.5
-          useConstantVel: false
-          useConstantAcc: false
   - Ball2: null
     Type: Static
     Name: Ball_2
@@ -128,23 +112,13 @@ Objects:
       rotation: [0.0, 1.5, 0.0]
       scale: [1, 1, 1]
     Components:
-      - Test: null
-        ID: Rigidbody
-        Parameters:
-          RigidBody:
-            Type: Sphere
-            Radius: 4.0
-          mass: 1
-          dragCoef: 10.5
-          useConstantVel: false
-          useConstantAcc: false
-  - Banana1: null
+  - Cube1: null
     Type: Static
-    Name: Banana1
-    ModelName: Banana
-    Color: [0.025, 0.01, 0.025, 1.0]
+    Name: Cube1
+    ModelName: Cube
+    Color: [0.1, 0.1, 0.1, 1.0]
     Transform:
-      position: [-30.0, 0.0, 30.0]
+      position: [-30.0, 0.0, 5.0]
       rotation: [0.0, 1.5, 0.0]
       scale: [1.0, 1.0, 1.0]
     Components:
@@ -154,20 +128,20 @@ Objects:
           RigidBody:
             Type: Box
             origin: [0.0, 0.0, 0.0]
-            width: 1.0
-            length: 1.0
-            height: 1.0
+            width: 2.0
+            length: 2.0
+            height: 2.0
           mass: 1
           dragCoef: 10.5
           useConstantVel: false
           useConstantAcc: false
-  - Banana2: null
+  - Cube2: null
     Type: Static
-    Name: Banana2
-    ModelName: Banana
-    Color: [0.01, 0.01, 0.025, 1.0]
+    Name: Cube2
+    ModelName: Cube
+    Color: [0.1, 0.1, 0.1, 1.0]
     Transform:
-      position: [-30.0, 0.0, -30.0]
+      position: [-30.0, 0.0, -5.0]
       rotation: [0.0, 1.5, 0.0]
       scale: [1.0, 1.0, 1.0]
     Components:
@@ -177,9 +151,9 @@ Objects:
           RigidBody:
             Type: Box
             origin: [0.0, 0.0, 0.0]
-            width: 1.0
-            length: 1.0
-            height: 1.0
+            width: 2.0
+            length: 2.0
+            height: 2.0
           mass: 1
           dragCoef: 10.5
           useConstantVel: false
@@ -188,7 +162,7 @@ Objects:
     Type: Static
     Name: Banana3
     ModelName: Banana
-    Color: [0.01, 0.025, 0.01, 1.0]
+    Color: [0.1, 0.1, 0.1, 1.0]
     Transform:
       position: [30.0, 0.0, -30.0]
       rotation: [0.0, 1.5, 0.0]
@@ -205,7 +179,7 @@ Objects:
     Type: Static
     Name: Banana4
     ModelName: Banana
-    Color: [0.025, 0.01, 0.01, 1.0]
+    Color: [0.1, 0.1, 0.1, 1.0]
     Transform:
       position: [0.0, 0.0, 0.0]
       rotation: [0.0, 1.5, 0.0]

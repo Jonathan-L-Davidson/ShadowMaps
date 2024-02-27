@@ -11,6 +11,7 @@ public:
 
 	virtual bool CollidesWith(Collider& other) override { return other.CollidesWith(*this); };
 	virtual bool CollidesWith(SphereCollider& other) override;
+	virtual bool CollidesWith(BoxCollider& other) override;
 private:
 	float _radius = 1.0f;
 };

@@ -4,6 +4,7 @@
 #include "Transform.h"
 
 class SphereCollider;
+class BoxCollider;
 
 class Collider abstract {
 public:
@@ -15,6 +16,7 @@ public:
 
 	virtual bool CollidesWith(Collider& other) = 0;
 	virtual bool CollidesWith(SphereCollider& other) = 0;
+	virtual bool CollidesWith(BoxCollider& other) = 0;
 
 
 	Vector3 GetPosition() const { return (*_tf + _offsetTransform).GetPosition(); };
