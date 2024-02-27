@@ -102,6 +102,16 @@ Objects:
       rotation: [0.0, 1.5, 0.0]
       scale: [1, 1, 1]
     Components:
+      - Test: null
+        ID: Rigidbody
+        Parameters:
+          RigidBody:
+            Type: Sphere
+            Radius: 2.0
+          mass: 1
+          dragCoef: 10.5
+          useConstantVel: false
+          useConstantAcc: false
   - Ball2: null
     Type: Static
     Name: Ball_2
@@ -112,6 +122,16 @@ Objects:
       rotation: [0.0, 1.5, 0.0]
       scale: [1, 1, 1]
     Components:
+      - Test: null
+        ID: Rigidbody
+        Parameters:
+          RigidBody:
+            Type: Sphere
+            Radius: 2.0
+          mass: 1
+          dragCoef: 10.5
+          useConstantVel: false
+          useConstantAcc: false
   - Cube1: null
     Type: Static
     Name: Cube1

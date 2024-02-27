@@ -156,9 +156,7 @@ void PhysicsComponent::UpdatePosition(float deltaTime) {
 }
 
 void PhysicsComponent::HandleMagnitude() {
-	// idk how to calculate the magnitude :(
-	// I need to think of how this works. It might be m_force_total realistically, before acceleration is applied.
-	// no idea.
+	// TODO
 }
 
 #pragma endregion

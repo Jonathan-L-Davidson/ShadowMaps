@@ -106,7 +106,7 @@ bool BoxCollider::CollidesOnAxis(BoundingBox boxA, Vector3 spherePos, float sphe
 
 	// If the distance between the furthest point and sphere radius is greater than the distance from the box to the circle, then it would go into the negative.
 	// if the overall distance is positive, then there's a gap and there is no collision. If it's in the negative, there is collision.
-	if (boxToCircle.Magnitude() - furthestPoint - (sphereRadius / 2) > 0) {
+	if (boxToCircle.Magnitude() - furthestPoint - (sphereRadius * 0.5) > 0) {
 		return false;
 	}
 	return true;
