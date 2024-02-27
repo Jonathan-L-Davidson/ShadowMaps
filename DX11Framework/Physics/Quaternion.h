@@ -18,6 +18,7 @@ namespace Physics {
 
         Quaternion(void);
         Quaternion(float e0, float e1, float e2, float e3);
+        Quaternion(Vector3 _v);
 
         float      Magnitude(void);
         Vector3    GetVector(void);
@@ -47,6 +48,13 @@ namespace Physics {
         v.y = e2;
         v.z = e3;
     }
+    
+    // Constructor
+    inline Quaternion::Quaternion(Vector3 _v)
+    {
+        n = 1;
+        v = _v;
+    }
 
     inline float Quaternion::Magnitude(void)
     {
@@ -65,11 +73,11 @@ namespace Physics {
    
     inline void Quaternion::Normalise(void)
     {
-        //real d = static_cast<float>(1.0) / Magnitude();
-        //n *= d;
-        //v.x *= d;
-        //v.y *= d;
-        //v.z *= d;
+        real d = static_cast<float>(1.0) / Magnitude();
+        n *= d;
+        v.x *= d;
+        v.y *= d;
+        v.z *= d;
     }
 
     inline Quaternion Quaternion::operator+=(Quaternion q)

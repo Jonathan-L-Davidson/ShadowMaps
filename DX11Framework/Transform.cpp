@@ -34,7 +34,7 @@ void Transform::UpdateWorldMatrix() {
 
 	XMMATRIX rotationMatrix = XMMatrixIdentity();
 
-	XMFLOAT4 rotationValue = XMFLOAT4(rotation.v.x, rotation.v.y, rotation.v.x, rotation.n);
+	XMFLOAT4 rotationValue = XMFLOAT4(rotation.v.x, rotation.v.y, rotation.v.z, rotation.n);
 	XMVECTOR rotationVector = XMLoadFloat4(&rotationValue);
 	rotationMatrix = XMMatrixRotationQuaternion(rotationVector);
 
