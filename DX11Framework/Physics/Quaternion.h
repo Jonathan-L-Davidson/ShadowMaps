@@ -21,6 +21,7 @@ namespace Physics {
         Quaternion(Vector3 _v);
 
         float      Magnitude(void);
+        float      MagnitudeSquared(void);
         Vector3    GetVector(void);
         float      GetScalar(void);
         void       Normalise(void);
@@ -61,6 +62,11 @@ namespace Physics {
         return (float)sqrt(n * n + v.x * v.x + v.y * v.y + v.z * v.z);
     }
 
+    inline float Quaternion::MagnitudeSquared(void)
+    {
+        return (float)n * n + v.x * v.x + v.y * v.y + v.z * v.z;
+    }
+
     inline Vector3 Quaternion::GetVector(void)
     {
         return Vector3(v.x, v.y, v.z);
@@ -73,7 +79,7 @@ namespace Physics {
    
     inline void Quaternion::Normalise(void)
     {
-        real d = static_cast<float>(1.0) / Magnitude();
+        real d = static_cast<float>(1.0) / MagnitudeSquared();
         n *= d;
         v.x *= d;
         v.y *= d;
