@@ -8,47 +8,6 @@ struct BoundingBox {
 	Vector3 origin;
 };
 
-
-
-// https://code.tutsplus.com/collision-detection-using-the-separating-axis-theorem--gamedev-169t
-// Seperating axis theorom
-// 
-// Premise goes by seperating each value and comparing the X value
-// 
-// Checks the seperation on the X axis:
-// l = magnitude((box2.position.x + box2.origin.x) - (box1.position + box1.origin.x))
-// gap check by doing:
-// 
-// gapcheck = l - (box1.width * 0.5) - (box2.width * 0.5)
-// 
-// if the gap is less than or equal to 0 then there is a collision on the X axis.
-// Do the same to all other axes.
-// 
-// To align, we just need to project these onto the axis we want.
-// 
-// But to do a 3D check, it'll look like:
-// 
-// vecDist = (box2.position + box2.origin) - (box1.position + box1.origin))
-// 
-// Then we get the vector to the points of the cube.
-// 
-// box1ToPoint = box1.p1 - box1.position
-// box2ToPoint = box2.p1 - box2.position
-// 
-// projectedDist = vecDist.dot(axis)
-// projectedBox1 = box1ToPoint.dot(axis)
-// projectedBox2 = box2ToPoint.dot(axis)
-//
-// gap = projectedDist - projectedBox1 - projectexBox2
-// 
-// 
-// 
-
-
-
-
-
-
 class BoxCollider : public Collider
 {
 public:
@@ -68,6 +27,7 @@ public:
 
 private:
 	bool CollidesOnAxis(BoundingBox boxA, BoundingBox boxB, Vector3 axis);
+	bool CollidesOnAxis(BoundingBox boxA, Vector3 spherePos, float sphereRadius);
 	void GetMinMax(float& min, float& max, BoundingBox box, Vector3 axis);
 
 	BoundingBox _boxShape;
