@@ -28,23 +28,22 @@ class PhysicsComponent : public Component
 		void AddForce(const Vector3 force, bool useMass = true) { m_forces.push_back(force * (useMass ? mass : 1)); };
 		void AddRotationalForce(const Vector3 force, bool useMass = true) { m_rotationalForces.push_back(force * (useMass ? mass : 1)); };
 
-		float mass = 1.0f;
+		float mass = 5.0f;
 		float radius = 2.0f;
-		float dragAmount = 5.0f;
-		float dragCoef = 3.05f; // cube coeff
+		float dragAmount = 1.2f;
+		float dragCoef = 1.05f; // cube coeff
 		Vector3 gravity = Vector3(0, -9.81f, 0);
 
 		bool useGravity = true;
-		bool hasFriction = false;
+		bool hasFriction = true;
 		bool useConstantVelocity = false;
 		bool useConstantAcceleration = false;
 
 		bool useDrag = true;
-		bool useTurbulentDrag = true;
-		bool useLaminarDrag = false;
+		bool useTurbulentDrag = false;
+		bool useLaminarDrag = true;
 		
-		float friction = 10.0f;
-		float frictionCoef = 1.0f;
+		float frictionCoef = 0.2f;
 		
 
 		float angularDampening = 0.5f;
@@ -58,6 +57,8 @@ private:
 		void CalculateAcceleration(float deltaTime);
 		void CalculateVelocity(float deltaTime);
 		void HandleGravity();
+		void HandleDrag();
+		void HandleFriction();
 		void HandleMagnitude();
 
 		void UpdatePosition(float deltatime);

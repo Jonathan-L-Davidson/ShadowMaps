@@ -3,6 +3,10 @@
 #include "PhysicsComponent.h"
 #include "Object.h"
 
+static int DebugPrintVector(const Vector3& vec, const char* prefix) {
+	return DebugPrintF("%s: x - %f, y - %f, z - %f\n", prefix, vec.x, vec.y, vec.z);
+}
+
 void PhysicsComponent::Start() {
 	m_oldPos = _owner->transform->position;
 }
@@ -20,15 +24,14 @@ void PhysicsComponent::Destroy() {
 }
 
 void PhysicsComponent::HandleGravity() {
-	if (_owner->GetPosition().y < 0) {
-		Vector3 pos = _owner->transform->position;
-		pos.y = 0;
-		_owner->SetPosition(pos);
+	if (_owner->GetPosition().y < 0 || m_oldPos.y < 0) {
+		m_oldPos.y = 0;
+		_owner->SetPosition(m_oldPos);
 		if (m_velocity.y < 0) {
 			m_velocity.y = 0;
 		}
 
-		//hasFriction = true;
+		hasFriction = true;
 	}
 	else if (_owner->GetPosition().y > 0) {
 		AddForce(gravity * mass);
@@ -63,71 +66,12 @@ void PhysicsComponent::CalculateForces(float deltaTime) {
 		m_forceTotal += force;
 	}
 
-	float velMagnitude = m_velocity.SquareMagnitude();
-
-	// handle drag:
-	if (velMagnitude != 0) {
-		//DebugPrintF("Velocity: %f \n", velMagnitude);
-		if (useDrag) {
-			Vector3 dragForce = m_velocity;
-			dragForce.Normalise();
-
-
-			// turbulent
-			Rigidbody* rb = _owner->GetComponent<Rigidbody>();
-			if (useTurbulentDrag && rb != nullptr) {
-				float force = (0.5f * (dragAmount * velMagnitude * dragCoef * rb->GetContactArea(dragForce)));
-				dragForce *= force;
-			}
-			// laminar
-			else if (useLaminarDrag) {
-				float force = (0.5f * (dragAmount * velMagnitude * dragCoef));
-				dragForce *= force;
-			}
-
-			dragForce *= -1;
-			// DebugPrintF("dragForce = X: %f,Y: %f, Z: %z \n m_velocity = X: %f, Y: %f, Z: %f \n", dragForce.x, dragForce.y, dragForce.z, m_velocity.x, m_velocity.y, m_velocity.z);
-			m_forceTotal += dragForce;
-		}
-	}
-
-	// handle friction:
-	if (hasFriction) {
-		Vector3 forceApplication = m_forceTotal;
-		forceApplication.Normalise();
-
-		// Use calculation once
-		// if it's static, then don't apply momentum.
-		// if not, add the friction force.
-
-
-		// kinetic friction
-		if (velMagnitude > (friction * frictionCoef)) {
-			forceApplication *= (friction * mass) * frictionCoef;
-			//forceApplication *= -1;
-
-			m_forceTotal += forceApplication;
-		}
-		// static friction
-		else {
-			if (m_forceTotal.SquareMagnitude() < friction) {
-				m_forceTotal = Vector3(); // we apply no more forces.
-
-				if (velMagnitude != 0) {
-					m_velocity -= m_velocity / ((friction * mass) * frictionCoef); // this is cheating, I know.
-				}
-			}
-		}
-	}
+	HandleDrag();
+	HandleFriction();
 }
 
 void PhysicsComponent::CalculateAcceleration(float deltaTime) {
-	if (!useConstantAcceleration) {
-		m_acceleration += (m_forceTotal / mass) * deltaTime;
-	}
-	else {
-		m_acceleration += m_forceTotal / mass;
-	}
+	m_acceleration += m_forceTotal / mass;
 }
 
 void PhysicsComponent::CalculateVelocity(float deltaTime) {
@@ -154,6 +98,57 @@ void PhysicsComponent::UpdatePosition(float deltaTime) {
 	}
 
 }
+
+void PhysicsComponent::HandleDrag() {
+	float velMagnitude = m_velocity.SquareMagnitude();
+
+	// handle drag:
+	if (velMagnitude != 0) {
+		//DebugPrintF("Velocity: %f \n", velMagnitude);
+		if (useDrag) {
+			Vector3 dragForce = m_velocity * -1.0f;
+			dragForce.Normalise();
+
+
+			// turbulent
+			Rigidbody* rb = _owner->GetComponent<Rigidbody>();
+			if (useTurbulentDrag && rb != nullptr) {
+				float force = (0.5f * (dragAmount * velMagnitude * dragCoef * rb->GetContactArea(dragForce)));
+				dragForce *= force;
+			}
+			// laminar
+			else if (useLaminarDrag || (!useTurbulentDrag && rb == nullptr)) {
+				float force = (0.5f * (dragAmount * velMagnitude * dragCoef));
+				dragForce *= force;
+			}
+
+			// DebugPrintF("dragForce = X: %f,Y: %f, Z: %z \n m_velocity = X: %f, Y: %f, Z: %f \n", dragForce.x, dragForce.y, dragForce.z, m_velocity.x, m_velocity.y, m_velocity.z);
+			m_forceTotal += dragForce;
+		}
+	}
+}
+
+#define KINETIC_THRESHHOLD 0.4f
+
+void PhysicsComponent::HandleFriction() {
+	float velMagnitude = m_velocity.SquareMagnitude();
+
+
+	if (hasFriction) {
+		float friction = mass * gravity.Magnitude() * frictionCoef;
+
+		Vector3 forceApplication = (m_velocity * -1.0f) * friction;
+		if (velMagnitude > 0) {
+			DebugPrintF("Friction Value: %f\n", friction);
+			DebugPrintVector(forceApplication, "Friction");
+		}
+
+		m_forceTotal += forceApplication;
+
+	}
+}
+
+#undef KINETIC_THRESHHOLD
 
 void PhysicsComponent::HandleMagnitude() {
 	// TODO

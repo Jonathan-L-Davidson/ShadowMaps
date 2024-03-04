@@ -54,9 +54,8 @@ void Rigidbody::UpdateCollision() {
 		if (_collider->CollidesWith(*rb->GetCollider())) {
 			// handleCollision
 			DebugPrintF("Collision!!! %s hits %s\n", _owner->GetName().c_str(), rb->_owner->GetName().c_str());
-			return;
+			continue;
 		}
-		return;
 	}
 }
 
