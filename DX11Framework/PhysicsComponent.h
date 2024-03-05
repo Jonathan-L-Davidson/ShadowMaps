@@ -59,7 +59,6 @@ private:
 		void HandleGravity();
 		void HandleDrag();
 		void HandleFriction();
-		void HandleMagnitude();
 
 		void UpdatePosition(float deltatime);
 

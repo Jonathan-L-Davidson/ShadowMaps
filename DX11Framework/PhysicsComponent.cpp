@@ -58,7 +58,6 @@ void PhysicsComponent::UpdateLinearMotion(float deltaTime) {
 	CalculateAcceleration(deltaTime);
 	CalculateVelocity(deltaTime);
 	UpdatePosition(deltaTime);
-	HandleMagnitude();
 }
 
 void PhysicsComponent::CalculateForces(float deltaTime) {
@@ -138,10 +137,10 @@ void PhysicsComponent::HandleFriction() {
 		float friction = mass * gravity.Magnitude() * frictionCoef;
 
 		Vector3 forceApplication = (m_velocity * -1.0f) * friction;
-		if (velMagnitude > 0) {
-			DebugPrintF("Friction Value: %f\n", friction);
-			DebugPrintVector(forceApplication, "Friction");
-		}
+		//if (velMagnitude > 0) {
+		//	DebugPrintF("Friction Value: %f\n", friction);
+		//	DebugPrintVector(forceApplication, "Friction");
+		//}
 
 		m_forceTotal += forceApplication;
 
