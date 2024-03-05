@@ -70,9 +70,7 @@ void Rigidbody::UpdateCollision() {
 				AddImpulse(normal * GetInverseMass() * momentum);
 				rb->AddImpulse((normal * rb->GetInverseMass() * momentum) * -1);
 			}
-
-
-			DebugPrintF("Collision!!! %s hits %s\n", _owner->GetName().c_str(), rb->_owner->GetName().c_str());
+			//DebugPrintF("Collision!!! %s hits %s\n", _owner->GetName().c_str(), rb->_owner->GetName().c_str());
 			continue;
 		}
 	}
