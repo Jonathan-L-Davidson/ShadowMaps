@@ -79,9 +79,9 @@ Vector3 BoxCollider::CollidesWith(BoxCollider& other) {
 	if (!xCollision.IsZero() && !yCollision.IsZero() && !zCollision.IsZero()) {
 		
 		Vector3 hitDir = xCollision + yCollision + zCollision;
+		float magnitude = hitDir.SquareMagnitude();
 		hitDir.Normalise();
-
-		return hitDir;
+		return hitDir * magnitude;
 
 	}
 
@@ -117,7 +117,6 @@ Vector3 BoxCollider::CollidesOnAxis(BoundingBox boxA, Vector3 spherePos, float s
 	}
 
 	Vector3 hitDir = spherePos - point;
-	hitDir.Normalise();
 	return hitDir;
 }
 
@@ -142,7 +141,6 @@ Vector3 BoxCollider::CollidesOnAxis(BoundingBox boxA, BoundingBox boxB, Vector3 
 
 	// If the conditions aren't met above, then we can assume there is collision.
 	Vector3 hitDir = boxB.origin - pointA;
-	hitDir.Normalise();
 	return hitDir;
 }
 
