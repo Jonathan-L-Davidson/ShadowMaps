@@ -170,8 +170,8 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
     }
 
     std::string line;
-    std::default_random_engine gen;
-    std::uniform_real_distribution<float> distribution(0.0, 1.0);
+    std::default_rando_engine gen;
+    std::unifor_real_distribution<float> distribution(0.0, 1.0);
 
     int indiceCount = 0;
     // This part took a while to recreate, requiring me to understand how to make use of stringstreams instead of using a single filestream.

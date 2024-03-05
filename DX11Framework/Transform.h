@@ -1,7 +1,7 @@
 #pragma once
 
-#ifndef TRANSFORM_H
-#define TRANSFORM_H
+#ifndef TRANSFOR_H
+#define TRANSFOR_H
 #include <DirectXMath.h>
 
 #include "Physics/Vector3.h"

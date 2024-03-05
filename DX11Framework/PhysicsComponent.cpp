@@ -122,7 +122,7 @@ void PhysicsComponent::HandleDrag() {
 				dragForce *= force;
 			}
 
-			// DebugPrintF("dragForce = X: %f,Y: %f, Z: %z \n m_velocity = X: %f, Y: %f, Z: %f \n", dragForce.x, dragForce.y, dragForce.z, m_velocity.x, m_velocity.y, m_velocity.z);
+			// DebugPrintF("dragForce = X: %f,Y: %f, Z: %z \n _velocity = X: %f, Y: %f, Z: %f \n", dragForce.x, dragForce.y, dragForce.z, _velocity.x, _velocity.y, _velocity.z);
 			_forceTotal += dragForce;
 		}
 	}
@@ -184,10 +184,10 @@ void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 	inertiaTensor = XMMatrixInverse(nullptr, inertiaTensor); // Inverting it.
 
 	// Acceleration
-	Vector3 m_angularAcceleration = TransformToVector3(torque, inertiaTensor);
+	Vector3 _angularAcceleration = TransformToVector3(torque, inertiaTensor);
 
 	// Velocity
-	_angularVelocity += m_angularAcceleration * deltaTime;
+	_angularVelocity += _angularAcceleration * deltaTime;
 
 	// Dampening
 	_angularVelocity *= pow(angularDampening, deltaTime);
@@ -197,7 +197,7 @@ void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 		_owner->transform->AddRotation(_angularVelocity * deltaTime);
 
 		_owner->transform->rotation.Normalise();
-		//DebugPrintF("Angular velocity = %f\n", m_angularVelocity.SquareMagnitude());
+		//DebugPrintF("Angular velocity = %f\n", _angularVelocity.SquareMagnitude());
 	}
 
 }

@@ -82,11 +82,11 @@ void SceneManager::Update(float deltaTime) {
 }
 
 void SceneManager::UpdateCameras() {
-    _cameras[CAM_DEFAULT_WASD]->LookFromTrans();
-    _cameras[CAM_LOOKDOWN]->LookFromTrans();
+    _cameras[CA_DEFAULT_WASD]->LookFromTrans();
+    _cameras[CA_LOOKDOWN]->LookFromTrans();
     
     if (_selectedObj != nullptr) {
-        _cameras[CAM_LOOKAT]->LookAt(*_selectedObj->transform);
+        _cameras[CA_LOOKAT]->LookAt(*_selectedObj->transform);
     }
 
 }
@@ -152,14 +152,14 @@ void SceneManager::SetupCameras() {
         _cameras[i] = cam;
     }
 
-    _cameras[CAM_DEFAULT_WASD]->SetPosition(Vector3(0.0f, 0.8f, -5.0f));
+    _cameras[CA_DEFAULT_WASD]->SetPosition(Vector3(0.0f, 0.8f, -5.0f));
 
-    _cameras[CAM_LOOKDOWN]->SetPosition(Vector3(0.0f, 10.0f, 0.0f));
-    //_cameras[CAM_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
+    _cameras[CA_LOOKDOWN]->SetPosition(Vector3(0.0f, 10.0f, 0.0f));
+    //_cameras[CA_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
 
-    _cameras[CAM_LOOKAT]->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
+    _cameras[CA_LOOKAT]->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
     
-    _activeCam = _cameras[CAM_DEFAULT_WASD];
+    _activeCam = _cameras[CA_DEFAULT_WASD];
 }
 
 Transform* YAMLReadTransform(const YAML::Node& node) { // Okay I hated it's ugliness so I actually written it into a seperate function now.

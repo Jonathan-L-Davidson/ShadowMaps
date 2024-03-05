@@ -222,12 +222,12 @@ namespace Physics {
 
     inline float DegreesToRadians(float deg)
     {
-        return deg * M_PI / 180.0f;
+        return deg * _PI / 180.0f;
     }
 
     inline float RadiansToDegrees(float rad)
     {
-        return rad * 180.0f / M_PI;
+        return rad * 180.0f / _PI;
     }
 
     inline Quaternion MakeQFromEulerAngles(float x, float y, float z)
@@ -285,7 +285,7 @@ namespace Physics {
             r13 = 2 * (q.v.x * q.v.z + q.n * q.v.y);
 
             u.x = RadiansToDegrees(0.0f); //roll
-            u.y = RadiansToDegrees((float)(-(M_PI / 2) * r31 / tmp));   // pitch
+            u.y = RadiansToDegrees((float)(-(_PI / 2) * r31 / tmp));   // pitch
             u.z = RadiansToDegrees((float)atan2(-r12, -r31 * r13)); // yaw
             return u;
         }

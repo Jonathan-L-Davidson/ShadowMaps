@@ -205,13 +205,13 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 
 void InputManager::HandleSceneKeys() {
 	if (HandleKeyPressed('1')) {
-		_sceneManager->SetActiveCam(_sceneManager->GetCam(CAM_DEFAULT_WASD));
+		_sceneManager->SetActiveCam(_sceneManager->GetCam(CA_DEFAULT_WASD));
 	}
 	if (HandleKeyPressed('2')) {
-		_sceneManager->SetActiveCam(_sceneManager->GetCam(CAM_LOOKAT));
+		_sceneManager->SetActiveCam(_sceneManager->GetCam(CA_LOOKAT));
 	}
 	if (HandleKeyPressed('3')) {
-		_sceneManager->SetActiveCam(_sceneManager->GetCam(CAM_LOOKDOWN));
+		_sceneManager->SetActiveCam(_sceneManager->GetCam(CA_LOOKDOWN));
 	}
 
 	if (HandleKeyPressed(keyCycleObjUp)) {

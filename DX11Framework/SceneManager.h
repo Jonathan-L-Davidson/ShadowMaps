@@ -7,9 +7,9 @@
 
 #define CAMERA_AMOUNT		3
 
-#define CAM_DEFAULT_WASD	0
-#define CAM_LOOKAT			1
-#define CAM_LOOKDOWN		2
+#define CA_DEFAULT_WASD	0
+#define CA_LOOKAT			1
+#define CA_LOOKDOWN		2
 
 class ConstantBuffer;
 class SimpleLight;
