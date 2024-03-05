@@ -9,7 +9,7 @@ Shader::Shader() {
 Shader::~Shader() {
 	if (_vertexShader)	DELETED3D(_vertexShader);
     if (_inputLayout)   DELETED3D(_inputLayout);
-	if (_pixelShader)	DELETED3D(_pixelShader);
+	if (M_PIxelShader)	DELETED3D(M_PIxelShader);
 
     _default = nullptr;
 }
@@ -44,8 +44,8 @@ ID3D11PixelShader* Shader::GetPixelShader() {
         return nullptr;
     }
 
-	if (_pixelShader != nullptr) {
-		return _pixelShader;
+	if (M_PIxelShader != nullptr) {
+		return M_PIxelShader;
 	}
 
     return _default->GetPixelShader();

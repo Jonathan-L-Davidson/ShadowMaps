@@ -109,7 +109,7 @@ HRESULT Renderer::CreateSwapChainAndFrameBuffer()
     if (FAILED(hr)) return hr;
 
     D3D11_RENDER_TARGET_VIEW_DESC framebufferDesc = {};
-    framebufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNOR_SRGB; //sRGB render target enables hardware gamma correction
+    framebufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB; //sRGB render target enables hardware gamma correction
     framebufferDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
     hr = _device->CreateRenderTargetView(frameBuffer, &framebufferDesc, &_frameBufferView);
@@ -117,7 +117,7 @@ HRESULT Renderer::CreateSwapChainAndFrameBuffer()
     D3D11_TEXTURE2D_DESC depthBufferDesc = {};
     frameBuffer->GetDesc(&depthBufferDesc);
 
-    depthBufferDesc.Format = DXGI_FORMAT_D24_UNOR_S8_UINT;
+    depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
     depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
     _device->CreateTexture2D(&depthBufferDesc, nullptr, &_depthStencilBuffer);

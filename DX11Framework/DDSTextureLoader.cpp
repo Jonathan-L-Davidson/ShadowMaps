@@ -48,7 +48,7 @@ using namespace DirectX;
 
 const uint32_t DDS_MAGIC = 0x20534444; // "DDS "
 
-struct DDS_PIXELFORMAT
+struct DDSM_PIXELFORMAT
 {
     uint32_t    size;
     uint32_t    flags;
@@ -98,7 +98,7 @@ struct DDS_HEADER
     uint32_t        depth; // only if DDS_HEADER_FLAGS_VOLUME is set in flags
     uint32_t        mipMapCount;
     uint32_t        reserved1[11];
-    DDS_PIXELFORMAT ddspf;
+    DDSM_PIXELFORMAT ddspf;
     uint32_t        caps;
     uint32_t        caps2;
     uint32_t        caps3;
@@ -236,7 +236,7 @@ static HRESULT LoadTextureDataFromFile( _In_z_ const wchar_t* fileName,
 
     // Verify header to validate DDS file
     if (hdr->size != sizeof(DDS_HEADER) ||
-        hdr->ddspf.size != sizeof(DDS_PIXELFORMAT))
+        hdr->ddspf.size != sizeof(DDSM_PIXELFORMAT))
     {
         return E_FAIL;
     }
@@ -575,7 +575,7 @@ static void GetSurfaceInfo( _In_ size_t width,
 //--------------------------------------------------------------------------------------
 #define ISBITMASK( r,g,b,a ) ( ddpf.RBitMask == r && ddpf.GBitMask == g && ddpf.BBitMask == b && ddpf.ABitMask == a )
 
-static DXGI_FORMAT GetDXGIFormat( const DDS_PIXELFORMAT& ddpf )
+static DXGI_FORMAT GetDXGIFormat( const DDSM_PIXELFORMAT& ddpf )
 {
     if (ddpf.flags & DDS_RGB)
     {
@@ -1627,7 +1627,7 @@ HRESULT DirectX::CreateDDSTextureFromMemoryEx( ID3D11Device* d3dDevice,
 
     // Verify header to validate DDS file
     if (header->size != sizeof(DDS_HEADER) ||
-        header->ddspf.size != sizeof(DDS_PIXELFORMAT))
+        header->ddspf.size != sizeof(DDSM_PIXELFORMAT))
     {
         return E_FAIL;
     }

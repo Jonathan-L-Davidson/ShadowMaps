@@ -18,9 +18,9 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 	// Main message loop
 	MSG msg = { 0 };
 
-	while (W_QUIT != msg.message)
+	while (WM_QUIT != msg.message)
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, P_REMOVE))
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 
 			TranslateMessage(&msg);

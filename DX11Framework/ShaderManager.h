@@ -16,7 +16,7 @@ public:
 	ID3D11PixelShader* GetPixelShader();
 	void SetVertexShader(ID3D11VertexShader* vertShader) { _vertexShader = vertShader; };
 	void SetInputLayout(ID3D11InputLayout* inputLayout) { _inputLayout = inputLayout;}
-	void SetPixelShader(ID3D11PixelShader* pixelShader) { _pixelShader = pixelShader; };
+	void SetPixelShader(ID3D11PixelShader* pixelShader) { M_PIxelShader = pixelShader; };
 
 
 	std::string GetID() { return _id; };
@@ -26,7 +26,7 @@ public:
 private:
 	ID3D11VertexShader* _vertexShader;
 	ID3D11InputLayout* _inputLayout;
-	ID3D11PixelShader* _pixelShader;
+	ID3D11PixelShader* M_PIxelShader;
 
 	std::string _id;
 	Shader* _default; // default callback if anything goes wrong.

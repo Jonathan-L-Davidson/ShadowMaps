@@ -7,12 +7,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
-    case W_PAINT:
+    case WM_PAINT:
         hdc = BeginPaint(hWnd, &ps);
         EndPaint(hWnd, &ps);
         break;
 
-    case W_DESTROY:
+    case WM_DESTROY:
         PostQuitMessage(0);
         break;
 
