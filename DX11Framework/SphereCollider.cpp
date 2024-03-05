@@ -1,15 +1,17 @@
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 
-bool SphereCollider::CollidesWith(SphereCollider& other) {
-	float dist = Vector3(other.GetPosition() - GetPosition()).Magnitude(); // Magnitude cannot be squared due to accuracy issues.
+Vector3 SphereCollider::CollidesWith(SphereCollider& other) {
+	Vector3 dir = other.GetPosition() - GetPosition();
+	float dist = dir.Magnitude(); // Magnitude cannot be squared due to accuracy issues.
 	if (dist < (_radius)) {
-		return true;
+		dir.Normalise();
+		return dir;
 	}
 
-	return false;
+	return Vector3();
 }
 
-bool SphereCollider::CollidesWith(BoxCollider& other) {
+Vector3 SphereCollider::CollidesWith(BoxCollider& other) {
 	return other.CollidesWith(*this);
 }

@@ -6,6 +6,10 @@
 #include "SphereCollider.h"
 #include "ObjectManager.h"
 
+static int DebugPrintVector(const Vector3& vec, const char* prefix) {
+	return DebugPrintF("%s: x - %f, y - %f, z - %f\n", prefix, vec.x, vec.y, vec.z);
+}
+
 Rigidbody::~Rigidbody() {
 	PhysicsComponent::Destroy();
 	delete _collider;
@@ -51,8 +55,23 @@ void Rigidbody::UpdateCollision() {
 	for (Rigidbody* rb : rbList) {
 		if (rb == this)	continue;
 
-		if (_collider->CollidesWith(*rb->GetCollider())) {
+		Vector3 normal = _collider->CollidesWith(*rb->GetCollider());
+		if (!normal.IsZero()) {
 			// handleCollision
+			
+			Vector3 relativeVelocity = rb->GetVelocity() - GetVelocity();
+
+			float relativeDot = relativeVelocity.DotProduct(normal);
+			if (relativeDot > 0) { // we're in the direction of colliding. 
+				float totalVelocity = -((1 + _restitution) * relativeDot);
+
+				float momentum = totalVelocity * GetInverseMass() + rb->GetInverseMass();
+
+				AddImpulse(normal * GetInverseMass() * momentum);
+				rb->AddImpulse((normal * rb->GetInverseMass() * momentum) * -1);
+			}
+
+
 			DebugPrintF("Collision!!! %s hits %s\n", _owner->GetName().c_str(), rb->_owner->GetName().c_str());
 			continue;
 		}

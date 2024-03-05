@@ -3,12 +3,8 @@
 #include "PhysicsComponent.h"
 #include "Object.h"
 
-static int DebugPrintVector(const Vector3& vec, const char* prefix) {
-	return DebugPrintF("%s: x - %f, y - %f, z - %f\n", prefix, vec.x, vec.y, vec.z);
-}
-
 void PhysicsComponent::Start() {
-	m_oldPos = _owner->transform->position;
+	_oldPos = _owner->transform->position;
 }
 
 void PhysicsComponent::Update(float deltaTime) {
@@ -24,11 +20,11 @@ void PhysicsComponent::Destroy() {
 }
 
 void PhysicsComponent::HandleGravity() {
-	if (_owner->GetPosition().y < 0 || m_oldPos.y < 0) {
-		m_oldPos.y = 0;
-		_owner->SetPosition(m_oldPos);
-		if (m_velocity.y < 0) {
-			m_velocity.y = 0;
+	if (_owner->GetPosition().y < 0 || _oldPos.y < 0) {
+		_oldPos.y = 0;
+		_owner->SetPosition(_oldPos);
+		if (_velocity.y < 0) {
+			_velocity.y = 0;
 		}
 
 		hasFriction = true;
@@ -43,12 +39,13 @@ void PhysicsComponent::UpdatePhysics(float deltaTime) {
 	UpdateLinearMotion(deltaTime);
 	UpdateAngularMotion(deltaTime);
 
-	m_forceTotal = Vector3(); // Resets it by returning default values.
-	m_forces.clear();
-	m_acceleration = Vector3();
+	_forceTotal = Vector3(); // Resets it by returning default values.
+	_forces.clear();
+	_impulses.clear();
+	_acceleration = Vector3();
 
-	m_rotationalForces.clear();
-	m_rotationalForce = Vector3();
+	_rotationalForces.clear();
+	_rotationalForce = Vector3();
 }
 
 #pragma region Linear Motion
@@ -61,8 +58,8 @@ void PhysicsComponent::UpdateLinearMotion(float deltaTime) {
 }
 
 void PhysicsComponent::CalculateForces(float deltaTime) {
-	for (Vector3 force : m_forces) {
-		m_forceTotal += force;
+	for (Vector3 force : _forces) {
+		_forceTotal += force;
 	}
 
 	HandleDrag();
@@ -70,42 +67,46 @@ void PhysicsComponent::CalculateForces(float deltaTime) {
 }
 
 void PhysicsComponent::CalculateAcceleration(float deltaTime) {
-	m_acceleration += m_forceTotal / mass;
+	_acceleration += _forceTotal / mass;
 }
 
 void PhysicsComponent::CalculateVelocity(float deltaTime) {
 	if (!useConstantVelocity) {
-		m_velocity += m_acceleration * deltaTime;
+		_velocity += _acceleration * deltaTime;
 	}
 	else {
-		m_velocity += m_acceleration;
+		_velocity += _acceleration;
+	}
+
+	for (Vector3 impulse : _impulses) {
+		_velocity += impulse;
 	}
 }
 
 void PhysicsComponent::UpdatePosition(float deltaTime) {
-	float magnitude = m_velocity.Magnitude();
+	float magnitude = _velocity.Magnitude();
 
-	if (magnitude > m_maxSpeed) {
-		m_velocity.Normalise();
-		m_velocity *= m_maxSpeed;
+	if (magnitude > _maxSpeed) {
+		_velocity.Normalise();
+		_velocity *= _maxSpeed;
 	}
 
 	if (magnitude != 0) {
-		Vector3 pos = m_oldPos + (m_velocity * deltaTime);
+		Vector3 pos = _oldPos + (_velocity * deltaTime);
 		_owner->SetPosition(pos);
-		m_oldPos = pos;
+		_oldPos = pos;
 	}
 
 }
 
 void PhysicsComponent::HandleDrag() {
-	float velMagnitude = m_velocity.SquareMagnitude();
+	float velMagnitude = _velocity.SquareMagnitude();
 
 	// handle drag:
 	if (velMagnitude != 0) {
 		//DebugPrintF("Velocity: %f \n", velMagnitude);
 		if (useDrag) {
-			Vector3 dragForce = m_velocity * -1.0f;
+			Vector3 dragForce = _velocity * -1.0f;
 			dragForce.Normalise();
 
 
@@ -122,7 +123,7 @@ void PhysicsComponent::HandleDrag() {
 			}
 
 			// DebugPrintF("dragForce = X: %f,Y: %f, Z: %z \n m_velocity = X: %f, Y: %f, Z: %f \n", dragForce.x, dragForce.y, dragForce.z, m_velocity.x, m_velocity.y, m_velocity.z);
-			m_forceTotal += dragForce;
+			_forceTotal += dragForce;
 		}
 	}
 }
@@ -130,43 +131,35 @@ void PhysicsComponent::HandleDrag() {
 #define KINETIC_THRESHHOLD 0.4f
 
 void PhysicsComponent::HandleFriction() {
-	float velMagnitude = m_velocity.SquareMagnitude();
+	float velMagnitude = _velocity.SquareMagnitude();
 
 
 	if (hasFriction) {
 		float friction = mass * gravity.Magnitude() * frictionCoef;
 
-		Vector3 forceApplication = (m_velocity * -1.0f) * friction;
+		Vector3 forceApplication = (_velocity * -1.0f) * friction;
 		//if (velMagnitude > 0) {
 		//	DebugPrintF("Friction Value: %f\n", friction);
 		//	DebugPrintVector(forceApplication, "Friction");
 		//}
 
-		m_forceTotal += forceApplication;
+		_forceTotal += forceApplication;
 
 	}
 }
-
-#undef KINETIC_THRESHHOLD
-
-void PhysicsComponent::HandleMagnitude() {
-	// TODO
-}
-
-#pragma endregion
 
 #pragma region Angular Motion
 void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 	// Calculate torque
 	
-	for (Vector3 force : m_rotationalForces) {
-		m_rotationalForce += force;
+	for (Vector3 force : _rotationalForces) {
+		_rotationalForce += force;
 	}
 
 	// I don't know what relative position is in terms of how this rigidbody physics works so I'm setting it to be the position of the object.
-	m_relativePosition = _owner->transform->position;
+	_relativePosition = _owner->transform->position;
 
-	Vector3 torque = m_relativePosition.CrossProduct(m_rotationalForce);
+	Vector3 torque = _relativePosition.CrossProduct(_rotationalForce);
 
 
 	// Inertia Tensor
@@ -194,14 +187,14 @@ void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 	Vector3 m_angularAcceleration = TransformToVector3(torque, inertiaTensor);
 
 	// Velocity
-	m_angularVelocity += m_angularAcceleration * deltaTime;
+	_angularVelocity += m_angularAcceleration * deltaTime;
 
 	// Dampening
-	m_angularVelocity *= pow(angularDampening, deltaTime);
-	if (m_angularVelocity.SquareMagnitude() != 0) {
+	_angularVelocity *= pow(angularDampening, deltaTime);
+	if (_angularVelocity.SquareMagnitude() != 0) {
 
 		// Applies rotation
-		_owner->transform->AddRotation(m_angularVelocity * deltaTime);
+		_owner->transform->AddRotation(_angularVelocity * deltaTime);
 
 		_owner->transform->rotation.Normalise();
 		//DebugPrintF("Angular velocity = %f\n", m_angularVelocity.SquareMagnitude());

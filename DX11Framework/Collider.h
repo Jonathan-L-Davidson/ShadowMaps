@@ -14,9 +14,9 @@ public:
 	Collider(Transform* transform, Transform offsetTransform) { _tf = transform; _offsetTransform = offsetTransform; };
 	Collider() { };
 
-	virtual bool CollidesWith(Collider& other) = 0;
-	virtual bool CollidesWith(SphereCollider& other) = 0;
-	virtual bool CollidesWith(BoxCollider& other) = 0;
+	virtual Vector3 CollidesWith(Collider& other) = 0;
+	virtual Vector3 CollidesWith(SphereCollider& other) = 0;
+	virtual Vector3 CollidesWith(BoxCollider& other) = 0;
 
 
 	Vector3 GetPosition() const { return (*_tf + _offsetTransform).GetPosition(); };

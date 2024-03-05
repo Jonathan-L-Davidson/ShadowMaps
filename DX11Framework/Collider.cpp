@@ -1,10 +1,10 @@
 #include "Collider.h"
 #include "SphereCollider.h"
 
-bool Collider::CollidesWith(Collider& other) {
-	return false;
+Vector3 Collider::CollidesWith(Collider& other) {
+	return Vector3();
 }
 
-bool Collider::CollidesWith(SphereCollider& other) {
-	return false;
+Vector3 Collider::CollidesWith(SphereCollider& other) {
+	return Vector3();
 }

@@ -34,6 +34,7 @@ private:
 	Transform* _transform;
 	Transform _offsetTransform;
 
+	float _restitution = 0.2f;
 };
 
 #endif

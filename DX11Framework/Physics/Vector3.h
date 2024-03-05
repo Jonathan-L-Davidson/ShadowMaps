@@ -27,6 +27,8 @@ namespace Physics {
 		Vector3(const real x, const real y, const real z) : x(x), y(y), z(z) {}
 		Vector3(const DirectX::XMFLOAT3 f3) : x(f3.x), y(f3.y), z(f3.z) {}
 
+		bool IsZero() { return x == 0 && y == 0 && z == 0; }
+
 		void Invert() {
 			x = -x;
 			y = -y;

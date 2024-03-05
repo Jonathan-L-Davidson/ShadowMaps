@@ -25,8 +25,12 @@ class PhysicsComponent : public Component
 		virtual void Update(float deltaTime);
 		void Destroy();
 
-		void AddForce(const Vector3 force, bool useMass = true) { m_forces.push_back(force * (useMass ? mass : 1)); };
-		void AddRotationalForce(const Vector3 force, bool useMass = true) { m_rotationalForces.push_back(force * (useMass ? mass : 1)); };
+		void AddForce(const Vector3 force, bool useMass = true) { _forces.push_back(force * (useMass ? mass : 1)); };
+		void AddImpulse(const Vector3 force) { _impulses.push_back(force); };
+		void AddRotationalForce(const Vector3 force, bool useMass = true) { _rotationalForces.push_back(force * (useMass ? mass : 1)); };
+
+		Vector3 GetVelocity() { return _velocity; };
+		float GetInverseMass() { return -(1 / mass); };
 
 		float mass = 5.0f;
 		float radius = 2.0f;
@@ -44,7 +48,6 @@ class PhysicsComponent : public Component
 		bool useLaminarDrag = true;
 		
 		float frictionCoef = 0.2f;
-		
 
 		float angularDampening = 0.5f;
 
@@ -62,21 +65,22 @@ private:
 
 		void UpdatePosition(float deltatime);
 
-		Vector3 m_velocity;
-		Vector3 m_acceleration;
-		Vector3 m_forceTotal;
-		std::vector<Vector3> m_forces;
+		Vector3 _velocity;
+		Vector3 _acceleration;
+		Vector3 _forceTotal;
+		std::vector<Vector3> _forces;
+		std::vector<Vector3> _impulses;
 
-		Vector3 m_oldVelocity;
-		Vector3 m_oldPos;
+		Vector3 _oldVelocity;
+		Vector3 _oldPos;
 
-		float m_maxSpeed = 500.0f;
-		Vector3 m_relativePosition;
+		float	_maxSpeed = 500.0f;
+		Vector3 _relativePosition;
 
 
-		Vector3 m_rotationalForce;
-		Vector3 m_angularVelocity;
-		std::vector<Vector3> m_rotationalForces;
+		Vector3 _rotationalForce;
+		Vector3 _angularVelocity;
+		std::vector<Vector3> _rotationalForces;
 };
 
 #endif // !PHYSICS_COMP_H

@@ -17,18 +17,18 @@ public:
 
 	void GenerateBoundingBox(Vector3 origin, float width, float length, float height);
 
-	virtual bool CollidesWith(Collider& other) { return other.CollidesWith(*(BoxCollider*)this); };
-	virtual bool CollidesWith(SphereCollider& other) override;
-	virtual bool CollidesWith(BoxCollider& other) override;
+	virtual Vector3 CollidesWith(Collider& other) { return other.CollidesWith(*(BoxCollider*)this); };
+	virtual Vector3 CollidesWith(SphereCollider& other) override;
+	virtual Vector3 CollidesWith(BoxCollider& other) override;
 	
 	BoundingBox GetBox() { TranslateBox(); return _translatedBox; }
 	void TranslateBox();
 
 
 private:
-	bool CollidesOnAxis(BoundingBox boxA, BoundingBox boxB, Vector3 axis);
-	bool CollidesOnAxis(BoundingBox boxA, Vector3 spherePos, float sphereRadius);
-	void GetMinMax(float& min, float& max, BoundingBox box, Vector3 axis);
+	Vector3 CollidesOnAxis(BoundingBox boxA, BoundingBox boxB, Vector3 axis);
+	Vector3 CollidesOnAxis(BoundingBox boxA, Vector3 spherePos, float sphereRadius);
+	Vector3 GetMinMax(float& min, float& max, BoundingBox box, Vector3 axis);
 
 	BoundingBox _boxShape;
 	BoundingBox _translatedBox;

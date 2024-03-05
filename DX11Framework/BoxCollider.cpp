@@ -45,7 +45,7 @@ void BoxCollider::TranslateBox() {
 	}
 }
 
-bool BoxCollider::CollidesWith(SphereCollider& other) {
+Vector3 BoxCollider::CollidesWith(SphereCollider& other) {
 	
 	BoundingBox translatedBox = GetBox(); // GetBox() updates translated box, this is the equivalent of updating our world matrix per object.
 
@@ -60,7 +60,7 @@ bool BoxCollider::CollidesWith(SphereCollider& other) {
 /// </summary>
 /// <param name="other"></param>
 /// <returns></returns>
-bool BoxCollider::CollidesWith(BoxCollider& other) {
+Vector3 BoxCollider::CollidesWith(BoxCollider& other) {
 
 	// The axes we want to check
 	Vector3 xCheck = Vector3(1, 0, 0);
@@ -71,20 +71,24 @@ bool BoxCollider::CollidesWith(BoxCollider& other) {
 	BoundingBox otherBox = other.GetBox();
 	
 
-	bool xCollision = CollidesOnAxis(translatedBox, otherBox, xCheck);
-	bool yCollision = CollidesOnAxis(translatedBox, otherBox, yCheck);
-	bool zCollision = CollidesOnAxis(translatedBox, otherBox, zCheck);
+	Vector3 xCollision = CollidesOnAxis(translatedBox, otherBox, xCheck);
+	Vector3 yCollision = CollidesOnAxis(translatedBox, otherBox, yCheck);
+	Vector3 zCollision = CollidesOnAxis(translatedBox, otherBox, zCheck);
 
 	// We've collided in every axes. Therefore there is contact.
-	if (xCollision && yCollision && zCollision) {
-		//calculate momentum here?
-		return true;
+	if (!xCollision.IsZero() && !yCollision.IsZero() && !zCollision.IsZero()) {
+		
+		Vector3 hitDir = xCollision + yCollision + zCollision;
+		hitDir.Normalise();
+
+		return hitDir;
+
 	}
 
-	return false;
+	return Vector3();
 }
 
-bool BoxCollider::CollidesOnAxis(BoundingBox boxA, Vector3 spherePos, float sphereRadius) {
+Vector3 BoxCollider::CollidesOnAxis(BoundingBox boxA, Vector3 spherePos, float sphereRadius) {
 
 
 	Vector3 boxToCircle = spherePos - boxA.origin;
@@ -92,6 +96,7 @@ bool BoxCollider::CollidesOnAxis(BoundingBox boxA, Vector3 spherePos, float sphe
 	Vector3 boxToCircleN = Vector3(boxToCircle);
 	boxToCircleN.Normalise(); // Our axis to test for alignment, basically the closest point to the circle.
 
+	Vector3 point = boxA.points[0];
 	float furthestPoint = boxToCircleN.DotProduct(boxA.points[0] - boxA.origin);
 	for (int i = 1; i < 8; i++) {
 		Vector3 pointToTest = boxA.points[i] - boxA.origin;
@@ -101,17 +106,22 @@ bool BoxCollider::CollidesOnAxis(BoundingBox boxA, Vector3 spherePos, float sphe
 		// Is the dot product greater than our highest? If so, replace it.
 		if (dotTest > furthestPoint) {
 			furthestPoint = dotTest;
+			point = boxA.points[i];
 		}
 	}
 
 	// If the distance between the furthest point and sphere radius is greater than the distance from the box to the circle, then it would go into the negative.
 	// if the overall distance is positive, then there's a gap and there is no collision. If it's in the negative, there is collision.
 	if (boxToCircle.Magnitude() - furthestPoint - (sphereRadius * 0.5) > 0) {
-		return false;
+		return Vector3();
 	}
-	return true;
+
+	Vector3 hitDir = spherePos - point;
+	hitDir.Normalise();
+	return hitDir;
 }
-bool BoxCollider::CollidesOnAxis(BoundingBox boxA, BoundingBox boxB, Vector3 axis) {
+
+Vector3 BoxCollider::CollidesOnAxis(BoundingBox boxA, BoundingBox boxB, Vector3 axis) {
 
 	// Point A & B's min-max, this is to get a point most aligned projected onto the axis.
 	float minPointA = float();
@@ -120,21 +130,23 @@ bool BoxCollider::CollidesOnAxis(BoundingBox boxA, BoundingBox boxB, Vector3 axi
 	float maxPointB = float();
 
 	// These functions set the minmax values for the boxes needed.
-	GetMinMax(minPointA, maxPointA, boxA, axis);
-	GetMinMax(minPointB, maxPointB, boxB, axis);
+	Vector3 pointA = GetMinMax(minPointA, maxPointA, boxA, axis);
+	Vector3 pointB = GetMinMax(minPointB, maxPointB, boxB, axis);
 
 	// if the closest point of box B is greater than the furthest point of box A. OR
 	// if the closest point of box A is greater than the furthest point of box B
 	// there is no collision, as they aren't inside eachother. This is a standard AABB test but using the dot products instead, which "aligns" them on the axes.
 	if ((minPointB > maxPointA || minPointA > maxPointB)) {
-		return false;
+		return Vector3();
 	}
 
 	// If the conditions aren't met above, then we can assume there is collision.
-	return true;
+	Vector3 hitDir = boxB.origin - pointA;
+	hitDir.Normalise();
+	return hitDir;
 }
 
-void BoxCollider::GetMinMax(float& min, float& max, BoundingBox box, Vector3 axis) {
+Vector3 BoxCollider::GetMinMax(float& min, float& max, BoundingBox box, Vector3 axis) {
 	Vector3 minV = box.points[0];
 	Vector3 maxV = box.points[0];
 
@@ -164,4 +176,5 @@ void BoxCollider::GetMinMax(float& min, float& max, BoundingBox box, Vector3 axi
 	// I'd rather do it at the end when the for loop is finished.
 	min = currentDotMin;
 	max = currentDotMax;
+	return maxV;
 }
