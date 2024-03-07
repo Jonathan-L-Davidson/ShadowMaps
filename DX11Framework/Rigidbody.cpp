@@ -57,12 +57,12 @@ void Rigidbody::UpdateCollision() {
 
 		Vector3 normal = _collider->CollidesWith(*rb->GetCollider());
 		normal.Normalise();
-		if (!normal.IsZero()) {
+		if (!normal.IsZero()) { // Is there a collision normal? If so, collision.
 			Vector3 relativeVelocity = rb->GetVelocity() - GetVelocity();
 
 			float relativeDot = relativeVelocity.DotProduct(normal);
 			if (relativeDot > 0) { // we're in the direction of colliding. 
-				float totalVelocity = (-(1 + _restitution) * relativeDot);
+				float totalVelocity = -(1 + _restitution) * relativeDot;
 
 				float momentum = totalVelocity * GetInverseMass() + rb->GetInverseMass();
 

@@ -49,7 +49,6 @@ void PhysicsComponent::UpdatePhysics(float deltaTime) {
 }
 
 #pragma region Linear Motion
-
 void PhysicsComponent::UpdateLinearMotion(float deltaTime) {
 	CalculateForces(deltaTime);
 	CalculateAcceleration(deltaTime);
@@ -71,7 +70,7 @@ void PhysicsComponent::CalculateAcceleration(float deltaTime) {
 }
 
 void PhysicsComponent::CalculateVelocity(float deltaTime) {
-	if (!useConstantVelocity) {
+	if (!useConstantAcceleration) {
 		_velocity += _acceleration * deltaTime;
 	}
 	else {
@@ -92,7 +91,7 @@ void PhysicsComponent::UpdatePosition(float deltaTime) {
 	}
 
 	if (magnitude != 0) {
-		Vector3 pos = _oldPos + (_velocity * deltaTime);
+		Vector3 pos = _oldPos + (_velocity * (useConstantVelocity ? 1.0f : deltaTime));
 		_owner->SetPosition(pos);
 		_oldPos = pos;
 	}
@@ -102,7 +101,6 @@ void PhysicsComponent::UpdatePosition(float deltaTime) {
 void PhysicsComponent::HandleDrag() {
 	float velMagnitude = _velocity.SquareMagnitude();
 
-	// handle drag:
 	if (velMagnitude != 0) {
 		//DebugPrintF("Velocity: %f \n", velMagnitude);
 		if (useDrag) {
@@ -121,14 +119,10 @@ void PhysicsComponent::HandleDrag() {
 				float force = (0.5f * (dragAmount * velMagnitude * dragCoef));
 				dragForce *= force;
 			}
-
-			// DebugPrintF("dragForce = X: %f,Y: %f, Z: %z \n _velocity = X: %f, Y: %f, Z: %f \n", dragForce.x, dragForce.y, dragForce.z, _velocity.x, _velocity.y, _velocity.z);
 			_forceTotal += dragForce;
 		}
 	}
 }
-
-#define KINETIC_THRESHHOLD 0.4f
 
 void PhysicsComponent::HandleFriction() {
 	float velMagnitude = _velocity.SquareMagnitude();
@@ -138,25 +132,19 @@ void PhysicsComponent::HandleFriction() {
 		float friction = mass * gravity.Magnitude() * frictionCoef;
 
 		Vector3 forceApplication = (_velocity * -1.0f) * friction;
-		//if (velMagnitude > 0) {
-		//	DebugPrintF("Friction Value: %f\n", friction);
-		//	DebugPrintVector(forceApplication, "Friction");
-		//}
 
 		_forceTotal += forceApplication;
 
 	}
 }
+#pragma endregion
 
 #pragma region Angular Motion
 void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
-	// Calculate torque
-	
 	for (Vector3 force : _rotationalForces) {
 		_rotationalForce += force;
 	}
 
-	// I don't know what relative position is in terms of how this rigidbody physics works so I'm setting it to be the position of the object.
 	_relativePosition = _owner->transform->position;
 
 	Vector3 torque = _relativePosition.CrossProduct(_rotationalForce);
