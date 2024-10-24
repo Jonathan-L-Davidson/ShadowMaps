@@ -158,25 +158,28 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 	}
 	
 	#pragma region Rotations
-	if (HandleKeyDown(keyYawCamLeft)) {
-		_cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
-	}
-	if (HandleKeyDown(keyYawCamRight)) {
-		_cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
-	}
+	//if (HandleKeyDown(keyYawCamLeft)) {
+	//	_cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
+	//}
+	//if (HandleKeyDown(keyYawCamRight)) {
+	//	_cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
+	//}
 
-	if (HandleKeyDown(keyRollCamLeft)) {
-		_cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
-	}
-	if (HandleKeyDown(keyRollCamRight)) {
-		_cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
-	}
-	
-	if (HandleKeyDown(keyPitchCamUp)) {
-		_cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
-	}
-	if (HandleKeyDown(keyPitchCamDown)) {
-		_cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
+	//if (HandleKeyDown(keyRollCamLeft)) {
+	//	_cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
+	//}
+	//if (HandleKeyDown(keyRollCamRight)) {
+	//	_cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
+	//}
+	//
+	//if (HandleKeyDown(keyPitchCamUp)) {
+	//	_cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
+	//}
+	//if (HandleKeyDown(keyPitchCamDown)) {
+	//	_cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
+	//}
+	if (HandleKeyPressed(keyToggleFlyCam)) {
+		SetFlyCam(!flyCamera);
 	}
 
 	#pragma endregion
@@ -269,18 +272,20 @@ void InputManager::HandleMouse(float deltaTime)
 {
 	auto mouse = _mouse->GetState();
 	_mouseButtons.Update(mouse);
+	DebugPrintF("Mouse pos X: %i | Mouse Pos Y: %i\nLMB: %i | RMB: %i\n", mouse.x, mouse.y, _mouseButtons.leftButton, _mouseButtons.rightButton);
 
 	if(flyCamera) {
-		DebugPrintF("Mouse pos X: %i | Mouse Pos Y: %i\nLMB: %i | RMB: %i\n", mouse.x, mouse.y, _mouseButtons.leftButton, _mouseButtons.rightButton);
 		// we want pitch and yaw to be added depending on the mouse movement from the current mouse input on the frame.
 		Vector3 camRot = MakeEulerAnglesFromQ(_cam->transform.rotation);
 		// x = roll, y = yaw, z = pitch
-		camRot.z += mouse.y * deltaTime;
-		camRot.y += mouse.x * deltaTime;
+		camRot.z -= mouse.y * deltaTime;
+		camRot.y -= mouse.x * deltaTime;
 
 		// By multiplying by pi, I'm able to constrain  a value within 
-		camRot.y = max(VIEW_PITCH_CLAMP, camRot.z);
-		camRot.y = min(-VIEW_PITCH_CLAMP, camRot.z);
+		camRot.z = max(-VIEW_PITCH_CLAMP, camRot.z);
+		camRot.z = min(VIEW_PITCH_CLAMP, camRot.z);
+
+		_cam->transform.SetRotation(camRot);
 	}
 }
 

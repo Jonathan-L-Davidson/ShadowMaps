@@ -9,6 +9,7 @@
 class Renderer;
 class SceneManager;
 class DX11Framework;
+class Camera;
 
 class InputManager
 {
@@ -38,11 +39,12 @@ private:
 	Renderer* _renderManager;
 	SceneManager* _sceneManager;
 	DX11Framework* _framework;
+	Camera* _cam;
 
 	DirectX::Mouse* _mouse;
 	DirectX::Mouse::ButtonStateTracker _mouseButtons;
 	bool flyCamera = 0;
-
+	char keyToggleFlyCam = 'F';
 
 	char keyMoveForward = 'W';
 	char keyMoveLeft = 'A';
@@ -86,8 +88,6 @@ private:
 	bool HandleKeyUp(const char input);
 	bool HandleKeyPressed(const char input);
 	void OutputCurrentObject();
-
-	Camera* _cam;
 };
 
 #endif // !INPUTMANAGER_H
