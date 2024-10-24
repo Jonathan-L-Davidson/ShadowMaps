@@ -47,12 +47,22 @@ void InputManager::OutputCurrentObject() {
 
 }
 
+void InputManager::Initialise()
+{
+	_mouse = new DirectX::Mouse();
+	_mouse->SetWindow(_renderManager->GetWindowInstance());
+	_mouse->SetMode(DirectX::Mouse::MODE_ABSOLUTE);
+}
+
 void InputManager::Update(float deltaTime) {
+	_cam = _sceneManager->GetActiveCam();
+
 	if (_renderManager->GetWindowInstance() == GetFocus()) {
 		HandleRenderKeys();
 		HandleMovementKeys(deltaTime);
 		HandleSceneKeys();
 		HandleMiscKeys();
+		HandleMouse(deltaTime);
 	}
 }
 
@@ -72,23 +82,22 @@ void InputManager::HandleRenderKeys() {
 }
 
 void InputManager::HandleMovementKeys(float deltaTime) {
-	Camera* cam = _sceneManager->GetActiveCam();
 	
 	PhysicsComponent* physicsObj = _sceneManager->GetActiveObject()->GetComponent<PhysicsComponent>();
 
 	// WASD.
 	{
 		if (HandleKeyDown(keyMoveForward)) {
-			cam->transform.AddPosition(Vector3(0, 0, _sceneManager->moveSpeed));
+			_cam->transform.AddPosition(Vector3(0, 0, _sceneManager->moveSpeed));
 		}
 		if (HandleKeyDown(keyMoveLeft)) {
-			cam->transform.AddPosition(Vector3(-_sceneManager->moveSpeed, 0, 0));
+			_cam->transform.AddPosition(Vector3(-_sceneManager->moveSpeed, 0, 0));
 		}
 		if (HandleKeyDown(keyMoveBackwards)) {
-			cam->transform.AddPosition(Vector3(0, 0, -_sceneManager->moveSpeed));
+			_cam->transform.AddPosition(Vector3(0, 0, -_sceneManager->moveSpeed));
 		}
 		if (HandleKeyDown(keyMoveRight)) {
-			cam->transform.AddPosition(Vector3(_sceneManager->moveSpeed, 0, 0));
+			_cam->transform.AddPosition(Vector3(_sceneManager->moveSpeed, 0, 0));
 		}
 	}
 	
@@ -150,24 +159,24 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 	
 	#pragma region Rotations
 	if (HandleKeyDown(keyYawCamLeft)) {
-		cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
+		_cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
 	}
 	if (HandleKeyDown(keyYawCamRight)) {
-		cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
+		_cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
 	}
 
 	if (HandleKeyDown(keyRollCamLeft)) {
-		cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
+		_cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
 	}
 	if (HandleKeyDown(keyRollCamRight)) {
-		cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
+		_cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
 	}
 	
 	if (HandleKeyDown(keyPitchCamUp)) {
-		cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
+		_cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
 	}
 	if (HandleKeyDown(keyPitchCamDown)) {
-		cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
+		_cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
 	}
 
 	#pragma endregion
@@ -180,24 +189,24 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 		// Y - looks up/down
 		// Z - rolls left/right -- this doesn't, it's some odd value I don't want to learn at the moment.
 		//if (HandleKeyDown(keyYawCamLeft)) {
-		//	cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
+		//	_cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
 		//}
 		//if (HandleKeyDown(keyYawCamRight)) {
-		//	cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
+		//	_cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
 		//}
 
 		//if (HandleKeyDown(keyRollCamLeft)) {
-		//	cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
+		//	_cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
 		//}
 		//if (HandleKeyDown(keyRollCamRight)) {
-		//	cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
+		//	_cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
 		//}
 		//
 		//if (HandleKeyDown(keyPitchCamUp)) {
-		//	cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
+		//	_cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
 		//}
 		//if (HandleKeyDown(keyPitchCamDown)) {
-		//	cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
+		//	_cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
 		//}
 
 	}
@@ -236,20 +245,42 @@ void InputManager::HandleMiscKeys() {
 	}
 
 	/* // DX11 doesn't like me changing the depth values, woops!
-	Camera* cam = _sceneManager->GetActiveCam();
+	Camera* _cam = _sceneManager->GetActiveCam();
 
 	if (KeyDown(keyAdjustDepthNearIncrease)) {
-		cam->SetDepth(cam->GetDepthNear() + 0.01f, 0);
+		_cam->SetDepth(_cam->GetDepthNear() + 0.01f, 0);
 	}
 	if (KeyDown(keyAdjustDepthNearDecrease)) {
-		cam->SetDepth(cam->GetDepthNear() - 0.01f, 0);
+		_cam->SetDepth(_cam->GetDepthNear() - 0.01f, 0);
 	}
 	if (KeyDown(keyAdjustDepthFarIncrease)) {
-		cam->SetDepth(0, cam->GetDepthFar() + 0.5f);
+		_cam->SetDepth(0, _cam->GetDepthFar() + 0.5f);
 	}
 	if (KeyDown(keyAdjustDepthFarDecrease)) {
-		cam->SetDepth(0, cam->GetDepthFar() - 0.5f);
+		_cam->SetDepth(0, _cam->GetDepthFar() - 0.5f);
 	}
 	*/
+}
+
+
+#define VIEW_PITCH_CLAMP	M_PI_2
+
+void InputManager::HandleMouse(float deltaTime)
+{
+	auto mouse = _mouse->GetState();
+	_mouseButtons.Update(mouse);
+
+	if(flyCamera) {
+		DebugPrintF("Mouse pos X: %i | Mouse Pos Y: %i\nLMB: %i | RMB: %i\n", mouse.x, mouse.y, _mouseButtons.leftButton, _mouseButtons.rightButton);
+		// we want pitch and yaw to be added depending on the mouse movement from the current mouse input on the frame.
+		Vector3 camRot = MakeEulerAnglesFromQ(_cam->transform.rotation);
+		// x = roll, y = yaw, z = pitch
+		camRot.z += mouse.y * deltaTime;
+		camRot.y += mouse.x * deltaTime;
+
+		// By multiplying by pi, I'm able to constrain  a value within 
+		camRot.y = max(VIEW_PITCH_CLAMP, camRot.z);
+		camRot.y = min(-VIEW_PITCH_CLAMP, camRot.z);
+	}
 }
 

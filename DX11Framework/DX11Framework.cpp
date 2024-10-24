@@ -30,6 +30,8 @@ HRESULT DX11Framework::Initialise(HINSTANCE hInstance, int nShowCmd)
     _inputManager->SetSceneManager(_activeScene);
     _inputManager->SetFramework(this);
 
+    _inputManager->Initialise();
+
     _activeScene->LoadScene("Test");
 
     _gameTimer = new Timer();

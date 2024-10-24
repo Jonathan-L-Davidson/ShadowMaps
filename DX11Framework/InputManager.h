@@ -4,6 +4,8 @@
 #define INPUTMANAGER_H
 #include <winuser.h>
 
+#include <Mouse.h>
+
 class Renderer;
 class SceneManager;
 class DX11Framework;
@@ -16,13 +18,19 @@ public:
 	void SetRenderManager(Renderer* renderer) { _renderManager = renderer; };
 	void SetSceneManager(SceneManager* sceneManager) { _sceneManager = sceneManager; };
 	void SetFramework(DX11Framework* framework) { _framework = framework; };
+	void SetFlyCam(bool val) {
+		flyCamera = val;
+		_mouse->SetMode((DirectX::Mouse::Mode)val);
+	}
 
+	void Initialise();
 	void Update(float deltaTime);
 
 	void HandleRenderKeys();
 	void HandleMovementKeys(float deltaTime);
 	void HandleSceneKeys();
 	void HandleMiscKeys();
+	void HandleMouse(float deltaTime);
 private:
 
 	bool _keyDown[255];
@@ -30,6 +38,11 @@ private:
 	Renderer* _renderManager;
 	SceneManager* _sceneManager;
 	DX11Framework* _framework;
+
+	DirectX::Mouse* _mouse;
+	DirectX::Mouse::ButtonStateTracker _mouseButtons;
+	bool flyCamera = 0;
+
 
 	char keyMoveForward = 'W';
 	char keyMoveLeft = 'A';
@@ -73,6 +86,8 @@ private:
 	bool HandleKeyUp(const char input);
 	bool HandleKeyPressed(const char input);
 	void OutputCurrentObject();
+
+	Camera* _cam;
 };
 
 #endif // !INPUTMANAGER_H

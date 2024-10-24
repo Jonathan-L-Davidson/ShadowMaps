@@ -1,5 +1,7 @@
 #include "WindowManager.h"
 
+#include "Mouse.h"
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
@@ -15,6 +17,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+
+    case WM_MOUSEHOVER:
+        Mouse::ProcessMessage(message, wParam, lParam);
+        break;
+
+    case WM_KEYDOWN: // Easier way to close the application
+        if (wParam == VK_ESCAPE) {
+            PostMessage(hWnd, WM_CLOSE, 0, 0);
+            break;
+        }
 
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
