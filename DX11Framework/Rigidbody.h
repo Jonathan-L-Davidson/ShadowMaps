@@ -5,7 +5,9 @@
 #include "Transform.h"
 
 class Collider;
+#ifndef USE_DIRECTXTK_MATH
 struct BoundingBox;
+#endif
 
 class Rigidbody : public PhysicsComponent {
 public:
@@ -14,7 +16,7 @@ public:
 
 
 	void CreateCollider(const float radius);
-	void CreateCollider(const BoundingBox box);
+	void CreateCollider(const DirectX::BoundingBox box);
 	Collider* GetCollider() { return _collider; };
 
 	void SetOffset(Transform offset) { _offsetTransform = offset; };

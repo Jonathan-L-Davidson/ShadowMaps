@@ -25,7 +25,8 @@ void Camera::SetPosition(Vector3 pos) {
 
 void Camera::LookTo(Quaternion rotation) {
 	DirectX::XMFLOAT3 position = DirectX::XMFLOAT3(transform.position.x, transform.position.y, transform.position.z);
-	Vector3 rotationEuler = MakeEulerAnglesFromQ(rotation);
+	//Vector3 rotationEuler = MakeEulerAnglesFromQ(rotation);
+	Vector3 rotationEuler = rotation.ToEuler();
 	DirectX::XMFLOAT3 rot = DirectX::XMFLOAT3(rotationEuler.x, rotationEuler.y, rotationEuler.z);
 	DirectX::XMFLOAT3 upDir = DirectX::XMFLOAT3(_upDir.x, _upDir.y, _upDir.z);
 	
@@ -49,15 +50,13 @@ void Camera::LookAt(Transform trans) {
 
 void Camera::LookFromTrans() {
 	DirectX::XMFLOAT3 position = DirectX::XMFLOAT3(transform.position.x, transform.position.y, transform.position.z);
-	DirectX::XMFLOAT4 rotation = DirectX::XMFLOAT4(transform.rotation.v.x, transform.rotation.v.y, transform.rotation.v.z, transform.rotation.n);
-	DirectX::XMVECTOR rotVec = DirectX::XMLoadFloat4(&rotation);
-	DirectX::XMVECTOR posVec = DirectX::XMLoadFloat3(&position);
-	DirectX::XMVECTOR translatedRotation = rotVec * posVec;
 	DirectX::XMFLOAT3 upDir = DirectX::XMFLOAT3(_upDir.x, _upDir.y, _upDir.z);
+	DirectX::XMVECTOR posVec = transform.position;
+	DirectX::XMVECTOR rotVec = transform.rotation;
 
 	//Vector3 rotDir = transform.GetDirection();
 	//XMStoreFloat4x4(&_view, XMMatrixLookToLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&rotDir), XMLoadFloat3(&_upDir)));
-	DirectX::XMStoreFloat4x4(&_view, DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&position), translatedRotation, DirectX::XMLoadFloat3(&upDir)));
+	DirectX::XMStoreFloat4x4(&_view, DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&position), transform.rotation, DirectX::XMLoadFloat3(&upDir)));
 	UpdateViewMatrix();
 }
 

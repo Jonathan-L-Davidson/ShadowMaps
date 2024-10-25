@@ -25,8 +25,8 @@ public:
 	void SetParent(Object* parent) { transform->parent = parent->transform; };
 	Transform* GetParent() { return transform->parent ? transform->parent : nullptr; };
 
-	void SetPosition(Physics::Vector3 pos) { transform->position = pos; };
-	void AddPosition(Physics::Vector3 pos) { transform->position += pos; };
+	void SetPosition(DirectX::SimpleMath::Vector3 pos) { transform->position = pos; };
+	void AddPosition(DirectX::SimpleMath::Vector3 pos) { transform->position += pos; };
 	Vector3 GetPosition() { return transform->GetPosition(); };
 	
 

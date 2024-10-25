@@ -278,7 +278,8 @@ void InputManager::HandleMouse(float deltaTime)
 		// we want pitch and yaw to be added depending on the mouse movement from the current mouse input on the frame.
 		constexpr float sensivity = 0.01f;
 		// x = roll, y = yaw, z = pitch
-		Vector3 camRot = MakeEulerAnglesFromQ(_cam->transform.rotation);
+		//Vector3 camRot = MakeEulerAnglesFromQ(_cam->transform.rotation);
+		Vector3 camRot = _cam->transform.rotation.ToEuler();
 		camRot.y -= mouse.x * deltaTime * sensivity;
 		camRot.z -= mouse.y * deltaTime * sensivity;
 
@@ -288,14 +289,15 @@ void InputManager::HandleMouse(float deltaTime)
 		camRot.z = max(-VIEW_PITCH_CLAMP, camRot.z);
 		camRot.z = min(VIEW_PITCH_CLAMP, camRot.z);
 		
-		Quaternion newQuat = MakeQFromEulerAngles(camRot.x, camRot.y, camRot.z);
-		_cam->transform.SetRotation(newQuat);
+		//Quaternion newQuat = MakeQFromEulerAngles(camRot.x, camRot.y, camRot.z);
+		//Quaternion newQuat = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(camRot.x, camRot.y, camRot.z);
+		//_cam->transform.SetRotation(newQuat);
 		
-		//const real n = cosf(camRot.z);
-		//_cam->transform.rotation.n = n;
-		//_cam->transform.rotation.v.x = n * sinf(camRot.y);
-		//_cam->transform.rotation.v.y = sin(camRot.z);
-		//_cam->transform.rotation.v.z = n * cosf(camRot.y);
+		/*const real n = cosf(camRot.z);
+		_cam->transform.rotation.w = n;
+		_cam->transform.rotation.x = n * sinf(camRot.y);
+		_cam->transform.rotation.y = sin(camRot.z);
+		_cam->transform.rotation.z = n * cosf(camRot.y);*/
 
 		//constexpr float deadzone = 0.002f;
 		//if (camRot.SquareMagnitude() > deadzone) {

@@ -83,10 +83,10 @@ void PhysicsComponent::CalculateVelocity(float deltaTime) {
 }
 
 void PhysicsComponent::UpdatePosition(float deltaTime) {
-	float magnitude = _velocity.Magnitude();
+	float magnitude = _velocity.Length();
 
 	if (magnitude > _maxSpeed) {
-		_velocity.Normalise();
+		_velocity.Normalize();
 		_velocity *= _maxSpeed;
 	}
 
@@ -99,24 +99,24 @@ void PhysicsComponent::UpdatePosition(float deltaTime) {
 }
 
 void PhysicsComponent::HandleDrag() {
-	float velMagnitude = _velocity.SquareMagnitude();
+	float velLength = _velocity.LengthSquared();
 
-	if (velMagnitude != 0) {
-		//DebugPrintF("Velocity: %f \n", velMagnitude);
+	if (velLength != 0) {
+		//DebugPrintF("Velocity: %f \n", velLength);
 		if (useDrag) {
 			Vector3 dragForce = _velocity * -1.0f;
-			dragForce.Normalise();
+			dragForce.Normalize();
 
 
 			// turbulent
 			Rigidbody* rb = _owner->GetComponent<Rigidbody>();
 			if (useTurbulentDrag && rb != nullptr) {
-				float force = (0.5f * (dragAmount * velMagnitude * dragCoef * rb->GetContactArea(dragForce)));
+				float force = (0.5f * (dragAmount * velLength * dragCoef * rb->GetContactArea(dragForce)));
 				dragForce *= force;
 			}
 			// laminar
 			else if (useLaminarDrag || (!useTurbulentDrag && rb == nullptr)) {
-				float force = (0.5f * (dragAmount * velMagnitude * dragCoef));
+				float force = (0.5f * (dragAmount * velLength * dragCoef));
 				dragForce *= force;
 			}
 			_forceTotal += dragForce;
@@ -125,11 +125,11 @@ void PhysicsComponent::HandleDrag() {
 }
 
 void PhysicsComponent::HandleFriction() {
-	float velMagnitude = _velocity.SquareMagnitude();
+	float velLength = _velocity.LengthSquared();
 
 
 	if (hasFriction) {
-		float friction = mass * gravity.Magnitude() * frictionCoef;
+		float friction = mass * gravity.Length() * frictionCoef;
 
 		Vector3 forceApplication = (_velocity * -1.0f) * friction;
 
@@ -147,7 +147,7 @@ void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 
 	_relativePosition = _owner->transform->position;
 
-	Vector3 torque = _relativePosition.CrossProduct(_rotationalForce);
+	Vector3 torque = _relativePosition.Cross(_rotationalForce);
 
 
 	// Inertia Tensor
@@ -179,13 +179,13 @@ void PhysicsComponent::UpdateAngularMotion(float deltaTime) {
 
 	// Dampening
 	_angularVelocity *= pow(angularDampening, deltaTime);
-	if (_angularVelocity.SquareMagnitude() != 0) {
+	if (_angularVelocity.LengthSquared() != 0) {
 
 		// Applies rotation
 		_owner->transform->AddRotation(_angularVelocity * deltaTime);
 
-		_owner->transform->rotation.Normalise();
-		//DebugPrintF("Angular velocity = %f\n", _angularVelocity.SquareMagnitude());
+		_owner->transform->rotation.Normalize();
+		//DebugPrintF("Angular velocity = %f\n", _angularVelocity.LengthSquared());
 	}
 
 }

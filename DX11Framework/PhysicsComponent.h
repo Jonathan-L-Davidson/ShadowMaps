@@ -5,7 +5,12 @@
 
 #include "Component.h"
 #include "Physics/Vector3.h"
+
+#ifdef USE_DIRECTXTK_MATH
+using namespace DirectX::SimpleMath;
+#else
 using namespace Physics;
+#endif
 
 class PhysicsComponent : public Component
 {

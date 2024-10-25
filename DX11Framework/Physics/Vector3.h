@@ -1,19 +1,33 @@
-
-/// IM AT PAGE 35 GO TO PAGE 35 DO NOT CONTINUE THIS UNTIL I COMPLETE CHAPTER 2
-
-
-
 #ifndef VECTOR3_H
 #define VECTOR3_H
+
 #include "Core.h"
 #include "math.h"
+
+#define USE_DIRECTXTK_MATH
+
+#define IsZero(vec) (bool)(vec.x == 0 && vec.y == 0 && vec.z == 0)
+
+#ifdef USE_DIRECTXTK_MATH
+#include "SimpleMath.h"
+
+static DirectX::SimpleMath::Vector3 inline TransformToVector3(DirectX::SimpleMath::Vector3 target, DirectX::XMMATRIX matrix) {
+	DirectX::XMFLOAT3 vecF3 = DirectX::XMFLOAT3(target.x, target.y, target.z);
+	DirectX::XMVECTOR vec = DirectX::XMLoadFloat3(&vecF3);
+	DirectX::XMVECTOR vecTransformed = DirectX::XMVector3Transform(vec, matrix);
+
+	DirectX::XMStoreFloat3(&vecF3, vecTransformed);
+	return DirectX::SimpleMath::Vector3(vecF3);
+}
+
+#else
+
 #include "DirectXMath.h"
 
-namespace Physics {
-
-	// I do not like this implementation, it's from: https://web.archive.org/web/20100330183043/http://nlindblad.org/2007/04/04/write-your-own-square-root-function
-	// TODO: import maths or just make a better sqrt function.
-	
+namespace Physics {	
+	bool IsZero(Vector3 vec) {
+		return vec.IsZero();
+	}
 
 	class Vector3
 	{
@@ -43,9 +57,18 @@ namespace Physics {
 			return (real)sqrtf(val);
 		}
 
+		real Length() {
+			return Magnitude();
+		}
+
 		real SquareMagnitude() const {
 			return x * x + y * y + z * z;
 		}
+
+		real LengthSquared() {
+			return SquareMagnitude();
+		}
+
 
 		void Normalise() {
 			real length = Magnitude();
@@ -152,6 +175,9 @@ namespace Physics {
 			return ScalarProduct(vector);
 		}
 
+		real Dot(const Vector3& vector) const {
+			return ScalarProduct(vector);
+		}
 		/// <summary>
 		/// Returns a scalar product/dot product.
 		/// </summary>
@@ -179,6 +205,10 @@ namespace Physics {
 		/// <param name="vector"></param>
 		/// <returns></returns>
 		Vector3 CrossProduct(const Vector3& vector) const {
+			return VectorProduct(vector);
+		}
+
+		Vector3 Cross(const Vector3& vector) const {
 			return VectorProduct(vector);
 		}
 
@@ -212,7 +242,6 @@ namespace Physics {
 		return Vector3(vecF3);
 	}
 }
-
-
+#endif
 #endif
 

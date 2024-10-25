@@ -7,7 +7,7 @@
 #include "Physics/Vector3.h"
 #include "Physics/Quaternion.h"
 
-using namespace Physics;
+using namespace DirectX::SimpleMath;
 
 class Object;
 
@@ -25,13 +25,21 @@ public:
 	void AddPosition(Vector3 pos) { position += pos; };
 
 
+#ifndef USE_DIRECTXTK_MATH
 	// Rotation helpers!
 	void SetRotation(Quaternion rot) { rotation = rot; };
 	void SetRotation(Vector3 rot) { rotation = Quaternion(); rotation = MakeQFromEulerAngles(rot.x, rot.y, rot.z); rotation.Normalise(); };
 	Quaternion GetRotation() { return rotation; };
 	void AddRotation(Quaternion rot) { rotation += rot; };
 	void AddRotation(Vector3 rot) { rotation = rotation * MakeQFromEulerAngles(rot.x, rot.y, rot.z); rotation.Normalise(); };
+#else
+	void SetRotation(Quaternion rot) { rotation = rot; };
+	void SetRotation(Vector3 rot) { rotation = Quaternion(); rotation = Quaternion::CreateFromYawPitchRoll(rot); rotation.Normalize(); };
+	Quaternion GetRotation() { return rotation; };
+	void AddRotation(Quaternion rot) { rotation += rot; };
+	void AddRotation(Vector3 rot) { rotation *= Quaternion::CreateFromYawPitchRoll(rot.x, rot.y, rot.z); rotation.Normalize(); };
 
+#endif // !USE_DIRECTXTK_MATH
 
 	void UpdateWorldMatrix();
 
@@ -53,7 +61,7 @@ private:
 public:
 	Transform operator+(const Transform& add) {
 		Transform returnedValue;
-		returnedValue.position = position + add.position;
+		returnedValue.position += add.position;
 
 		returnedValue.scale.x = scale.x * add.scale.x;
 		returnedValue.scale.y = scale.y * add.scale.y;
