@@ -266,26 +266,41 @@ void InputManager::HandleMiscKeys() {
 }
 
 
-#define VIEW_PITCH_CLAMP	M_PI_2
+#define VIEW_PITCH_CLAMP	M_PI_2 - 0.001f
 
 void InputManager::HandleMouse(float deltaTime)
 {
 	auto mouse = _mouse->GetState();
 	_mouseButtons.Update(mouse);
-	DebugPrintF("Mouse pos X: %i | Mouse Pos Y: %i\nLMB: %i | RMB: %i\n", mouse.x, mouse.y, _mouseButtons.leftButton, _mouseButtons.rightButton);
 
 	if(flyCamera) {
+		DebugPrintF("Mouse pos X: %i | Mouse Pos Y: %i\nLMB: %i | RMB: %i\n", mouse.x, mouse.y, _mouseButtons.leftButton, _mouseButtons.rightButton);
 		// we want pitch and yaw to be added depending on the mouse movement from the current mouse input on the frame.
-		Vector3 camRot = MakeEulerAnglesFromQ(_cam->transform.rotation);
+		constexpr float sensivity = 0.01f;
 		// x = roll, y = yaw, z = pitch
-		camRot.z -= mouse.y * deltaTime;
-		camRot.y -= mouse.x * deltaTime;
+		Vector3 camRot = MakeEulerAnglesFromQ(_cam->transform.rotation);
+		camRot.y -= mouse.x * deltaTime * sensivity;
+		camRot.z -= mouse.y * deltaTime * sensivity;
 
 		// By multiplying by pi, I'm able to constrain  a value within 
+		//camRot.z = max(-VIEW_PITCH_CLAMP, camRot.z);
+		//camRot.z = min(VIEW_PITCH_CLAMP, camRot.z);
 		camRot.z = max(-VIEW_PITCH_CLAMP, camRot.z);
 		camRot.z = min(VIEW_PITCH_CLAMP, camRot.z);
+		
+		Quaternion newQuat = MakeQFromEulerAngles(camRot.x, camRot.y, camRot.z);
+		_cam->transform.SetRotation(newQuat);
+		
+		//const real n = cosf(camRot.z);
+		//_cam->transform.rotation.n = n;
+		//_cam->transform.rotation.v.x = n * sinf(camRot.y);
+		//_cam->transform.rotation.v.y = sin(camRot.z);
+		//_cam->transform.rotation.v.z = n * cosf(camRot.y);
 
-		_cam->transform.SetRotation(camRot);
+		//constexpr float deadzone = 0.002f;
+		//if (camRot.SquareMagnitude() > deadzone) {
+		//	_cam->transform.AddRotation(camRot);
+		//}
 	}
 }
 

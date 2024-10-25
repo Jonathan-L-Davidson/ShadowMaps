@@ -82,6 +82,7 @@ void SceneManager::Update(float deltaTime) {
 }
 
 void SceneManager::UpdateCameras() {
+    //_cameras[CA_DEFAULT_WASD]->LookTo(_cameras[CA_DEFAULT_WASD]->transform.rotation);
     _cameras[CA_DEFAULT_WASD]->LookFromTrans();
     _cameras[CA_LOOKDOWN]->LookFromTrans();
     

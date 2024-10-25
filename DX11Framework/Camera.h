@@ -38,6 +38,7 @@ public:
     Transform transform;
 private:
     Vector3 _upDir = Vector3(0.0f, 1.0f, 0.0f);
+    //Vector3 _right = Vector3();
     DirectX::XMFLOAT4X4 _view;
     DirectX::XMFLOAT4X4 _projection;
 

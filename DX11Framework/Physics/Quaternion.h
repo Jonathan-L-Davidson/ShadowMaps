@@ -240,60 +240,71 @@ namespace Physics {
         double     cyaw, cpitch, croll, syaw, spitch, sroll;
         double     cyawcpitch, syawspitch, cyawspitch, syawcpitch;
 
-        cyaw = cos(0.5f * yaw);
-        cpitch = cos(0.5f * pitch);
         croll = cos(0.5f * roll);
-        syaw = sin(0.5f * yaw);
-        spitch = sin(0.5f * pitch);
         sroll = sin(0.5f * roll);
+        cyaw = cos(0.5f * yaw);
+        syaw = sin(0.5f * yaw);
+        cpitch = cos(0.5f * pitch);
+        spitch = sin(0.5f * pitch);
 
-        cyawcpitch = cyaw * cpitch;
-        syawspitch = syaw * spitch;
-        cyawspitch = cyaw * spitch;
-        syawcpitch = syaw * cpitch;
-
-        q.n = (float)(cyawcpitch * croll + syawspitch * sroll);
-        q.v.x = (float)(cyawcpitch * sroll - syawspitch * croll);
-        q.v.y = (float)(cyawspitch * croll + syawcpitch * sroll);
-        q.v.z = (float)(syawcpitch * croll - cyawspitch * sroll);
+        q.n = (float)(croll * cpitch * cyaw + sroll * spitch * syaw);
+        q.v.x = (float)(sroll * cpitch * cyaw - croll * spitch * syaw);
+        q.v.y = (float)(croll * spitch * cyaw + sroll * cpitch * syaw);
+        q.v.z = (float)(croll * cpitch * syaw - sroll * spitch * cyaw);
 
         return q;
     }
 
     inline Vector3 MakeEulerAnglesFromQ(Quaternion q)
     {
-        double     r11, r21, r31, r32, r33, r12, r13;
-        double     q00, q11, q22, q33;
-        double     tmp;
-        Vector3     u;
+        //double     r11, r21, r31, r32, r33, r12, r13;
+        //double     q00, q11, q22, q33;
+        //double     tmp;
+        //Vector3     u;
 
-        q00 = q.n * q.n;
-        q11 = q.v.x * q.v.x;
-        q22 = q.v.y * q.v.y;
-        q33 = q.v.z * q.v.z;
+        //q00 = q.n * q.n;
+        //q11 = q.v.x * q.v.x;
+        //q22 = q.v.y * q.v.y;
+        //q33 = q.v.z * q.v.z;
 
-        r11 = q00 + q11 - q22 - q33;
-        r21 = 2 * (q.v.x * q.v.y + q.n * q.v.z);
-        r31 = 2 * (q.v.x * q.v.z - q.n * q.v.y);
-        r32 = 2 * (q.v.y * q.v.z + q.n * q.v.x);
-        r33 = q00 - q11 - q22 + q33;
+        //r11 = q00 + q11 - q22 - q33;
+        //r21 = 2 * (q.v.x * q.v.y + q.n * q.v.z);
+        //r31 = 2 * (q.v.x * q.v.z - q.n * q.v.y);
+        //r32 = 2 * (q.v.y * q.v.z + q.n * q.v.x);
+        //r33 = q00 - q11 - q22 + q33;
 
-        tmp = fabs(r31);
-        if (tmp > 0.999999)
-        {
-            r12 = 2 * (q.v.x * q.v.y - q.n * q.v.z);
-            r13 = 2 * (q.v.x * q.v.z + q.n * q.v.y);
+        //tmp = fabs(r31);
+        //if (tmp > 0.999999)
+        //{
+        //    r12 = 2 * (q.v.x * q.v.y - q.n * q.v.z);
+        //    r13 = 2 * (q.v.x * q.v.z + q.n * q.v.y);
 
-            u.x = RadiansToDegrees(0.0f); //roll
-            u.y = RadiansToDegrees((float)(-(M_PI / 2) * r31 / tmp));   // pitch
-            u.z = RadiansToDegrees((float)atan2(-r12, -r31 * r13)); // yaw
-            return u;
-        }
+        //    u.x = RadiansToDegrees(0.0f); //roll
+        //    u.y = RadiansToDegrees((float)(-(M_PI / 2) * r31 / tmp));   // pitch
+        //    u.z = RadiansToDegrees((float)atan2(-r12, -r31 * r13)); // yaw
+        //    return u;
+        //}
 
-        u.x = RadiansToDegrees((float)atan2(r32, r33)); // roll
-        u.y = RadiansToDegrees((float)asin(-r31));      // pitch
-        u.z = RadiansToDegrees((float)atan2(r21, r11)); // yaw
-        return u;
+        //u.x = RadiansToDegrees((float)atan2(r32, r33)); // roll
+        //u.y = RadiansToDegrees((float)asin(-r31));      // pitch
+        //u.z = RadiansToDegrees((float)atan2(r21, r11)); // yaw
+        //return u;
+
+        Vector3 vec;
+
+        double sinr_cosp = 2 * (q.n * q.v.x + q.v.y * q.v.z);
+        double cosr_cosp = 1 - 2 * (q.v.x * q.v.x + q.v.y * q.v.y);
+        vec.x = atan2(sinr_cosp, cosr_cosp);
+
+        double sinp = sqrt(1 + 2 * (q.n * q.v.y - q.v.x * q.v.z));
+        double cosp = sqrt(1 - 2 * (q.n * q.v.y - q.v.x * q.v.z));
+        vec.y = 2 * atan2(sinp, cosp) - M_PI_2;
+
+        double siny_cosp = 2 * (q.n * q.v.z + q.v.x * q.v.y);
+        double cosy_cosp = 1 - 2 * (q.v.y * q.v.y + q.v.z * q.v.z);
+        vec.z = atan2(siny_cosp, cosy_cosp);
+
+        return vec;
     }
 }
 #endif// !H_QUATERNION

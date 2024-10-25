@@ -1,6 +1,8 @@
 
 /// IM AT PAGE 35 GO TO PAGE 35 DO NOT CONTINUE THIS UNTIL I COMPLETE CHAPTER 2
 
+
+
 #ifndef VECTOR3_H
 #define VECTOR3_H
 #include "Core.h"
