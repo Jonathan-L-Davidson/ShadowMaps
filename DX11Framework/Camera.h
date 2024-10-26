@@ -6,7 +6,12 @@
 #include <DirectXMath.h>
 #include "Transform.h"
 
+#ifndef USE_DIRECTXTK_MATH
 using namespace Physics;
+#else
+using namespace DirectX::SimpleMath;
+#endif // !USE_DIRECTXTK_MATH
+
 
 class Camera
 {
@@ -14,6 +19,11 @@ public:
     Camera() {};
     Camera(Transform trans);
     ~Camera();
+
+    void PostInit() {
+        lookAtTrans = transform;
+        lookAtTrans.position *= -1; // Initial inverse position.
+    };
 
     void UpdateViewMatrix();
     void UpdateProjectionMatrix();
@@ -24,6 +34,7 @@ public:
     void LookTo(Quaternion rotation);
     void LookAt(Transform trans);
     void LookFromTrans();
+    void LookFlyCam();
 
     DirectX::XMFLOAT4X4 GetView() { return _view; };
     DirectX::XMFLOAT4X4 GetProjection() { return _projection; };
@@ -34,11 +45,13 @@ public:
     float GetDepthNear() { return _depthNear; };
     float GetDepthFar() { return _depthFar; };
 
-
+    Vector3 flyCamRotation;
     Transform transform;
+    Transform lookAtTrans;
+    Vector3 lookDir;
 private:
     Vector3 _upDir = Vector3(0.0f, 1.0f, 0.0f);
-    //Vector3 _right = Vector3();
+
     DirectX::XMFLOAT4X4 _view;
     DirectX::XMFLOAT4X4 _projection;
 

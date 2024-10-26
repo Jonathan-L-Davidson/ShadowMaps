@@ -25,6 +25,7 @@ public:
 	void AddPosition(Vector3 pos) { position += pos; };
 
 
+
 #ifndef USE_DIRECTXTK_MATH
 	// Rotation helpers!
 	void SetRotation(Quaternion rot) { rotation = rot; };

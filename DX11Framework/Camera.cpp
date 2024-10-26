@@ -1,8 +1,10 @@
 #include "Camera.h"
 
+using namespace DirectX;
+
+
 Camera::Camera(Transform trans) {
 	transform = trans;
-
 	LookFromTrans();
 }
 
@@ -49,14 +51,20 @@ void Camera::LookAt(Transform trans) {
 //}
 
 void Camera::LookFromTrans() {
-	DirectX::XMFLOAT3 position = DirectX::XMFLOAT3(transform.position.x, transform.position.y, transform.position.z);
-	DirectX::XMFLOAT3 upDir = DirectX::XMFLOAT3(_upDir.x, _upDir.y, _upDir.z);
-	DirectX::XMVECTOR posVec = transform.position;
-	DirectX::XMVECTOR rotVec = transform.rotation;
 
 	//Vector3 rotDir = transform.GetDirection();
 	//XMStoreFloat4x4(&_view, XMMatrixLookToLH(XMLoadFloat3(&transform.position), XMLoadFloat3(&rotDir), XMLoadFloat3(&_upDir)));
-	DirectX::XMStoreFloat4x4(&_view, DirectX::XMMatrixLookToLH(DirectX::XMLoadFloat3(&position), transform.rotation, DirectX::XMLoadFloat3(&upDir)));
+	DirectX::XMStoreFloat4x4(&_view, DirectX::XMMatrixLookToLH(transform.position, transform.rotation, _upDir));
+	UpdateViewMatrix();
+}
+
+void Camera::LookFlyCam()
+{
+	DirectX::XMFLOAT3 position = DirectX::XMFLOAT3(transform.position.x, transform.position.y, transform.position.z);
+	DirectX::XMFLOAT3 transPosition = transform.position + lookAtTrans.position;
+	DirectX::XMFLOAT3 upDir = DirectX::XMFLOAT3(_upDir.x, _upDir.y, _upDir.z);
+
+	DirectX::XMStoreFloat4x4(&_view, DirectX::XMMatrixLookAtLH(DirectX::XMLoadFloat3(&position), DirectX::XMLoadFloat3(&transPosition), DirectX::XMLoadFloat3(&upDir)));
 	UpdateViewMatrix();
 }
 

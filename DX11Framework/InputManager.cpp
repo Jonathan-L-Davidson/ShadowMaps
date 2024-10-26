@@ -274,35 +274,31 @@ void InputManager::HandleMouse(float deltaTime)
 	_mouseButtons.Update(mouse);
 
 	if(flyCamera) {
-		DebugPrintF("Mouse pos X: %i | Mouse Pos Y: %i\nLMB: %i | RMB: %i\n", mouse.x, mouse.y, _mouseButtons.leftButton, _mouseButtons.rightButton);
-		// we want pitch and yaw to be added depending on the mouse movement from the current mouse input on the frame.
+		//DebugPrintF("Mouse pos X: %i | Mouse Pos Y: %i\nLMB: %i | RMB: %i\n", mouse.x, mouse.y, _mouseButtons.leftButton, _mouseButtons.rightButton);
 		constexpr float sensivity = 0.01f;
+		
 		// x = roll, y = yaw, z = pitch
-		//Vector3 camRot = MakeEulerAnglesFromQ(_cam->transform.rotation);
-		Vector3 camRot = _cam->transform.rotation.ToEuler();
-		camRot.y -= mouse.x * deltaTime * sensivity;
+		//Vector3 camRot = _cam->transform.rotation.ToEuler();
+		Vector3& camRot = _cam->lookDir;
+		camRot.y += mouse.x * deltaTime * sensivity;
 		camRot.z -= mouse.y * deltaTime * sensivity;
+		//DebugPrintF("CamRot Y: %f | CamRot Z: %f\n", camRot.y, camRot.z);
 
-		// By multiplying by pi, I'm able to constrain  a value within 
-		//camRot.z = max(-VIEW_PITCH_CLAMP, camRot.z);
-		//camRot.z = min(VIEW_PITCH_CLAMP, camRot.z);
 		camRot.z = max(-VIEW_PITCH_CLAMP, camRot.z);
 		camRot.z = min(VIEW_PITCH_CLAMP, camRot.z);
 		
-		//Quaternion newQuat = MakeQFromEulerAngles(camRot.x, camRot.y, camRot.z);
-		//Quaternion newQuat = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(camRot.x, camRot.y, camRot.z);
-		//_cam->transform.SetRotation(newQuat);
-		
-		/*const real n = cosf(camRot.z);
-		_cam->transform.rotation.w = n;
-		_cam->transform.rotation.x = n * sinf(camRot.y);
-		_cam->transform.rotation.y = sin(camRot.z);
-		_cam->transform.rotation.z = n * cosf(camRot.y);*/
+		if (camRot.y > XM_PI) { //if we do a full 360 on yaw.
+			camRot.y -= XM_2PI; // Inverse the yaw axis to -360, basically.
+		}
+		else if (camRot.y < -XM_PI) {// if we go below -360 
+			camRot.y += XM_2PI; // simply set us back to 360.
+		}
 
-		//constexpr float deadzone = 0.002f;
-		//if (camRot.SquareMagnitude() > deadzone) {
-		//	_cam->transform.AddRotation(camRot);
-		//}
+		float rotation = cosf(camRot.z);
+		_cam->lookAtTrans.position.x = rotation * sinf(camRot.y);
+		_cam->lookAtTrans.position.y = sin(camRot.z);
+		_cam->lookAtTrans.position.z = rotation * cosf(camRot.y);
+
 	}
 }
 

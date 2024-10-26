@@ -83,7 +83,7 @@ void SceneManager::Update(float deltaTime) {
 
 void SceneManager::UpdateCameras() {
     //_cameras[CA_DEFAULT_WASD]->LookTo(_cameras[CA_DEFAULT_WASD]->transform.rotation);
-    _cameras[CA_DEFAULT_WASD]->LookFromTrans();
+    _cameras[CA_DEFAULT_WASD]->LookFlyCam();
     _cameras[CA_LOOKDOWN]->LookFromTrans();
     
     if (_selectedObj != nullptr) {
@@ -154,11 +154,14 @@ void SceneManager::SetupCameras() {
     }
 
     _cameras[CA_DEFAULT_WASD]->SetPosition(Vector3(0.0f, 0.8f, -5.0f));
+    _cameras[CA_DEFAULT_WASD]->PostInit();
 
     _cameras[CA_LOOKDOWN]->SetPosition(Vector3(0.0f, 10.0f, 0.0f));
+    _cameras[CA_LOOKDOWN]->PostInit();
     //_cameras[CA_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
 
     _cameras[CA_LOOKAT]->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
+    _cameras[CA_LOOKAT]->PostInit();
     
     _activeCam = _cameras[CA_DEFAULT_WASD];
 }
