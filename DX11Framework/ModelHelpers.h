@@ -4,6 +4,7 @@
 #define MODELHELPERS_H
 #include "Structures.h"
 #include <vector>
+#include <list>
 
 //class Buffer {
 //public:
@@ -29,18 +30,18 @@ public:
 	VertexBuffer(ID3D11Device* device);
 	~VertexBuffer();
 	
-	void SetBuffer(std::vector<SimpleVertex> verts);
+	void SetBuffer(std::list<SimpleVertex> verts);
 
 	ID3D11Buffer* GetBuffer()					{ return _buffer; };
 	int GetCount()								{ return _vertices->size(); };
-	std::vector<SimpleVertex>* GetVertices()		{ return _vertices; };
+	std::list<SimpleVertex>* GetVertices()		{ return _vertices; };
 
 	void RefreshBuffer();
 private:
 	ID3D11Device* _device;
 	ID3D11Buffer* _buffer; // DirectX buffer
 
-	std::vector<SimpleVertex>* _vertices;
+	std::list<SimpleVertex>* _vertices;
 
 };
 
@@ -49,24 +50,24 @@ public:
 	IndexBuffer(ID3D11Device* device);
 	~IndexBuffer();
 
-	void SetBuffer(std::vector<DWORD> indices);
+	void SetBuffer(std::list<DWORD> indices);
 
 	ID3D11Buffer* GetBuffer() { return _buffer; };
 	int GetCount() { return _indices->size(); };
-	std::vector<DWORD>* GetIndices() { return _indices; };
+	std::list<DWORD>* GetIndices() { return _indices; };
 
 	void RefreshBuffer();
 private:
 	ID3D11Device* _device;
 	ID3D11Buffer* _buffer; // DirectX buffer
 
-	std::vector<DWORD>* _indices;
+	std::list<DWORD>* _indices;
 };
 
 class ModelBuffer {
 public:
 	ModelBuffer(ID3D11Device* device);
-	ModelBuffer(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<DWORD> indices);
+	ModelBuffer(ID3D11Device* device, std::list<SimpleVertex> verts, std::list<DWORD> indices);
 	~ModelBuffer();
 
 	VertexBuffer* GetVertBuffer()	{ return _vBuffer; };

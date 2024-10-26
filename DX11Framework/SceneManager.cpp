@@ -82,13 +82,18 @@ void SceneManager::Update(float deltaTime) {
 }
 
 void SceneManager::UpdateCameras() {
-    
+
+    D3D11_VIEWPORT view = _renderManager->GetViewPort();
+    GetActiveCam()->SetAspect(view.Width / view.Height);
+
+
     //if (_cameras[CA_DEFAULT_WASD]->flyCam) {
     //    _cameras[CA_DEFAULT_WASD]->LookFlyCam();
     //}
     //else {
     //    _cameras[CA_DEFAULT_WASD]->LookAt(_cameras[CA_DEFAULT_WASD]->lookAtTrans);
     //}
+
     _cameras[CA_DEFAULT_WASD]->LookFlyCam();
     _cameras[CA_LOOKDOWN]->LookFromTrans();
     
@@ -148,12 +153,8 @@ void SceneManager::SetupCameras() {
     camPos.position = Vector3(0.0f, 5.0f, -5.0f);
     camPos.rotation = Quaternion(1.0f, 1.0f, 0.0f, 1.0f);
 
-    D3D11_VIEWPORT view = _renderManager->GetViewPort();
-
     for (int i = 0; i < CAMERA_AMOUNT; i++) {
         Camera* cam = new Camera();
-        cam->SetAspect(view.Width / view.Height);
-        cam->SetDepth(0.01f, 100.0f);
         cam->transform = camPos;
         cam->LookFromTrans();
         _cameras[i] = cam;

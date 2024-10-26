@@ -1,5 +1,6 @@
 #include "ModelHelpers.h"
 #include <stdexcept>
+#include "Debug.h"
 
 // For context to this messed up solution, using std::lists or std::vectors, they often pass pointers to the buffer instead of the data.
 // So I've made it so it creates a new pointer array and copies the list, this can be costly, but aslong as we're not loading models during gameplay,
@@ -11,7 +12,7 @@
 /// <param name="device"></param>
 VertexBuffer::VertexBuffer(ID3D11Device* device) {
 	_device = device;
-	_vertices = new std::vector<SimpleVertex>();
+	_vertices = new std::list<SimpleVertex>();
 }
 
 VertexBuffer::~VertexBuffer() {
@@ -20,9 +21,8 @@ VertexBuffer::~VertexBuffer() {
 	delete _vertices;
 }
 
-void VertexBuffer::SetBuffer(std::vector<SimpleVertex> verts) {
+void VertexBuffer::SetBuffer(std::list<SimpleVertex> verts) {
 	_vertices->assign(verts.begin(),verts.end());
-	_vertices->reserve(_vertices->size());
 	RefreshBuffer();
 }
 
@@ -30,6 +30,7 @@ void VertexBuffer::RefreshBuffer() {
 	HRESULT hr = S_OK;
 
 	const int vertexSize = _vertices->size();
+	DebugPrintF("Vertex Count: %i\n", vertexSize);
 	SimpleVertex* vertexArray = new SimpleVertex[vertexSize];
 	std::copy(_vertices->begin(), _vertices->end(), vertexArray);
 
@@ -62,7 +63,7 @@ void VertexBuffer::RefreshBuffer() {
 /// <param name="device"></param>
 IndexBuffer::IndexBuffer(ID3D11Device* device) {
 	_device = device;
-	_indices = new std::vector<DWORD>();
+	_indices = new std::list<DWORD>();
 }
 IndexBuffer::~IndexBuffer() {
 	_buffer->Release();
@@ -70,11 +71,8 @@ IndexBuffer::~IndexBuffer() {
 	delete _indices;
 }
 
-void IndexBuffer::SetBuffer(std::vector<DWORD> ind) {
+void IndexBuffer::SetBuffer(std::list<DWORD> ind) {
 	_indices->assign(ind.begin(), ind.end());
-	_indices->reserve(_indices->size());
-
-
 	RefreshBuffer();
 }
 
@@ -82,6 +80,7 @@ void IndexBuffer::RefreshBuffer() {
 	HRESULT hr = S_OK;
 
 	const int indiceSize = _indices->size();
+	DebugPrintF("Index Count: %i\n", indiceSize);
 	DWORD* indiceArray = new DWORD[indiceSize];
 	std::copy(_indices->begin(), _indices->end(), indiceArray);
 
@@ -115,7 +114,7 @@ ModelBuffer::ModelBuffer(ID3D11Device* device) {
 	_iBuffer = new IndexBuffer(device);
 }
 
-ModelBuffer::ModelBuffer(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<DWORD> indices) {
+ModelBuffer::ModelBuffer(ID3D11Device* device, std::list<SimpleVertex> verts, std::list<DWORD> indices) {
 	_vBuffer = new VertexBuffer(device);
 	_iBuffer = new IndexBuffer(device);
 

@@ -187,10 +187,6 @@ void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
     _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&camView));
     _cbData.Projection = XMMatrixTranspose(XMLoadFloat4x4(&camProjection));
     
-    Vector3 tempPos = _activeCam->GetPosition();
-    _cbData.CameraPos = XMFLOAT3(tempPos.x, tempPos.y, tempPos.z);
-
-
     _immediateContext->RSSetState(_activeRS);
 
     //Present unbinds render target, so rebind and clear at start of each frame

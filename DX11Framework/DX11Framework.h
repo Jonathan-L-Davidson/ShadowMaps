@@ -27,8 +27,8 @@ public:
 
 	void RefreshScene();
 private:
-	int _windW = 1280;
-	int _windH = 768;
+	int _windW = 1920;
+	int _windH = 1080;
 
 	D3D11_VIEWPORT _viewport;
 

@@ -14,6 +14,7 @@ Camera::~Camera() {
 
 void Camera::UpdateViewMatrix() {
 	UpdateProjectionMatrix();
+
 }
 
 void Camera::UpdateProjectionMatrix() {

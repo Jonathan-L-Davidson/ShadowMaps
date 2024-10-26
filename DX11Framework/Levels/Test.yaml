@@ -33,6 +33,15 @@ Models:
       position: [0.0, 0.0, 0.0]
       rotation: [0.0, 0.0, 0.0, 0.0]
       scale: [1.0, 1.0, 1.0]
+  - Sponza: null
+    Name: Sponza
+    ObjPath: Sponza.obj
+    Shader: Default
+    Texture: Crate
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
   - ExampleModel: null
     Name: PrintedSpeaker
     ObjPath: 3DPrintBeanieHeadphones.obj
@@ -92,106 +101,12 @@ Lights:
     FalloffDropDistance: 1.5
     FalloffGradientCoefficiency: 1
 Objects:
-  - Ball1: null
+  - Sponza: null
     Type: Static
-    Name: Ball_1
-    ModelName: Ball
-    Color: [0.03, 0.02, 0.02, 1.0]
+    Name: Sponza
+    ModelName: Sponza
+    Color: [0.08, 0.08, 0.08, 1.0]
     Transform:
-      position: [2.0, 0.0, 10.0]
-      rotation: [0.0, 1.5, 0.0]
-      scale: [1, 1, 1]
-    Components:
-      - Test: null
-        ID: Rigidbody
-        Parameters:
-          RigidBody:
-            Type: Sphere
-            Radius: 2.0
-          mass: 5
-          dragCoef: 1.05
-          useConstantVel: false
-          useConstantAcc: false
-  - Ball2: null
-    Type: Static
-    Name: Ball_2
-    ModelName: Ball
-    Color: [0.04, 0.05, 0.03, 1.0]
-    Transform:
-      position: [-2.0, 0.0, 10.0]
-      rotation: [0.0, 1.5, 0.0]
-      scale: [1, 1, 1]
-    Components:
-      - Test: null
-        ID: Rigidbody
-        Parameters:
-          RigidBody:
-            Type: Sphere
-            Radius: 2.0
-          mass: 5
-          dragCoef: 1.05
-          useConstantVel: false
-          useConstantAcc: false
-  - Cube1: null
-    Type: Static
-    Name: Cube1
-    ModelName: Cube
-    Color: [0.1, 0.1, 0.1, 1.0]
-    Transform:
-      position: [-4.0, 0.0, 1.0]
-      rotation: [0.0, 1.5, 0.0]
-      scale: [1.0, 1.0, 1.0]
-    Components:
-      - Test: null
-        ID: Rigidbody
-        Parameters:
-          RigidBody:
-            Type: Box
-            origin: [0.0, 0.0, 0.0]
-            width: 2.0
-            length: 2.0
-            height: 2.0
-          mass: 5
-          dragCoef: 1.05
-          useConstantVel: false
-          useConstantAcc: false
-  - Cube2: null
-    Type: Static
-    Name: Cube2
-    ModelName: Cube
-    Color: [0.1, 0.1, 0.1, 1.0]
-    Transform:
-      position: [4.0, 0.0, 1.0]
-      rotation: [0.0, 1.5, 0.0]
-      scale: [1.0, 1.0, 1.0]
-    Components:
-      - Test: null
-        ID: Rigidbody
-        Parameters:
-          RigidBody:
-            Type: Box
-            origin: [0.0, 0.0, 0.0]
-            width: 2.0
-            length: 2.0
-            height: 2.0
-          mass: 5
-          dragCoef: 1.05
-          useConstantVel: false
-          useConstantAcc: false
-  - Banana3: null
-    Type: Static
-    Name: Banana3
-    ModelName: Banana
-    Color: [0.1, 0.1, 0.1, 1.0]
-    Transform:
-      position: [30.0, 0.0, -30.0]
-      rotation: [0.0, 1.5, 0.0]
-      scale: [1.0, 1.0, 1.0]
-    Components:
-      - Test: null
-        ID: Physics
-        Parameters:
-          mass: 5
-          dragCoef: 1.05
-          useConstantVel: false
-          useConstantAcc: false
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0]
+      scale: [0.4, 0.4, 0.4]

@@ -15,7 +15,7 @@ class Model
 {
 public:
 	Model(ID3D11Device* device);
-	Model(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<DWORD> indices);
+	Model(ID3D11Device* device, std::list<SimpleVertex> verts, std::list<DWORD> indices);
 	~Model();
 	int GetIndices() { return _modelBuffer->GetIndBuffer()->GetCount(); };
 	ModelBuffer* GetModelBuffer() { return _modelBuffer; };

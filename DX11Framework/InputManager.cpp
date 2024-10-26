@@ -199,6 +199,20 @@ void InputManager::HandleMovementKeys(float deltaTime) {
 		if (HandleKeyDown(keyMoveDown)) {
 			_cam->transform.AddPosition(_cam->transform.up* (float)(deltaTime * -_sceneManager->moveSpeed));
 		}
+
+		// DX11 doesn't like me changing the depth values, woops!
+		if (KeyDown(keyAdjustDepthNearIncrease)) {
+			_cam->SetDepth(_cam->GetDepthNear() + 0.001f * deltaTime, _cam->GetDepthFar());
+		}
+		if (KeyDown(keyAdjustDepthNearDecrease)) {
+			_cam->SetDepth(_cam->GetDepthNear() - 0.001f * deltaTime, _cam->GetDepthFar());
+		}
+		if (KeyDown(keyAdjustDepthFarIncrease)) {
+			_cam->SetDepth(_cam->GetDepthNear(), _cam->GetDepthFar() + 100.0f * deltaTime);
+		}
+		if (KeyDown(keyAdjustDepthFarDecrease)) {
+			_cam->SetDepth(_cam->GetDepthNear(), _cam->GetDepthFar() - 100.0f * deltaTime);
+		}
 	}
 }
 
@@ -233,23 +247,6 @@ void InputManager::HandleMiscKeys() {
 	if (HandleKeyPressed(keyOutputDelta)) {
 		_sceneManager->outputTime = !_sceneManager->outputTime;
 	}
-
-	/* // DX11 doesn't like me changing the depth values, woops!
-	Camera* _cam = _sceneManager->GetActiveCam();
-
-	if (KeyDown(keyAdjustDepthNearIncrease)) {
-		_cam->SetDepth(_cam->GetDepthNear() + 0.01f, 0);
-	}
-	if (KeyDown(keyAdjustDepthNearDecrease)) {
-		_cam->SetDepth(_cam->GetDepthNear() - 0.01f, 0);
-	}
-	if (KeyDown(keyAdjustDepthFarIncrease)) {
-		_cam->SetDepth(0, _cam->GetDepthFar() + 0.5f);
-	}
-	if (KeyDown(keyAdjustDepthFarDecrease)) {
-		_cam->SetDepth(0, _cam->GetDepthFar() - 0.5f);
-	}
-	*/
 }
 
 

@@ -65,7 +65,7 @@ Shader* ModelManager::GetShader(std::string path) {
 }
 
 void ModelManager::CreateCube() {
-    std::vector<SimpleVertex> VertexData = {
+    std::list<SimpleVertex> VertexData = {
         //Position                          //Normal                            // TexCoords
         { XMFLOAT3(-1.00f,  1.00f, -1.00f), XMFLOAT3(-1.00f,  1.00f, -1.00f),   XMFLOAT2(0.0f, 0.0f)}, // 0
         { XMFLOAT3(1.00f,  1.00f, -1.00f),  XMFLOAT3(1.00f,  1.00f, -1.00f),    XMFLOAT2(1.0f, 0.0f)}, // 1
@@ -77,7 +77,7 @@ void ModelManager::CreateCube() {
         { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f),     XMFLOAT2(0.0f, 1.0f)}, // 7
     };
 
-    std::vector<DWORD> IndexData = {
+    std::list<DWORD> IndexData = {
         //Indices
         0,1,2,
         2,1,3,
@@ -101,7 +101,7 @@ void ModelManager::CreateCube() {
 }
 
 void ModelManager::CreatePyramid() {
-    std::vector<SimpleVertex> VertexData = {
+    std::list<SimpleVertex> VertexData = {
         //Position                          //Normal                            // TexCoords
         { XMFLOAT3(0.00f,  1.00f, 0.00f),   XMFLOAT3(0.00f,  1.00f, 0.00f),     XMFLOAT2(0.5f, 0.5f)},
         { XMFLOAT3(-1.00f, -1.00f, -1.00f), XMFLOAT3(-1.00f, -1.00f, -1.00f),   XMFLOAT2(0.0f, 0.0f)},
@@ -110,7 +110,7 @@ void ModelManager::CreatePyramid() {
         { XMFLOAT3(1.00f, -1.00f, 1.00f),   XMFLOAT3(1.00f, -1.00f, 1.00f),     XMFLOAT2(1.0f, 1.0f)},
     };                                                                          
 
-    std::vector<DWORD> IndexData = {
+    std::list<DWORD> IndexData = {
         //Indices
         2,1,0,
         2,0,4,
@@ -128,7 +128,7 @@ void ModelManager::CreatePyramid() {
 }
 
 void ModelManager::CreatePlane() {
-    std::vector<SimpleVertex> VertexData = {
+    std::list<SimpleVertex> VertexData = {
         //Position                          //Normal                         // TexCoords
         { XMFLOAT3(50.00f,  0.00f, 50.00f),  XMFLOAT3(50.00f, 0.0f, 50.00f),  XMFLOAT2(0.0f, 0.0f)},
         { XMFLOAT3(-50.00f, 0.00f, -50.00f), XMFLOAT3(-50.00f, 0.0f, -50.00f),  XMFLOAT2(1.0f, 0.0f)},
@@ -136,7 +136,7 @@ void ModelManager::CreatePlane() {
         { XMFLOAT3(-50.00f, 0.00f, 50.00f),  XMFLOAT3(-50.00f, 0.0f, 50.00f),  XMFLOAT2(1.0f, 1.0f)},
     };
 
-    std::vector<DWORD> IndexData = {
+    std::list<DWORD> IndexData = {
         //Indices
         3,0,1,
         2,1,0,
@@ -157,11 +157,11 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
 
     modelFile.open(tempPath);
     
-    std::vector<SimpleVertex> SimpleVerts;
-    std::vector<XMFLOAT3> Vertices;
-    std::vector<XMFLOAT3> Normals;
-    std::vector<XMFLOAT2> Textures;
-    std::vector<DWORD> Indices;
+    std::list<SimpleVertex> SimpleVerts;
+    std::list<XMFLOAT3> Vertices;
+    std::list<XMFLOAT3> Normals;
+    std::list<XMFLOAT2> Textures;
+    std::list<DWORD> Indices;
 
     if (!modelFile) {
         // throw an error!!!
@@ -223,15 +223,15 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
 
                 while (std::getline(iss, temp, splitter)) {
                     if (state == 0) { // v
-                        simpleVert.Position = Vertices.at(std::stoi(temp.c_str()) - 1);
+                        simpleVert.Position = *std::next(Vertices.begin(), std::stoi(temp.c_str()) - 1);
                     }
                     
                     if(state == 1) { // vt
-                        simpleVert.TexCoord = Textures.at(std::stoi(temp.c_str()) - 1);
+                        simpleVert.TexCoord = *std::next(Textures.begin(), std::stoi(temp.c_str()) - 1);
                     }
                     
                     if(state == 2) { // vn
-                        simpleVert.Normal = Normals.at(std::stoi(temp.c_str()) - 1);
+                        simpleVert.Normal = *std::next(Normals.begin(), std::stoi(temp.c_str()) - 1);
                     }
                     
                     state++; // Handle reading the `v/vt/vn` state swapping

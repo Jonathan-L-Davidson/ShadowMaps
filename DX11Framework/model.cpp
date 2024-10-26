@@ -9,7 +9,7 @@ Model::Model(ID3D11Device* device) {
     transform = new Transform();
 }
 
-Model::Model(ID3D11Device* device, std::vector<SimpleVertex> verts, std::vector<DWORD> indices) {
+Model::Model(ID3D11Device* device, std::list<SimpleVertex> verts, std::list<DWORD> indices) {
     _modelBuffer = new ModelBuffer(device, verts, indices);
     transform = new Transform();
 
