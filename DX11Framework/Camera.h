@@ -45,10 +45,10 @@ public:
     float GetDepthNear() { return _depthNear; };
     float GetDepthFar() { return _depthFar; };
 
-    Vector3 flyCamRotation;
     Transform transform;
     Transform lookAtTrans;
     Vector3 lookDir;
+    bool flyCam = 0;
 private:
     Vector3 _upDir = Vector3(0.0f, 1.0f, 0.0f);
 

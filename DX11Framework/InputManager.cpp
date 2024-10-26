@@ -10,7 +10,11 @@
 
 #define KeyDown(x) ((GetAsyncKeyState(x) & 0x8000))
 
+#ifdef USE_DIRECTXTK_MATH
+using namespace DirectX;
+#else
 using namespace Physics;
+#endif
 
 bool InputManager::HandleKeyDown(const char input) {
 
@@ -45,6 +49,12 @@ void InputManager::OutputCurrentObject() {
 	Object* currentObj = _sceneManager->GetActiveObject();
 	DebugPrintF("\nINPUT MANAGER: Selected Object is now: %i | %s\n", index, currentObj->GetName().c_str());
 
+}
+
+void InputManager::SetFlyCam(bool val)
+{
+	_cam->flyCam = val;
+	_mouse->SetMode((DirectX::Mouse::Mode)val);
 }
 
 void InputManager::Initialise()
@@ -83,135 +93,112 @@ void InputManager::HandleRenderKeys() {
 
 void InputManager::HandleMovementKeys(float deltaTime) {
 	
-	PhysicsComponent* physicsObj = _sceneManager->GetActiveObject()->GetComponent<PhysicsComponent>();
+	//PhysicsComponent* physicsObj = _sceneManager->GetActiveObject()->GetComponent<PhysicsComponent>();
 
 	// WASD.
 	{
 		if (HandleKeyDown(keyMoveForward)) {
-			_cam->transform.AddPosition(Vector3(0, 0, _sceneManager->moveSpeed));
+			if (_cam->flyCam) {
+				_cam->transform.AddPosition(_cam->lookAtTrans.position * (float)(deltaTime * _sceneManager->moveSpeed));
+			}
+			else {
+				_cam->transform.AddPosition(Vector3(0, 0, _sceneManager->moveSpeed) * deltaTime);
+			}
 		}
 		if (HandleKeyDown(keyMoveLeft)) {
-			_cam->transform.AddPosition(Vector3(-_sceneManager->moveSpeed, 0, 0));
+			if (_cam->flyCam) {
+				_cam->transform.AddPosition(_cam->transform.right * (float)(deltaTime * _sceneManager->moveSpeed));
+			}
+			else {
+				_cam->transform.AddPosition(Vector3(-_sceneManager->moveSpeed, 0, 0) * deltaTime);
+			}
 		}
 		if (HandleKeyDown(keyMoveBackwards)) {
-			_cam->transform.AddPosition(Vector3(0, 0, -_sceneManager->moveSpeed));
+			if (_cam->flyCam) {
+				_cam->transform.AddPosition(_cam->lookAtTrans.position * (float)(deltaTime * -_sceneManager->moveSpeed));
+			}
+			else {
+				_cam->transform.AddPosition(Vector3(0, 0, -_sceneManager->moveSpeed) * deltaTime);
+			}
 		}
 		if (HandleKeyDown(keyMoveRight)) {
-			_cam->transform.AddPosition(Vector3(_sceneManager->moveSpeed, 0, 0));
+			if (_cam->flyCam) {
+				_cam->transform.AddPosition(_cam->transform.right * (float)(deltaTime * -_sceneManager->moveSpeed));
+			}
+			else {
+				_cam->transform.AddPosition(Vector3(_sceneManager->moveSpeed, 0, 0) * deltaTime);
+			}
 		}
 	}
 	
-	if (physicsObj != nullptr) {
-		if (HandleKeyPressed(keyPhysConstantVelToggle)) {
-			physicsObj->useConstantVelocity = !physicsObj->useConstantVelocity;
-			DebugPrintF("Object's use constant velocity: %s\n", physicsObj->useConstantVelocity ? "True" : "False");
-		}
-
-		if (HandleKeyPressed(keyPhysConstantAccToggle)) {
-			physicsObj->useConstantAcceleration = !physicsObj->useConstantAcceleration;
-			DebugPrintF("Object's use constant acceleration: %s\n", physicsObj->useConstantAcceleration ? "True" : "False");
-		}
-
-		if (HandleKeyDown(keyPhysMoveForward)) {
-			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
-				physicsObj->AddRotationalForce(Vector3(0, rotationalSpeed, 0));
-			}
-			else {
-				physicsObj->AddForce(Vector3(0, 0, moveSpeed));
-			}
-		}
-		if (HandleKeyDown(keyPhysMoveBackwards)) {
-			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
-				physicsObj->AddRotationalForce(Vector3(0, -rotationalSpeed, 0));
-			}
-			else {
-				physicsObj->AddForce(Vector3(0, 0, -moveSpeed));
-			}
-		}
-		if (HandleKeyDown(keyPhysMoveLeft)) {
-			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
-				physicsObj->AddRotationalForce(Vector3(rotationalSpeed, 0, 0));
-			}
-			else {
-				physicsObj->AddForce(Vector3(-moveSpeed, 0, 0));
-			}
-		}
-		if (HandleKeyDown(keyPhysMoveRight)) {
-			if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
-				physicsObj->AddRotationalForce(Vector3(-rotationalSpeed, 0, 0));
-			}
-			else {
-				physicsObj->AddForce(Vector3(moveSpeed, 0, 0));
-			}
-		}
-		if (HandleKeyDown(keyPhysJump)) {
-			physicsObj->AddForce(Vector3(0, jumpForce, 0));
-		}
-
-		if (HandleKeyDown('H')) {
-			_sceneManager->GetActiveObject()->transform->AddRotation(Vector3(0,1,0));
-		}
-		if (HandleKeyDown('J')) {
-			_sceneManager->GetActiveObject()->transform->AddRotation(Vector3(0, -1, 0));
-		}
-
-	}
-	
-	#pragma region Rotations
-	//if (HandleKeyDown(keyYawCamLeft)) {
-	//	_cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
-	//}
-	//if (HandleKeyDown(keyYawCamRight)) {
-	//	_cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
-	//}
-
-	//if (HandleKeyDown(keyRollCamLeft)) {
-	//	_cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
-	//}
-	//if (HandleKeyDown(keyRollCamRight)) {
-	//	_cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
-	//}
-	//
-	//if (HandleKeyDown(keyPitchCamUp)) {
-	//	_cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
-	//}
-	//if (HandleKeyDown(keyPitchCamDown)) {
-	//	_cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
-	//}
-	if (HandleKeyPressed(keyToggleFlyCam)) {
-		SetFlyCam(!flyCamera);
-	}
-
-	#pragma endregion
-
-
-	// Rotationals. I personally don't like my implementation of it, I really dislike it, even.
+	// Physics (Unused for shadow project)
+	/*
 	{
-		// For dumb me:
-		// X - looks left/right
-		// Y - looks up/down
-		// Z - rolls left/right -- this doesn't, it's some odd value I don't want to learn at the moment.
-		//if (HandleKeyDown(keyYawCamLeft)) {
-		//	_cam->transform.AddRotation(Vector3(-_sceneManager->rotSpeed, 0, 0));
-		//}
-		//if (HandleKeyDown(keyYawCamRight)) {
-		//	_cam->transform.AddRotation(Vector3(_sceneManager->rotSpeed, 0, 0));
-		//}
+		if (physicsObj != nullptr) {
+			if (HandleKeyPressed(keyPhysConstantVelToggle)) {
+				physicsObj->useConstantVelocity = !physicsObj->useConstantVelocity;
+				DebugPrintF("Object's use constant velocity: %s\n", physicsObj->useConstantVelocity ? "True" : "False");
+			}
 
-		//if (HandleKeyDown(keyRollCamLeft)) {
-		//	_cam->transform.AddRotation(Vector3(0, 0, _sceneManager->rotSpeed));
-		//}
-		//if (HandleKeyDown(keyRollCamRight)) {
-		//	_cam->transform.AddRotation(Vector3(0, 0, -_sceneManager->rotSpeed));
-		//}
-		//
-		//if (HandleKeyDown(keyPitchCamUp)) {
-		//	_cam->transform.AddRotation(Vector3(0, _sceneManager->rotSpeed, 0));
-		//}
-		//if (HandleKeyDown(keyPitchCamDown)) {
-		//	_cam->transform.AddRotation(Vector3(0, -_sceneManager->rotSpeed, 0));
-		//}
+			if (HandleKeyPressed(keyPhysConstantAccToggle)) {
+				physicsObj->useConstantAcceleration = !physicsObj->useConstantAcceleration;
+				DebugPrintF("Object's use constant acceleration: %s\n", physicsObj->useConstantAcceleration ? "True" : "False");
+			}
 
+			if (HandleKeyDown(keyPhysMoveForward)) {
+				if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
+					physicsObj->AddRotationalForce(Vector3(0, rotationalSpeed, 0));
+				}
+				else {
+					physicsObj->AddForce(Vector3(0, 0, moveSpeed));
+				}
+			}
+			if (HandleKeyDown(keyPhysMoveBackwards)) {
+				if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
+					physicsObj->AddRotationalForce(Vector3(0, -rotationalSpeed, 0));
+				}
+				else {
+					physicsObj->AddForce(Vector3(0, 0, -moveSpeed));
+				}
+			}
+			if (HandleKeyDown(keyPhysMoveLeft)) {
+				if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
+					physicsObj->AddRotationalForce(Vector3(rotationalSpeed, 0, 0));
+				}
+				else {
+					physicsObj->AddForce(Vector3(-moveSpeed, 0, 0));
+				}
+			}
+			if (HandleKeyDown(keyPhysMoveRight)) {
+				if (HandleKeyDown(keyPhysRotation)) { // Use rotation instead when shift is held.
+					physicsObj->AddRotationalForce(Vector3(-rotationalSpeed, 0, 0));
+				}
+				else {
+					physicsObj->AddForce(Vector3(moveSpeed, 0, 0));
+				}
+			}
+			if (HandleKeyDown(keyPhysJump)) {
+				physicsObj->AddForce(Vector3(0, jumpForce, 0));
+			}
+
+			if (HandleKeyDown('H')) {
+				_sceneManager->GetActiveObject()->transform->AddRotation(Vector3(0, 1, 0));
+			}
+			if (HandleKeyDown('J')) {
+				_sceneManager->GetActiveObject()->transform->AddRotation(Vector3(0, -1, 0));
+			}
+		}
+	}
+	*/
+
+	// Misc additionals (Raise cam & lower cam)
+	{
+		if (HandleKeyDown(keyMoveUp)) {
+			_cam->transform.AddPosition(_cam->transform.up* (float)(deltaTime * _sceneManager->moveSpeed));
+		}
+		if (HandleKeyDown(keyMoveDown)) {
+			_cam->transform.AddPosition(_cam->transform.up* (float)(deltaTime * -_sceneManager->moveSpeed));
+		}
 	}
 }
 
@@ -266,16 +253,24 @@ void InputManager::HandleMiscKeys() {
 }
 
 
-#define VIEW_PITCH_CLAMP	M_PI_2 - 0.001f
+#define VIEW_PITCH_CLAMP	M_PI_2 + 0.01f
 
 void InputManager::HandleMouse(float deltaTime)
 {
 	auto mouse = _mouse->GetState();
 	_mouseButtons.Update(mouse);
 
-	if(flyCamera) {
+	_sceneManager->moveSpeed += mouse.scrollWheelValue * deltaTime;
+	_mouse->ResetScrollWheelValue();
+	
+	_sceneManager->moveSpeed = min(_sceneManager->maxSpeed, _sceneManager->moveSpeed);
+	_sceneManager->moveSpeed = max(_sceneManager->minSpeed, _sceneManager->moveSpeed);
+
+	//DebugPrintF("Move Speed: %f\n", _sceneManager->moveSpeed);
+
+	if(_cam->flyCam) {
 		//DebugPrintF("Mouse pos X: %i | Mouse Pos Y: %i\nLMB: %i | RMB: %i\n", mouse.x, mouse.y, _mouseButtons.leftButton, _mouseButtons.rightButton);
-		constexpr float sensivity = 0.01f;
+		constexpr float sensivity = 0.05f;
 		
 		// x = roll, y = yaw, z = pitch
 		//Vector3 camRot = _cam->transform.rotation.ToEuler();
@@ -294,11 +289,20 @@ void InputManager::HandleMouse(float deltaTime)
 			camRot.y += XM_2PI; // simply set us back to 360.
 		}
 
-		float rotation = cosf(camRot.z);
+		// This is rotates the point of LookAt around 0.
+		const float rotation = cosf(camRot.z);
 		_cam->lookAtTrans.position.x = rotation * sinf(camRot.y);
 		_cam->lookAtTrans.position.y = sin(camRot.z);
 		_cam->lookAtTrans.position.z = rotation * cosf(camRot.y);
 
+		// Update the right direction
+		_cam->transform.right = _cam->lookAtTrans.position.Cross(_cam->transform.up);
+		_cam->transform.right.Normalize();
+
+	}
+
+	if (_mouseButtons.rightButton == Mouse::ButtonStateTracker::PRESSED || HandleKeyPressed(keyToggleFlyCam)) {
+		SetFlyCam(!_cam->flyCam);
 	}
 }
 

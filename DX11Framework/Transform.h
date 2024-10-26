@@ -24,8 +24,6 @@ public:
 	Vector3 GetPosition() { return position; };
 	void AddPosition(Vector3 pos) { position += pos; };
 
-
-
 #ifndef USE_DIRECTXTK_MATH
 	// Rotation helpers!
 	void SetRotation(Quaternion rot) { rotation = rot; };
@@ -54,7 +52,7 @@ public:
 	Vector3 scale = Vector3(1.0f, 1.0f, 1.0f);
 	Vector3 up = Vector3(0.0f, 1.0f, 0.0f);
 	Vector3 forward = Vector3(0.0f, 0.0f, 1.0f);
-	Vector3 right = Vector3();
+	Vector3 right = Vector3(); // Mainly unused, only used for camera.
 
 	Quaternion rotation = Quaternion();
 private:

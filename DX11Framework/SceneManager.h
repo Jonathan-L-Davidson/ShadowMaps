@@ -23,7 +23,9 @@ class Transform;
 class SceneManager
 {
 public:
-	float moveSpeed = 0.6f;
+	float moveSpeed = 15.0f;
+	const float maxSpeed = 50.0f;
+	const float minSpeed = 0.1f;
 	float rotSpeed = 1.0f;
 
 	SceneManager();

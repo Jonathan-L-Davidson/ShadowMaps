@@ -19,10 +19,7 @@ public:
 	void SetRenderManager(Renderer* renderer) { _renderManager = renderer; };
 	void SetSceneManager(SceneManager* sceneManager) { _sceneManager = sceneManager; };
 	void SetFramework(DX11Framework* framework) { _framework = framework; };
-	void SetFlyCam(bool val) {
-		flyCamera = val;
-		_mouse->SetMode((DirectX::Mouse::Mode)val);
-	}
+	void SetFlyCam(bool val);
 
 	void Initialise();
 	void Update(float deltaTime);
@@ -43,13 +40,14 @@ private:
 
 	DirectX::Mouse* _mouse;
 	DirectX::Mouse::ButtonStateTracker _mouseButtons;
-	bool flyCamera = 0;
 	char keyToggleFlyCam = 'F';
 
 	char keyMoveForward = 'W';
 	char keyMoveLeft = 'A';
 	char keyMoveBackwards = 'S';
 	char keyMoveRight = 'D';
+	char keyMoveUp = VK_SPACE;
+	char keyMoveDown = VK_CONTROL;
 
 	char keyYawCamLeft = 'Q';
 	char keyYawCamRight = 'E';
