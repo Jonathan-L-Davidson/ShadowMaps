@@ -1,8 +1,6 @@
 #pragma once
 #include <chrono>
 
-using namespace std::chrono;
-
 class Timer
 {
 	public:
@@ -12,6 +10,6 @@ class Timer
 		void Tick();
 
 	private: 
-		steady_clock::time_point _lastFrame; 
+		std::chrono::steady_clock::time_point _lastFrame;
 };
 

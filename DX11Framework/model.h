@@ -5,6 +5,9 @@
 #include "ModelHelpers.h"
 #include <string>
 
+#include "DirectXMesh.h"
+#include "WaveFrontReader.h"
+
 class Shader;
 class ShaderManager;
 class Buffer;

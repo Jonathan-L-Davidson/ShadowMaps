@@ -7,6 +7,8 @@
 #include <sstream>
 #include <random>
 
+#include <codecvt>
+
 ModelManager::ModelManager() {
 	_models = new std::map<std::string, Model*>();
 };
@@ -151,6 +153,8 @@ void ModelManager::CreatePlane() {
 }
 
 Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
+    // OLD
+    /*
     std::ifstream modelFile;
 
     std::string tempPath = "Models\\" + path;
@@ -245,6 +249,29 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
                 indiceCount++;
             }
         }
+    }*/
+
+    WaveFrontReader<DWORD> fileReader;
+ 
+    std::string tempPath = "Models\\" + path;
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+    std::wstring w_tempPath = converter.from_bytes(tempPath);
+
+    HRESULT hr = fileReader.Load(w_tempPath.c_str());
+    if (FAILED(hr)) {
+        throw("Model Failed to load!");
+        return NULL;
+    }
+
+    std::list<SimpleVertex> SimpleVerts;
+    for (const auto& elem : fileReader.vertices) {
+        SimpleVertex vert = {elem.position, elem.normal, elem.textureCoordinate};
+        SimpleVerts.push_back(vert);
+    }
+
+    std::list<DWORD> Indices;
+    for (const auto& elem : fileReader.indices) {
+        Indices.push_back(elem);
     }
 
     Model* model = new Model(_renderManager->GetDevice(), SimpleVerts, Indices);

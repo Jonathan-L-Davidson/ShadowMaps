@@ -5,7 +5,7 @@ Timer::Timer() {
 }
 
 float Timer::GetDelta() {
-	return duration<float>(steady_clock::now() - _lastFrame).count();
+	return std::chrono::duration<float>(std::chrono::steady_clock::now() - _lastFrame).count();
 }
 
 void Timer::Tick() {

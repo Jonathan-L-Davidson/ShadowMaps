@@ -28,6 +28,7 @@ public:
 
 	std::map<std::string, Model*>* GetModels() { return _models; };
 
+	TextureManager* GetTextureManager() { return _textureManager; }
 	void SetRenderManager(Renderer* renderer) { _renderManager = renderer; };
 
 	Model* LoadModelFromFile(std::string path, std::string modelName);
