@@ -6,12 +6,10 @@
 #include <string>
 #include "Transform.h"
 #include "model.h"
-
-using namespace DirectX;
+#include "Component.h"
 
 class ObjectManager;
 class Renderer;
-class Component;
 
 class Object
 {
@@ -27,7 +25,7 @@ public:
 
 	void SetPosition(DirectX::SimpleMath::Vector3 pos) { transform->position = pos; };
 	void AddPosition(DirectX::SimpleMath::Vector3 pos) { transform->position += pos; };
-	Vector3 GetPosition() { return transform->GetPosition(); };
+	DirectX::SimpleMath::Vector3 GetPosition() { return transform->GetPosition(); };
 	
 
 	// Manager references.
