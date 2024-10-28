@@ -137,9 +137,11 @@ void TextureManager::CreateSampler() {
 	bilinearSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	bilinearSamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	bilinearSamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	bilinearSamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	bilinearSamplerDesc.MaxLOD = 1;
+	bilinearSamplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+	bilinearSamplerDesc.MaxLOD = MAXINT;
 	bilinearSamplerDesc.MinLOD = 0;
+	bilinearSamplerDesc.MaxAnisotropy = 16;
+	bilinearSamplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 
 	hr = _device->CreateSamplerState(&bilinearSamplerDesc, &_bilinearSamplerState);
 	if (FAILED(hr)) {
