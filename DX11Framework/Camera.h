@@ -66,7 +66,7 @@ private:
 
     float _aspect = 1.6f;
 
-    float _depthNear = 0.0001f;
+    float _depthNear = 1.0f;
     float _depthFar = 1700.0f;
     
 };
