@@ -152,6 +152,8 @@ void ModelManager::CreatePlane() {
     AddModel(model, "Floor Plane");
 }
 
+const static std::wstring defaultMat = L"default";
+
 Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) {
     // OLD
     /*
@@ -272,6 +274,27 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
     std::list<DWORD> Indices;
     for (const auto& elem : fileReader.indices) {
         Indices.push_back(elem);
+    }
+
+    for (const auto& elem : fileReader.materials) {
+        std::wstring name = elem.strName;
+        if (name == defaultMat) {
+            continue;
+        }
+
+        std::wstring path = elem.strTexture;
+        std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+
+        TextureList list;
+        list.strName = (std::string)converter.to_bytes(elem.strName);
+        list.strTexture = (std::string)converter.to_bytes(elem.strTexture);
+        list.strNormalTexture = (std::string)converter.to_bytes(elem.strNormalTexture);
+        list.strSpecularTexture = (std::string)converter.to_bytes(elem.strSpecularTexture);
+        list.strEmissiveTexture = (std::string)converter.to_bytes(elem.strEmissiveTexture);
+        list.strRMATexture = (std::string)converter.to_bytes(elem.strRMATexture);
+
+        GetTextureManager()->AddTexture(list.strName, list);
+        Texture* texture = GetTexture(list.strName);
     }
 
     Model* model = new Model(_renderManager->GetDevice(), SimpleVerts, Indices);

@@ -1,7 +1,9 @@
 #include "TextureManager.h"
+#include "WICTextureLoader.h"
 #include "DDSTextureLoader.h"
 #include "FileHelpers.h"
 #include <stdexcept>
+
 
 Texture::Texture() {
 
@@ -50,6 +52,35 @@ void TextureManager::AddTexture(Texture* texture, std::string path) {
 
 }
 
+void TextureManager::AddTexture(std::string path, TextureList textureList)
+{
+	if (_textures->count(path)) {
+		return;
+	}
+
+	// Texture construction.
+	Texture* tex = new Texture();
+
+	if (Helpers::FileExists(textureList.strTexture.c_str())) {
+		LoadTextureFromPath(textureList.strTexture, tex, TextureType::DIFFUSE);
+	}
+	//if (Helpers::FileExists(textureList.strNormalTexture.c_str())) {
+	//	LoadTextureFromPath(displacementPath, tex, TextureType::DISPLACEMENT);
+	//}
+	if (Helpers::FileExists(textureList.strNormalTexture.c_str())) {
+		LoadTextureFromPath(textureList.strNormalTexture, tex, TextureType::NORMAL);
+	}
+	if (Helpers::FileExists(textureList.strSpecularTexture.c_str())) {
+		LoadTextureFromPath(textureList.strSpecularTexture, tex, TextureType::SPECULAR);
+	}
+
+
+	tex->SetSampler(_bilinearSamplerState);
+	tex->SetID(path);
+	// Add it to the texture list.
+	_textures->insert(std::make_pair(path, tex));
+}
+
 void TextureManager::AddTexture(std::string path) {
 	if (_textures->count(path)) {
 		return;
@@ -85,6 +116,8 @@ void TextureManager::AddTexture(std::string path) {
 	_textures->insert(std::make_pair(path, tex));
 }
 
+const std::wstring dds = L"dds";
+
 void TextureManager::LoadTextureFromPath(std::string path, Texture* texture, TextureType type) {
 
 	std::wstring widePath = std::wstring(path.begin(), path.end());
@@ -94,7 +127,12 @@ void TextureManager::LoadTextureFromPath(std::string path, Texture* texture, Tex
 	
 	// Load the texture file.
 	HRESULT hr = S_OK;
-	hr = CreateDDSTextureFromFile(_device, widePath.c_str(), nullptr, &texturePath);
+	if (!widePath.compare(widePath.length() - dds.length(), dds.length(), dds)) {
+		hr = CreateDDSTextureFromFile(_device, widePath.c_str(), nullptr, &texturePath);
+	}
+	else {
+		hr = CreateWICTextureFromFile(_device, widePath.c_str(), nullptr, &texturePath);
+	}
 
 	if (FAILED(hr)) {
 		throw std::invalid_argument("Texture failed to be created");

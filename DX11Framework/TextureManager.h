@@ -78,6 +78,15 @@ private:
 	ID3D11SamplerState* _sampler;
 };
 
+struct TextureList {
+	std::string strName;
+	std::string strTexture;
+	std::string strNormalTexture;
+	std::string strSpecularTexture;
+	std::string strEmissiveTexture;
+	std::string strRMATexture;
+};
+
 class TextureManager
 {
 public:
@@ -90,6 +99,7 @@ public:
 	Texture* GetDefaultTexture();
 
 	void AddTexture(Texture* texture, std::string path);
+	void AddTexture(std::string path, TextureList textureList);
 	void AddTexture(std::string path);
 	void LoadTextureFromPath(std::string path, Texture* texture, TextureType type);
 	Texture* LoadTextureFromFile(std::string path);
