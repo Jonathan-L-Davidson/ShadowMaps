@@ -37,7 +37,7 @@ Models:
     Name: Sponza
     ObjPath: Sponza.obj
     Shader: Default
-    Texture: Crate
+    Texture: Sponza
     Transform:
       position: [0.0, 0.0, 0.0]
       rotation: [0.0, 0.0, 0.0, 0.0]
