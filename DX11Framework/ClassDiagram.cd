@@ -1,0 +1,401 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="NameAndType">
+  <Class Name="Camera">
+    <Position X="14.75" Y="16.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>gAADAQAAACSAABAAQAAACQAAACAEAgwAACBJAAQAAiI=</HashCode>
+      <FileName>Camera.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="transform" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="VertexBuffer">
+    <Position X="27.25" Y="37" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAAAEgAAAAAABAAAAAAAAAAAAAgAAAAAgAAAAAEEA=</HashCode>
+      <FileName>ModelHelpers.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IndexBuffer">
+    <Position X="23.5" Y="37" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAgAAAAAABAAAAAEAABAAAAgIQAAAAAAAAAAEA=</HashCode>
+      <FileName>ModelHelpers.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ModelBuffer">
+    <Position X="25.5" Y="34.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAEAAAAAIAAAQAAAgAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>ModelHelpers.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_iBuffer" />
+      <Field Name="_vBuffer" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="InputManager">
+    <Position X="23" Y="12.25" Width="3.25" />
+    <AssociationLine Name="_renderManager" Type="Renderer" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="26.25" Y="17.375" />
+        <Point X="27.229" Y="17.375" Type="JumpStart" />
+        <Point X="27.396" Y="17.375" Type="JumpEnd" />
+        <Point X="34" Y="17.375" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>YSQAAQACBAAACAGAABAAkYAACAkBBAgAAAIAOAAAAAA=</HashCode>
+      <FileName>InputManager.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_framework" />
+      <Field Name="_renderManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ModelManager">
+    <Position X="25.5" Y="23.25" Width="3.25" />
+    <AssociationLine Name="_shaderManager" Type="ShaderManager" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="28.75" Y="23.875" />
+        <Point X="29.125" Y="23.875" />
+        <Point X="29.125" Y="22.406" />
+        <Point X="34" Y="22.406" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_textureManager" Type="TextureManager" FixedToPoint="true">
+      <Path>
+        <Point X="28.75" Y="26.562" />
+        <Point X="29.577" Y="26.562" Type="JumpStart" />
+        <Point X="29.744" Y="26.562" Type="JumpEnd" />
+        <Point X="34" Y="26.562" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_renderManager" Type="Renderer" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="28.156" Y="23.25" />
+        <Point X="28.156" Y="20.525" />
+        <Point X="36.5" Y="20.525" />
+        <Point X="36.5" Y="19.901" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAoAAACBACAAUQAABAACgAAQAAAIAAABABAEACAAAA=</HashCode>
+      <FileName>ModelManager.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_shaderManager" />
+      <Field Name="_textureManager" />
+      <Field Name="_renderManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ObjectManager">
+    <Position X="23.5" Y="20" Width="3.25" />
+    <AssociationLine Name="_renderManager" Type="Renderer" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="26.75" Y="20.188" />
+        <Point X="27.229" Y="20.188" Type="JumpStart" />
+        <Point X="27.396" Y="20.188" Type="JumpEnd" />
+        <Point X="34.5" Y="20.188" />
+        <Point X="34.5" Y="19.901" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AQQAAAAABQAIAAAAAQAAAAACBAAAAAAAIAAAEAAAAAA=</HashCode>
+      <FileName>ObjectManager.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_modelManager" />
+      <Field Name="_renderManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Renderer">
+    <Position X="34" Y="12" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>BCBkAAEAAAAAARgIAAEGQEDAIEEEgAgAABCFBBQAgQU=</HashCode>
+      <FileName>Renderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneManager">
+    <Position X="18.75" Y="12" Width="3.25" />
+    <AssociationLine Name="_renderManager" Type="Renderer" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="20.75" Y="16.824" />
+        <Point X="20.75" Y="18.688" />
+        <Point X="27.229" Y="18.688" Type="JumpStart" />
+        <Point X="27.396" Y="18.688" Type="JumpEnd" />
+        <Point X="34" Y="18.688" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_objectManager" Type="ObjectManager" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="19.188" Y="16.824" />
+        <Point X="19.188" Y="21.875" />
+        <Point X="19.917" Y="21.875" Type="JumpStart" />
+        <Point X="20.083" Y="21.875" Type="JumpEnd" />
+        <Point X="23.5" Y="21.875" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_modelManager" Type="ModelManager" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="21.375" Y="12" />
+        <Point X="21.375" Y="11.625" />
+        <Point X="24.104" Y="11.625" Type="JumpStart" />
+        <Point X="24.271" Y="11.625" Type="JumpEnd" />
+        <Point X="24.542" Y="11.625" Type="JumpStart" />
+        <Point X="24.708" Y="11.625" Type="JumpEnd" />
+        <Point X="27.312" Y="11.625" />
+        <Point X="27.312" Y="23.25" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_activeCam" Type="Camera" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="18.75" Y="16.169" />
+        <Point X="18.375" Y="16.169" />
+        <Point X="18.375" Y="17.812" />
+        <Point X="17.75" Y="17.812" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>EgQABAAAFADQAVAAACAAGAAigAAAgAAAAgAAAAAAAMQ=</HashCode>
+      <FileName>SceneManager.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_renderManager" />
+      <Field Name="_objectManager" />
+      <Field Name="_modelManager" />
+      <Field Name="_activeCam" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Shader">
+    <Position X="34" Y="35.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>QBAKAAAAAAAAAgAAAABAgAAAAAAAAEABFAAIAAABADA=</HashCode>
+      <FileName>ShaderManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShaderManager">
+    <Position X="34" Y="21" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AEQCAAAAAAACAQQAAEAAAAAAAACAgAAgAABAAgAAAAA=</HashCode>
+      <FileName>ShaderManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Texture">
+    <Position X="34" Y="30.25" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>BAQIAAAAAAAAkAIAgABAgIAAAAAgAEAAAQIAAQgICAA=</HashCode>
+      <FileName>TextureManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TextureManager">
+    <Position X="34" Y="25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAACBCQQAAEQAABAAAAAAABACAgAAgAAQAEAAAAEA=</HashCode>
+      <FileName>TextureManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="WindowManager">
+    <Position X="16" Y="7.5" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AIBAAAAAAAAAAQCgAAAAAAAAAAAAgAAAAAABAAAAAAA=</HashCode>
+      <FileName>WindowManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Model">
+    <Position X="25.5" Y="28.25" Width="3.25" />
+    <AssociationLine Name="_shader" Type="Shader" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="28.75" Y="32.352" />
+        <Point X="31.588" Y="32.352" />
+        <Point X="31.588" Y="35.875" />
+        <Point X="34" Y="35.875" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="transform" Type="Transform" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="25.5" Y="31.5" />
+        <Point X="22.18" Y="31.5" />
+        <Point X="22.18" Y="33.557" />
+        <Point X="19.708" Y="33.557" Type="JumpStart" />
+        <Point X="19.542" Y="33.557" Type="JumpEnd" />
+        <Point X="15.25" Y="33.557" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_shaderManager" Type="ShaderManager" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="28.75" Y="28.938" />
+        <Point X="29.661" Y="28.938" />
+        <Point X="29.661" Y="23.125" />
+        <Point X="34" Y="23.125" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.055" Y="0.122" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>BQAgAAACAQAIAAACBAACBAAAICAEAAQABDhAAAAAQAA=</HashCode>
+      <FileName>Model.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_shader" />
+      <Field Name="_texture" />
+      <Field Name="_modelBuffer" />
+      <Field Name="transform" />
+      <Field Name="_shaderManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Object">
+    <Position X="18.25" Y="26.75" Width="3" />
+    <AssociationLine Name="_objManager" Type="ObjectManager" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="21.062" Y="26.75" />
+        <Point X="21.062" Y="22.312" />
+        <Point X="23.5" Y="22.312" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_model" Type="Model" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="21.25" Y="29.438" />
+        <Point X="25.5" Y="29.438" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_renderManager" Type="Renderer" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="20" Y="26.75" />
+        <Point X="20" Y="19.625" />
+        <Point X="27.229" Y="19.625" Type="JumpStart" />
+        <Point X="27.396" Y="19.625" Type="JumpEnd" />
+        <Point X="34" Y="19.625" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="transform" Type="Transform" FixedToPoint="true">
+      <Path>
+        <Point X="18.25" Y="31.562" />
+        <Point X="15.25" Y="31.562" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAQAIAAADSiIASCgAoAAAEAAACAEAgiAAMgAUAQARAA=</HashCode>
+      <FileName>Object.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_objManager" />
+      <Field Name="_model" />
+      <Field Name="_renderManager" />
+      <Field Name="transform" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Transform">
+    <Position X="12.5" Y="29.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAECCIAABAAADAIAQCAAABAggAQAAAQAAAQJA=</HashCode>
+      <FileName>Transform.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Cube">
+    <Position X="16.75" Y="36" Width="1.75" />
+    <InheritanceLine Type="Object" FixedFromPoint="true">
+      <Path>
+        <Point X="19.625" Y="32.92" />
+        <Point X="19.625" Y="35.625" />
+        <Point X="17.625" Y="35.625" />
+        <Point X="17.625" Y="36" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAgAAAAAQAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Cube.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Monkey">
+    <Position X="18.75" Y="36" Width="1.75" />
+    <InheritanceLine Type="Object" FixedFromPoint="true">
+      <Path>
+        <Point X="19.625" Y="32.92" />
+        <Point X="19.625" Y="36" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAQQAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Monkey.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pyramid">
+    <Position X="20.75" Y="36" Width="2" />
+    <InheritanceLine Type="Object" FixedFromPoint="true">
+      <Path>
+        <Point X="19.625" Y="32.92" />
+        <Point X="19.625" Y="35.625" />
+        <Point X="21.75" Y="35.625" />
+        <Point X="21.75" Y="36" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAQAAIAAAAAAAAQAAAAEAAAAAAgAAAAA=</HashCode>
+      <FileName>Pyramid.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DX11Framework">
+    <Position X="20.75" Y="7.5" Width="5.5" />
+    <AssociationLine Name="_activeScene" Type="SceneManager" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="20.75" Y="9.5" />
+        <Point X="20.375" Y="9.5" />
+        <Point X="20.375" Y="12" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_renderManager" Type="Renderer" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="26.25" Y="7.812" />
+        <Point X="35.312" Y="7.812" />
+        <Point X="35.312" Y="12" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_inputManager" Type="InputManager" FixedFromPoint="true">
+      <Path>
+        <Point X="24.188" Y="10.401" />
+        <Point X="24.188" Y="12.25" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="_windowManager" Type="WindowManager" FixedToPoint="true">
+      <Path>
+        <Point X="20.75" Y="7.938" />
+        <Point X="19.25" Y="7.938" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAABQABAQAAAAAACAgAAkAAAAAAAAAAAAQAAQA=</HashCode>
+      <FileName>DX11Framework.h</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_activeScene" />
+      <Field Name="_renderManager" />
+      <Field Name="_inputManager" />
+      <Field Name="_windowManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Struct Name="SimpleLight">
+    <Position X="14.75" Y="12.75" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAQAAAAAAKAgAABAAAAAAAAAAAAAAQAAQAASgAA=</HashCode>
+      <FileName>Structures.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SimpleVertex">
+    <Position X="30" Y="40.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAIAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Structures.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="LightType">
+    <Position X="12.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAAAAAAAAAAAIAgAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Structures.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

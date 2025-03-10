@@ -1,0 +1,112 @@
+---
+UseHardcodedModels: false
+Shaders:
+  - Skybox: null
+    Name: Skybox
+Textures:
+  - Plastic: null
+    Name: plastic
+  - Crate: null
+    Name: Crate
+  - Skybox: null
+    Name: Skybox
+  - Ball: null
+    Name: Ball
+  - Banana: null
+    Name: banana
+Models:
+  - Skybox: null
+    Name: Skybox
+    ObjPath: InvertedCube.obj
+    Shader: Skybox
+    Texture: Skybox
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
+  - Cube: null
+    Name: Cube
+    ObjPath: InvertedCube.obj
+    Shader: Default
+    Texture: Crate
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
+  - Sponza: null
+    Name: Sponza
+    ObjPath: Sponza.obj
+    Shader: Default
+    Texture: Crate
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
+  - ExampleModel: null
+    Name: PrintedSpeaker
+    ObjPath: 3DPrintBeanieHeadphones.obj
+    Shader: Default
+    Texture: plastic
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
+  - Ball: null
+    Name: Ball
+    ObjPath: ball.obj
+    Shader: Default
+    Texture: Ball
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
+      scale: [1.0, 1.0, 1.0]
+  - Banana : null
+    Name: Banana
+    ObjPath: banana.obj
+    Shader: Default
+    Texture: banana
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0, 0.0]
+      scale: [0.0, 0.0, 0.0]
+Lights:
+  - Light: null
+    Position: [30.0, 0.0, -50.0, 1.0]
+    Rotation: [0.5, 0.0, 0.0]
+    Type: 1
+    DiffuseColor: [0.3, 0.6, 0.3]
+    SpecColor: [0.4, 0.6, 0.4]
+    SpecPower: 15
+    FalloffDistance: 5
+    FalloffDropDistance: 2
+    FalloffGradientCoefficiency: 2
+  - Light2: null
+    Position: [-15.0, 5.0, -7.0, 1.0]
+    Rotation: [0.5, 0.0, 0.0]
+    Type: 1
+    DiffuseColor: [0.1, 0.1, 0.6]
+    SpecColor: [0.2, 0.2, 0.6]
+    SpecPower: 10
+    FalloffDistance: 5
+    FalloffDropDistance: 3
+    FalloffGradientCoefficiency: 1
+  - Light3: null
+    Position: [35.0, 5.0, 30.0, 1.0]
+    Rotation: [0.5, 0.0, 0.0]
+    Type: 1
+    DiffuseColor: [0.4, 0.4, 0.4]
+    SpecColor: [0.6, 0.6, 0.6]
+    SpecPower: 5
+    FalloffDistance: 3
+    FalloffDropDistance: 1.5
+    FalloffGradientCoefficiency: 1
+Objects:
+  - Sponza: null
+    Type: Static
+    Name: Sponza
+    ModelName: Sponza
+    Color: [0.08, 0.08, 0.08, 1.0]
+    Transform:
+      position: [0.0, 0.0, 0.0]
+      rotation: [0.0, 0.0, 0.0]
+      scale: [0.02, 0.02, 0.02]
