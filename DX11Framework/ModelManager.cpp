@@ -253,7 +253,7 @@ Model* ModelManager::LoadModelFromFile(std::string path, std::string modelName) 
         }
     }*/
 
-    WaveFrontReader<DWORD> fileReader;
+    DX::WaveFrontReader<DWORD> fileReader;
  
     std::string tempPath = "Models\\" + path;
     std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;

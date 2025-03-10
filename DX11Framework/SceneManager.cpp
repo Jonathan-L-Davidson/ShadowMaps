@@ -384,6 +384,7 @@ bool SceneManager::LoadScene(const char* path) {
             simpleLight.Rotation = XMFLOAT3(rotation.x, rotation.y, rotation.z);
 
             simpleLight.Type = light["Type"].as<int>();
+            simpleLight.ConeCoef = light["ConeCoeff"].as<float>();
 
             Vector3 diffColor = Vector2Float3(light["DiffuseColor"].as<std::vector<float>>());
             simpleLight.DiffuseColor = XMFLOAT3(diffColor.x, diffColor.y, diffColor.z);
@@ -438,11 +439,6 @@ bool SceneManager::LoadScene(const char* path) {
 }
 
 void SceneManager::LoadLights(ConstantBuffer* cbData) {
-    for (int i = 0; i < MAX_LIGHTS; i++) {
-        SimpleLight light; // reset it back to generic disabled lights.
-        cbData->Lights[i] = light;
-    }
-
     if (_lights->size() > MAX_LIGHTS) {
         throw new std::exception("Too many lights!!");
         return;

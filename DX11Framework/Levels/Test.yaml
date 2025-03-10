@@ -71,35 +71,27 @@ Models:
       scale: [0.0, 0.0, 0.0]
 Lights:
   - Light: null
-    Position: [30.0, 0.0, -50.0, 1.0]
-    Rotation: [0.5, 0.0, 0.0]
+    Position: [0.0, 10.0, 0.0, 1.0]
+    Rotation: [-0.1, 0.9, 0.0]
     Type: 1
-    DiffuseColor: [0.3, 0.6, 0.3]
+    ConeCoeff: 0.2
+    DiffuseColor: [0.6, 0.6, 0.9]
     SpecColor: [0.4, 0.6, 0.4]
     SpecPower: 15
-    FalloffDistance: 5
-    FalloffDropDistance: 2
+    FalloffDistance: 0
+    FalloffDropDistance: 0.3
     FalloffGradientCoefficiency: 2
-  - Light2: null
-    Position: [-15.0, 5.0, -7.0, 1.0]
-    Rotation: [0.5, 0.0, 0.0]
-    Type: 1
-    DiffuseColor: [0.1, 0.1, 0.6]
-    SpecColor: [0.2, 0.2, 0.6]
-    SpecPower: 10
-    FalloffDistance: 5
-    FalloffDropDistance: 3
-    FalloffGradientCoefficiency: 1
-  - Light3: null
-    Position: [35.0, 5.0, 30.0, 1.0]
-    Rotation: [0.5, 0.0, 0.0]
-    Type: 1
-    DiffuseColor: [0.4, 0.4, 0.4]
-    SpecColor: [0.6, 0.6, 0.6]
-    SpecPower: 5
-    FalloffDistance: 3
-    FalloffDropDistance: 1.5
-    FalloffGradientCoefficiency: 1
+  - Light: null
+    Position: [0.0, 10.0, 0.0, 1.0]
+    Rotation: [-0.1, 0.9, 0.0]
+    Type: 2
+    ConeCoeff: 0.2
+    DiffuseColor: [0.6, 0.6, 0.9]
+    SpecColor: [0.4, 0.6, 0.4]
+    SpecPower: 15
+    FalloffDistance: 0
+    FalloffDropDistance: 0.3
+    FalloffGradientCoefficiency: 2
 Objects:
   - Sponza: null
     Type: Static

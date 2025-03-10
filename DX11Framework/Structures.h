@@ -14,8 +14,8 @@ using namespace DirectX;
 enum LightType {
 	DISABLED = 0,
 	POINT_LIGHT,
-	DIRECTIONAL_LIGHT,
 	SPOT_LIGHT,
+	DIRECTIONAL_LIGHT,
 };
 
 struct SimpleLight {
@@ -25,18 +25,18 @@ struct SimpleLight {
 	
 	// 16 bytes
 	XMFLOAT3 Rotation;
-	int Type = LightType::DISABLED;
-	//
+	int Type = LightType::DISABLED; 
 
 	// 16 bytes
 	XMFLOAT3 DiffuseColor; // Diffuse lighting color from light.
-	int padding;
-	//
+	float ConeCoef;
 
 	// 16 bytes
 	XMFLOAT3 SpecColor; // Specular shining color from light.
 	float SpecPower;
-	//
+
+	XMMATRIX view;
+	XMMATRIX projection; 
 
 	// Todo: Change this to calculate the inverse square law instead. This works for now however.
 	// 16 bytes
