@@ -377,11 +377,21 @@ bool SceneManager::LoadScene(const char* path) {
         for (YAML::const_iterator it = lights.begin(); it != lights.end(); it++) {
             const YAML::Node& light = *it;
             SimpleLight simpleLight;
-
             // Experimenting with yaml node reading using a heads up from https://stackoverflow.com/questions/34757198/how-to-read-a-yaml-node-array-into-stdvector
             simpleLight.Position = Vector2Float4(light["Position"].as<std::vector<float>>());
             Vector3 rotation = Vector2Float3(light["Rotation"].as<std::vector<float>>());
             simpleLight.Rotation = XMFLOAT3(rotation.x, rotation.y, rotation.z);
+
+            Camera cam;
+            cam.SetPosition(Vector3(simpleLight.Position.x, simpleLight.Position.y, simpleLight.Position.z));
+            cam.SetLookAtTrans(rotation);
+            cam.UpdateViewMatrix();
+            cam.UpdateProjectionMatrix();
+
+            XMFLOAT4X4 camView = cam.GetView();
+            XMFLOAT4X4 camProjection = cam.GetProjection();
+            simpleLight.View = XMMatrixTranspose(XMLoadFloat4x4(&camView));
+            simpleLight.Projection = XMMatrixTranspose(XMLoadFloat4x4(&camProjection));
 
             simpleLight.Type = light["Type"].as<int>();
             simpleLight.ConeCoef = light["ConeCoeff"].as<float>();
@@ -393,9 +403,11 @@ bool SceneManager::LoadScene(const char* path) {
             simpleLight.SpecPower = light["SpecPower"].as<float>();
 
             simpleLight.FalloffDistance = light["FalloffDistance"].as<float>();
-            simpleLight.FalloffDropDistance = light["FalloffDropDistance"].as<float>();
-            simpleLight.FalloffGradientCoefficiency = light["FalloffGradientCoefficiency"].as<float>();
+            simpleLight.ShadowCaster = light["ShadowCaster"].as<int>();
             _lights->push_back(simpleLight);
+            if (simpleLight.ShadowCaster) {
+                _shadowLights.push_back(&simpleLight);
+            }
         }
     }
 

@@ -5,6 +5,10 @@ Texture2D specularTex : register(t3);
 SamplerState bilinearSampler : register(s0);
 
 #define MAX_LIGHTS 3
+#define LIGHT_DISABLED 0
+#define LIGHT_POINT 1
+#define LIGHT_SPOT 2
+#define LIGHT_DIRECTIONAL 3
 
 struct SimpleLight
 {
@@ -19,12 +23,12 @@ struct SimpleLight
     float3 SpecColor;
     float SpecPower;
 
-    float4x4 view;
-    float4x4 projection;
+    float4x4 View;
+    float4x4 Projection;
 
     float FalloffDistance;
-    float FalloffDropDistance;
-    float FalloffGradientCoefficiency;
+    int ShadowCaster;
+    int padding1;
     int padding2;
 };
 
@@ -136,25 +140,25 @@ float4 PS_main(VS_Out input) : SV_TARGET
     }
 
 	//////////////// AMBIENT ////////////////
-    float4 ambient = AmbientLight;
+    float4 ambient = AmbientLight * texColor;
 
     float4 diffuse = 0;
     float4 specular = 0;
     float cone = 1.0f;
     for (int i = 0; i < MAX_LIGHTS; i++)
     {
-        if (lights[i].Type == 0)
+        if (lights[i].Type == LIGHT_DISABLED)
         {
             continue;
         }
         
         LightInfo light;
         light.distance = distance(posW, lights[i].Position);
-        light.direction = normalize(posW - lights[i].Position); // From light to pixel position.
+        light.direction = (lights[i].Type == LIGHT_DIRECTIONAL) ? -lights[i].Rotation : normalize(posW - lights[i].Position); // From light to pixel position.
         light.lightIndex = i;
         
         cone = 1.0f;
-        if (lights[i].Type == 2)
+        if (lights[i].Type == LIGHT_SPOT)
         {
             cone = dot(-light.direction, lights[i].Rotation.xyz);
 
@@ -163,13 +167,17 @@ float4 PS_main(VS_Out input) : SV_TARGET
                 cone = 0.0f;
             }
         }
-
-        diffuse += (CalculateDiffuse(light, posW, normW, texColor, lights[i]) * cone) * (lights[i].FalloffDistance / (light.distance * light.distance));
+        
+        float falloff = 1.0f;
+        if (lights[i].Type != LIGHT_DIRECTIONAL)
+        {
+            falloff = lights[i].FalloffDistance / (light.distance * light.distance);
+        }
+        
+        diffuse += (CalculateDiffuse(light, posW, normW, texColor, lights[i]) * cone) * falloff;
 			
         //specular += CalculateSpecular(light, posW, normW, specTextureReflect, lights[i], CameraPos) * cone / lights[i].ConeCoef;
-		
 
-		
     }
 
 	// I compiled all of the lighting types into this one line so it's easier for me to understand.

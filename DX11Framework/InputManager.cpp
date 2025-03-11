@@ -271,7 +271,7 @@ void InputManager::HandleMouse(float deltaTime)
 		
 		// x = roll, y = yaw, z = pitch
 		//Vector3 camRot = _cam->transform.rotation.ToEuler();
-		Vector3& camRot = _cam->lookDir;
+		Vector3 camRot = _cam->lookDir;
 		camRot.y += mouse.x * deltaTime * sensivity;
 		camRot.z -= mouse.y * deltaTime * sensivity;
 		//DebugPrintF("CamRot Y: %f | CamRot Z: %f\n", camRot.y, camRot.z);
@@ -286,16 +286,7 @@ void InputManager::HandleMouse(float deltaTime)
 			camRot.y += XM_2PI; // simply set us back to 360.
 		}
 
-		// This is rotates the point of LookAt around 0.
-		const float rotation = cosf(camRot.z);
-		_cam->lookAtTrans.position.x = rotation * sinf(camRot.y);
-		_cam->lookAtTrans.position.y = sin(camRot.z);
-		_cam->lookAtTrans.position.z = rotation * cosf(camRot.y);
-
-		// Update the right direction
-		_cam->transform.right = _cam->lookAtTrans.position.Cross(_cam->transform.up);
-		_cam->transform.right.Normalize();
-
+		_cam->SetLookAtTrans(camRot);
 	}
 
 	if (_mouseButtons.rightButton == Mouse::ButtonStateTracker::PRESSED || HandleKeyPressed(keyToggleFlyCam)) {

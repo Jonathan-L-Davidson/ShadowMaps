@@ -31,7 +31,7 @@ public:
 	void SetShaderManager(ShaderManager* manager) { _shaderManager = manager; };
 	void SetupInput(ID3D11DeviceContext* context);
 	void SetupTextures(ID3D11DeviceContext* context);
-	void Render(ID3D11DeviceContext* context);
+	void Render(ID3D11DeviceContext* context, bool ignoreShader = 0);
 	void UpdateCBData(ConstantBuffer* cbData);
 
 	Texture* GetTexture() { return _texture; }

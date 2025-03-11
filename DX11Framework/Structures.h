@@ -35,16 +35,14 @@ struct SimpleLight {
 	XMFLOAT3 SpecColor; // Specular shining color from light.
 	float SpecPower;
 
-	XMMATRIX view;
-	XMMATRIX projection; 
+	XMMATRIX View;
+	XMMATRIX Projection; 
 
-	// Todo: Change this to calculate the inverse square law instead. This works for now however.
 	// 16 bytes
 	float FalloffDistance; // How far the gradient will be.
-	float FalloffDropDistance; // I dont actually know what to call this, this is the distance before falling off.
-	float FalloffGradientCoefficiency; // How quick the gradient takes to fade.
+	int ShadowCaster;
+	int padding1;
 	int padding2;
-	//
 
 
 };
@@ -76,6 +74,13 @@ struct ConstantBuffer
 	unsigned int UseNormal;
 	unsigned int UseSpecular;
 
+};
+
+struct ConstantBufferBasic
+{
+	XMMATRIX Projection;
+	XMMATRIX View;
+	XMMATRIX World;
 };
 
 struct Rect{

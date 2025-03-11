@@ -75,7 +75,7 @@ void Model::SetupTextures(ID3D11DeviceContext* context) {
     }
 }
 
-void Model::Render(ID3D11DeviceContext* context) {
+void Model::Render(ID3D11DeviceContext* context, bool ignoreShader) {
     //Set object variables and draw
     UINT stride = { sizeof(SimpleVertex) };
     UINT offset = 0;
@@ -83,9 +83,11 @@ void Model::Render(ID3D11DeviceContext* context) {
     context->IASetVertexBuffers(0, 1, &vBuffer, &stride, &offset);
     ID3D11Buffer* iBuffer = _modelBuffer->GetIndBuffer()->GetBuffer();
     context->IASetIndexBuffer(iBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-    context->VSSetShader(_shader->GetVertexShader(), nullptr, 0);
-    context->PSSetShader(_shader->GetPixelShader(), nullptr, 0);
+    
+    if (!ignoreShader) {
+        context->VSSetShader(_shader->GetVertexShader(), nullptr, 0);
+        context->PSSetShader(_shader->GetPixelShader(), nullptr, 0);
+    }
 
     context->DrawIndexed(GetIndices(), 0, 0);
 }

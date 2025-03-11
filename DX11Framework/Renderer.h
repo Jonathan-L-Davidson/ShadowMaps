@@ -50,6 +50,8 @@ private:
 	IDXGISwapChain1* _swapChain;
 	D3D11_VIEWPORT _viewport;
 
+	ID3D11ShaderResourceView* _shadowBuffer;
+
 	ID3D11RasterizerState* _activeRS;
 	ID3D11RasterizerState* _rsDefault;
 	ID3D11RasterizerState* _rsWireframe;

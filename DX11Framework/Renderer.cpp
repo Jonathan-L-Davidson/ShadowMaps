@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "TextureManager.h"
 #include "Camera.h"
+#include "ShaderManager.h"
 
 Renderer::Renderer() {
 
@@ -20,6 +21,7 @@ Renderer::~Renderer() {
     DELETED3D(_constantBuffer);
     DELETED3D(_depthStencilBuffer);
     DELETED3D(_depthStencilView);
+    DELETED3D(_shadowBuffer);
 
     _activeRS = nullptr;
     _activeCam = nullptr;
@@ -181,12 +183,41 @@ HRESULT Renderer::InitPipelineVariables()
 }
 
 void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
+    //Write constant buffer data onto GPU
+    D3D11_MAPPED_SUBRESOURCE mappedSubresource;
+
+    ObjectManager* objManager = sceneManager->GetObjManager();
+    Shader* depthShader = objManager->GetShader("Depth");
+    _immediateContext->VSSetShader(depthShader->GetVertexShader(), nullptr, 0);
+    _immediateContext->PSSetShader(depthShader->GetPixelShader(), nullptr, 0);
+    std::vector<SimpleLight*> shadowLights = sceneManager->GetShadowLights();
+    for (SimpleLight* light : shadowLights) {
+        ConstantBufferBasic basicCB;
+        basicCB.View = light->View;
+        basicCB.Projection = light->Projection;
+
+        for (Object* obj : objManager->GetObjects()) {
+            Model* model = obj->GetModel();
+            if (model) {
+                model->SetupInput(_immediateContext);
+
+                basicCB.World = XMMatrixTranspose(obj->transform->GetWorldMatrix());
+
+                _immediateContext->Map(_constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
+                memcpy(mappedSubresource.pData, &basicCB, sizeof(basicCB));
+                _immediateContext->Unmap(_constantBuffer, 0);
+
+                model->Render(_immediateContext);
+            }
+        }
+    }
+
     //Store this frames data in constant buffer struct
     XMFLOAT4X4 camView = _activeCam->GetView();
     XMFLOAT4X4 camProjection = _activeCam->GetProjection();
     _cbData.View = XMMatrixTranspose(XMLoadFloat4x4(&camView));
     _cbData.Projection = XMMatrixTranspose(XMLoadFloat4x4(&camProjection));
-    
+
     _immediateContext->RSSetState(_activeRS);
 
     //Present unbinds render target, so rebind and clear at start of each frame
@@ -195,10 +226,6 @@ void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
     _immediateContext->ClearRenderTargetView(_frameBufferView, backgroundColor);
     _immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0.0f);
 
-    //Write constant buffer data onto GPU
-    D3D11_MAPPED_SUBRESOURCE mappedSubresource;
-
-    ObjectManager* objManager = sceneManager->GetObjManager();
     for (Object* obj : objManager->GetObjects()) {
         Model* model = obj->GetModel();
         if (model) {

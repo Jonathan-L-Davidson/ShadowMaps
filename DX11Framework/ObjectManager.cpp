@@ -23,6 +23,11 @@ ObjectManager::~ObjectManager() {
 
 }
 
+Shader* ObjectManager::GetShader(std::string id)
+{
+	return _modelManager->GetShader(id);
+}
+
 void ObjectManager::Update(float deltaTime) {
 	for (Object* obj : _objects) {
 		if (obj) {

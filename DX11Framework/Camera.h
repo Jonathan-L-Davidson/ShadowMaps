@@ -30,6 +30,18 @@ public:
 
     void SetPosition(Vector3 pos);
     Vector3 GetPosition() { return transform.position; };
+    void SetLookAtTrans(const Vector3& toRotateTo) {
+        // This is rotates the point of LookAt around 0.
+        const float rotation = cosf(toRotateTo.z);
+        lookAtTrans.position.x = rotation * sinf(toRotateTo.y);
+        lookAtTrans.position.y = sin(toRotateTo.z);
+        lookAtTrans.position.z = rotation * cosf(toRotateTo.y);
+
+        // Update the right direction
+        transform.right = lookAtTrans.position.Cross(transform.up);
+        transform.right.Normalize();
+        lookDir = toRotateTo;
+    };
 
     void LookTo(Quaternion rotation);
     void LookAt(Transform trans);

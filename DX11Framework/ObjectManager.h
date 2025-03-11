@@ -18,6 +18,7 @@ public:
 
 	void SetRenderManager(Renderer* manager) { _renderManager = manager; };
 	void SetModelManager(ModelManager* manager) { _modelManager = manager; };
+	Shader* GetShader(std::string id);
 
 	std::vector<Object*> GetObjects() { return _objects; };
 	const std::vector<Rigidbody*>& GetBodies() { return _bodies; };

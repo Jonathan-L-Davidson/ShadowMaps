@@ -44,6 +44,7 @@ public:
 	void SetActiveCam(Camera* cam) { _activeCam = cam; };
 	Camera* GetActiveCam() { return _activeCam; };
 	Camera* GetCam(int index) { return _cameras[index]; };
+	std::vector<SimpleLight*>& GetShadowLights() { return _shadowLights; };
 
 	Object* SetActiveObject(int index);
 	Object* SetActiveObject(Object* obj, int index);
@@ -67,6 +68,7 @@ private:
 	unsigned int _selectedObjIndex;
 
 	std::vector<SimpleLight>* _lights;
+	std::vector<SimpleLight*> _shadowLights;
 
 	// CameraHandler;
 
