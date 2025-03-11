@@ -71,8 +71,8 @@ Models:
       scale: [0.0, 0.0, 0.0]
 Lights:
   - Light: null
-    Position: [0.0, 0.0, 0.0, 1.0]
-    Rotation: [-0.6, 0.5, 0.1]
+    Position: [1.0, 100, 5.0, 1.0]
+    Rotation: [-0.5, 0.4, 0.1]
     Type: 3
     ConeCoeff: 0.2
     DiffuseColor: [0.2, 0.2, 0.25]
@@ -89,7 +89,7 @@ Lights:
     SpecColor: [0.4, 0.6, 0.4]
     SpecPower: 1
     FalloffDistance: 50
-    ShadowCaster: 1
+    ShadowCaster: 0
 Objects:
   - Sponza: null
     Type: Static

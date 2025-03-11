@@ -41,6 +41,7 @@ private:
 	HRESULT CreateD3DDevice();
 	HRESULT CreateSwapChainAndFrameBuffer();
 	HRESULT InitPipelineVariables();
+	HRESULT CreateShadowBuffers();
 
 	ID3D11DeviceContext* _immediateContext = nullptr;
 	ID3D11Device* _device;
@@ -50,13 +51,16 @@ private:
 	IDXGISwapChain1* _swapChain;
 	D3D11_VIEWPORT _viewport;
 
-	ID3D11ShaderResourceView* _shadowBuffer;
+	ID3D11Texture2D* _shadowBuffer;
+	ID3D11DepthStencilView* _shadowBufferDSV;
+	ID3D11ShaderResourceView* _shadowBufferSRV;
 
 	ID3D11RasterizerState* _activeRS;
 	ID3D11RasterizerState* _rsDefault;
 	ID3D11RasterizerState* _rsWireframe;
 	ID3D11RasterizerState* _rsNoBackface;
 	ID3D11Buffer* _constantBuffer;
+	ID3D11Buffer* _constantBufferBasic;
 	ID3D11Texture2D* _depthStencilBuffer;
 	ID3D11DepthStencilView* _depthStencilView;
 

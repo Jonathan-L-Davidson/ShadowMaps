@@ -36,6 +36,9 @@ HRESULT Renderer::Initialise() {
     hr = CreateSwapChainAndFrameBuffer(); // Renderer Class
     if (FAILED(hr)) return E_FAIL;
 
+    hr = CreateShadowBuffers(); // Shadow
+    if (FAILED(hr)) return E_FAIL;
+
     hr = InitPipelineVariables(); // Renderer Class
     if (FAILED(hr)) return E_FAIL;
 
@@ -127,7 +130,6 @@ HRESULT Renderer::CreateSwapChainAndFrameBuffer()
 
     frameBuffer->Release();
 
-
     return hr;
 }
 
@@ -162,10 +164,6 @@ HRESULT Renderer::InitPipelineVariables()
 
     _activeRS = _rsDefault;
 
-    //Viewport Values
-    _viewport = { 0.0f, 0.0f, (float)_windowRect->x, (float)_windowRect->y, 0.0f, 1.0f };
-    _immediateContext->RSSetViewports(1, &_viewport);
-
     //Constant Buffer
     D3D11_BUFFER_DESC constantBufferDesc = {};
     constantBufferDesc.ByteWidth = sizeof(ConstantBuffer);
@@ -176,41 +174,94 @@ HRESULT Renderer::InitPipelineVariables()
     hr = _device->CreateBuffer(&constantBufferDesc, nullptr, &_constantBuffer);
     if (FAILED(hr)) { return hr; }
 
-    _immediateContext->VSSetConstantBuffers(0, 1, &_constantBuffer);
-    _immediateContext->PSSetConstantBuffers(0, 1, &_constantBuffer);
+    D3D11_BUFFER_DESC constantBufferBasicDesc = {};
+    constantBufferBasicDesc.ByteWidth = sizeof(ConstantBufferBasic);
+    constantBufferBasicDesc.Usage = D3D11_USAGE_DYNAMIC;
+    constantBufferBasicDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    constantBufferBasicDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    hr = _device->CreateBuffer(&constantBufferBasicDesc, nullptr, &_constantBufferBasic);
+    if (FAILED(hr)) { return hr; }
+
 
     return S_OK;
 }
 
+HRESULT Renderer::CreateShadowBuffers()
+{
+    D3D11_TEXTURE2D_DESC depthStencilDesc = {};
+    depthStencilDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+    depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL | D3D11_BIND_SHADER_RESOURCE;
+    depthStencilDesc.Width = 256;
+    depthStencilDesc.Height = 256;
+    depthStencilDesc.MipLevels = depthStencilDesc.ArraySize = 1;
+    depthStencilDesc.SampleDesc.Count = 1;
+    depthStencilDesc.MiscFlags = 0;
+
+    D3D11_DEPTH_STENCIL_VIEW_DESC dsv_desc;
+    dsv_desc.Flags = 0;
+    dsv_desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+    dsv_desc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+    dsv_desc.Texture2D.MipSlice = 0;
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC sr_desc;
+    sr_desc.Format = DXGI_FORMAT_R24_UNORM_X8_TYPELESS;
+    sr_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+    sr_desc.Texture2D.MostDetailedMip = 0;
+    sr_desc.Texture2D.MipLevels = -1;
+    
+    
+    HRESULT hr = S_OK;
+
+    hr = _device->CreateTexture2D(&depthStencilDesc, nullptr, &_shadowBuffer);
+    hr = _device->CreateDepthStencilView(_shadowBuffer, &dsv_desc, &_shadowBufferDSV);
+    hr = _device->CreateShaderResourceView(_shadowBuffer, &sr_desc, &_shadowBufferSRV);
+
+    return hr;
+}
+
 void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
+    _immediateContext->ClearState();
+
+    //Viewport Values
+    _viewport = { 0.0f, 0.0f, (float)_windowRect->x, (float)_windowRect->y, 0.0f, 1.0f };
+    _immediateContext->RSSetViewports(1, &_viewport);
+
+    _immediateContext->VSSetConstantBuffers(0, 1, &_constantBuffer);
+    _immediateContext->PSSetConstantBuffers(0, 1, &_constantBuffer);
+
     //Write constant buffer data onto GPU
     D3D11_MAPPED_SUBRESOURCE mappedSubresource;
 
     ObjectManager* objManager = sceneManager->GetObjManager();
+
+    _immediateContext->OMSetRenderTargets(0, nullptr, _shadowBufferDSV);
     Shader* depthShader = objManager->GetShader("Depth");
     _immediateContext->VSSetShader(depthShader->GetVertexShader(), nullptr, 0);
     _immediateContext->PSSetShader(depthShader->GetPixelShader(), nullptr, 0);
-    std::vector<SimpleLight*> shadowLights = sceneManager->GetShadowLights();
-    for (SimpleLight* light : shadowLights) {
-        ConstantBufferBasic basicCB;
-        basicCB.View = light->View;
-        basicCB.Projection = light->Projection;
+
+    std::vector<SimpleLight*>* shadowLights = sceneManager->GetShadowLights();
+    for (SimpleLight* light : *shadowLights) {
+
+        _cbData.View = XMMatrixTranspose(light->View);
+        _cbData.Projection = XMMatrixTranspose(light->Projection);
 
         for (Object* obj : objManager->GetObjects()) {
             Model* model = obj->GetModel();
             if (model) {
                 model->SetupInput(_immediateContext);
 
-                basicCB.World = XMMatrixTranspose(obj->transform->GetWorldMatrix());
+                _cbData.World = XMMatrixTranspose(obj->transform->GetWorldMatrix());
 
                 _immediateContext->Map(_constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubresource);
-                memcpy(mappedSubresource.pData, &basicCB, sizeof(basicCB));
+                memcpy(mappedSubresource.pData, &_cbData, sizeof(_cbData));
                 _immediateContext->Unmap(_constantBuffer, 0);
 
                 model->Render(_immediateContext);
             }
         }
     }
+
 
     //Store this frames data in constant buffer struct
     XMFLOAT4X4 camView = _activeCam->GetView();
@@ -225,6 +276,7 @@ void Renderer::Render(float simpleCount, SceneManager* sceneManager) {
     _immediateContext->OMSetRenderTargets(1, &_frameBufferView, _depthStencilView);
     _immediateContext->ClearRenderTargetView(_frameBufferView, backgroundColor);
     _immediateContext->ClearDepthStencilView(_depthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0.0f);
+    _immediateContext->PSSetShaderResources(0, 1, &_shadowBufferSRV);
 
     for (Object* obj : objManager->GetObjects()) {
         Model* model = obj->GetModel();

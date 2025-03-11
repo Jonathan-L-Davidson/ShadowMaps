@@ -167,7 +167,7 @@ void SceneManager::SetupCameras() {
     _cameras[CA_LOOKDOWN]->PostInit();
     //_cameras[CA_LOOKDOWN]->SetRotation(Vector3(0.0f, -1.0f, 0.5f));
 
-    _cameras[CA_LOOKAT]->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
+    _cameras[CA_LOOKAT]->SetPosition(Vector3(1.0f, 100.0f, 5.0f));
     _cameras[CA_LOOKDOWN]->PostInit();
     
     _activeCam = _cameras[CA_DEFAULT_WASD];
@@ -376,37 +376,41 @@ bool SceneManager::LoadScene(const char* path) {
 
         for (YAML::const_iterator it = lights.begin(); it != lights.end(); it++) {
             const YAML::Node& light = *it;
-            SimpleLight simpleLight;
+            SimpleLight* simpleLight = new SimpleLight();
             // Experimenting with yaml node reading using a heads up from https://stackoverflow.com/questions/34757198/how-to-read-a-yaml-node-array-into-stdvector
-            simpleLight.Position = Vector2Float4(light["Position"].as<std::vector<float>>());
+            simpleLight->Position = Vector2Float4(light["Position"].as<std::vector<float>>());
             Vector3 rotation = Vector2Float3(light["Rotation"].as<std::vector<float>>());
-            simpleLight.Rotation = XMFLOAT3(rotation.x, rotation.y, rotation.z);
+            rotation.Normalize();
+            simpleLight->Rotation = XMFLOAT3(rotation.x, rotation.y, rotation.z);
 
-            Camera cam;
-            cam.SetPosition(Vector3(simpleLight.Position.x, simpleLight.Position.y, simpleLight.Position.z));
-            cam.SetLookAtTrans(rotation);
-            cam.UpdateViewMatrix();
-            cam.UpdateProjectionMatrix();
+            Camera* testCam = new Camera();
+            testCam->transform.position = Vector3(simpleLight->Position.x, simpleLight->Position.y, simpleLight->Position.z);
+            testCam->PostInit();
+            testCam->SetLookAtTrans(rotation);
+            testCam->LookFlyCam();
+            testCam->UpdateProjectionMatrix();
 
-            XMFLOAT4X4 camView = cam.GetView();
-            XMFLOAT4X4 camProjection = cam.GetProjection();
-            simpleLight.View = XMMatrixTranspose(XMLoadFloat4x4(&camView));
-            simpleLight.Projection = XMMatrixTranspose(XMLoadFloat4x4(&camProjection));
+            XMFLOAT4X4 camView = testCam->GetView();
+            XMFLOAT4X4 camProjection = testCam->GetProjection();
+            simpleLight->View = XMMatrixTranspose(XMLoadFloat4x4(&camView));
+            simpleLight->Projection = XMMatrixTranspose(XMLoadFloat4x4(&camProjection));
 
-            simpleLight.Type = light["Type"].as<int>();
-            simpleLight.ConeCoef = light["ConeCoeff"].as<float>();
+            delete testCam;
+            
+            simpleLight->Type = light["Type"].as<int>();
+            simpleLight->ConeCoef = light["ConeCoeff"].as<float>();
 
             Vector3 diffColor = Vector2Float3(light["DiffuseColor"].as<std::vector<float>>());
-            simpleLight.DiffuseColor = XMFLOAT3(diffColor.x, diffColor.y, diffColor.z);
+            simpleLight->DiffuseColor = XMFLOAT3(diffColor.x, diffColor.y, diffColor.z);
             Vector3 specColor = Vector2Float3(light["SpecColor"].as<std::vector<float>>());
-            simpleLight.SpecColor = XMFLOAT3(specColor.x, specColor.y, specColor.z);
-            simpleLight.SpecPower = light["SpecPower"].as<float>();
+            simpleLight->SpecColor = XMFLOAT3(specColor.x, specColor.y, specColor.z);
+            simpleLight->SpecPower = light["SpecPower"].as<float>();
 
-            simpleLight.FalloffDistance = light["FalloffDistance"].as<float>();
-            simpleLight.ShadowCaster = light["ShadowCaster"].as<int>();
-            _lights->push_back(simpleLight);
-            if (simpleLight.ShadowCaster) {
-                _shadowLights.push_back(&simpleLight);
+            simpleLight->FalloffDistance = light["FalloffDistance"].as<float>();
+            simpleLight->ShadowCaster = light["ShadowCaster"].as<int>();
+            _lights->push_back(*simpleLight);
+            if (simpleLight->ShadowCaster) {
+                _shadowLights.push_back(simpleLight);
             }
         }
     }

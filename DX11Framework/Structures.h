@@ -6,6 +6,7 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include "GlobalDefines.h"
+#include "Camera.h"
 
 #define DELETED3D(x)	if(x)	x->Release(); 
 
@@ -36,15 +37,13 @@ struct SimpleLight {
 	float SpecPower;
 
 	XMMATRIX View;
-	XMMATRIX Projection; 
+	XMMATRIX Projection;
 
 	// 16 bytes
 	float FalloffDistance; // How far the gradient will be.
 	int ShadowCaster;
-	int padding1;
-	int padding2;
-
-
+	int pad1;
+	int pad2;
 };
 
 struct SimpleVertex
@@ -81,6 +80,12 @@ struct ConstantBufferBasic
 	XMMATRIX Projection;
 	XMMATRIX View;
 	XMMATRIX World;
+
+	XMMATRIX padding1;
+	XMMATRIX padding2;
+	XMMATRIX padding3;
+	XMMATRIX padding4;
+	XMMATRIX padding5;
 };
 
 struct Rect{

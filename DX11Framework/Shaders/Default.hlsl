@@ -3,6 +3,7 @@ Texture2D displacementTex : register(t1);
 Texture2D normalTex : register(t2);
 Texture2D specularTex : register(t3);
 SamplerState bilinearSampler : register(s0);
+Texture2D shadowMap : register(t0);
 
 #define MAX_LIGHTS 3
 #define LIGHT_DISABLED 0
@@ -28,8 +29,8 @@ struct SimpleLight
 
     float FalloffDistance;
     int ShadowCaster;
-    int padding1;
-    int padding2;
+    int pad1;
+    int pad2;
 };
 
 cbuffer ConstantBuffer : register(b0)

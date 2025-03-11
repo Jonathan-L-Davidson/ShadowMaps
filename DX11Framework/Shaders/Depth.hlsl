@@ -1,7 +1,3 @@
-Texture2D diffuseTex : register(t0);
-Texture2D displacementTex : register(t1);
-Texture2D normalTex : register(t2);
-Texture2D specularTex : register(t3);
 SamplerState bilinearSampler : register(s0);
 
 cbuffer ConstantBuffer : register(b0)
@@ -18,7 +14,7 @@ struct VS_Out
 
 };
 
-VS_Out VS_main(float3 Position : POSITION)
+VS_Out VS_main(float3 Position : POSITION, float3 Normal : NORMAL, float2 TexCoord : TEXCOORDS)
 {
     VS_Out output = (VS_Out) 0;
 
@@ -31,7 +27,9 @@ VS_Out VS_main(float3 Position : POSITION)
     return output;
 }
 
-float PS_main(VS_Out input) : SV_TARGET
+float4 PS_main(VS_Out input) : SV_TARGET
 {
-    return input.position.z / input.positionW.w;
+    float4 baseWhite = float4(1,1,1,1);
+    return baseWhite * (input.position.z / input.positionW.w);
+
 }
